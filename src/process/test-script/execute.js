@@ -55,7 +55,7 @@ module.exports = async ({ }, context) => {
     }
 
     const endTime = new Date().getTime();
-    waitAfterExecute({ staticDelay });
+    await waitAfterExecute({ staticDelay });
 
     return { key: PROCESS_ENUM.SCRIPT_EXECUTE, executionStats, startTime, endTime };
   } catch (error) {
