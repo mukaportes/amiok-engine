@@ -18,6 +18,8 @@
   "homepage": "https://github.com/mukaportes/amiok-engine#readme",
   "dependencies": {
     "@nearform/doctor": "^8.0.0",
+    "axios": "^0.21.1",
+    "node-netstat": "^1.8.0",
     "rimraf": "^3.0.2"
   }
 }
