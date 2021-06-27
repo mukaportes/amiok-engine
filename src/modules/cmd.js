@@ -1,5 +1,4 @@
-const path = require('path');
-// const util = require('util');
+const netstat = require('node-netstat');
 const { execSync } = require('child_process');
 
 
@@ -26,7 +25,26 @@ const execCmdList = async (cmdList = [], fromPath) => {
   console.log('Done executing cmd list from path', fromPath);
 };
 
+const netstatByPort = (port) => {
+  if (!port) throw 'A port must be provided.';
+
+  return new Promise((resolve, reject) => {
+    netstat({
+      filter: {
+        local: {
+          port,
+        },
+      },
+    }, (item, err) => {
+      if (err) reject(err);
+
+      resolve(item);
+    });
+  });
+};
+
 module.exports = {
   execCmd,
   execCmdList,
+  netstatByPort,
 };
