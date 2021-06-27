@@ -15,12 +15,12 @@ const getFileContent = (filePath) => new Promise((resolve, reject) => {
 
 const removeFolder = (folderPath) => new Promise((resolve, reject) => {
   try {
-    const fullPath = path.join(__dirname, `../../${folderPath}`);
-
-    rimraf(fullPath, (err) => {
+    rimraf(folderPath, (err) => {
       if (err) throw err;
 
-      resolve(`Removed all content from folder at ${fullPath}`);
+      console.log(`Removed all content from folder at ${folderPath}`);
+
+      resolve();
     });
   } catch (error) {
     console.error('removeFolder() error', error);
@@ -29,7 +29,16 @@ const removeFolder = (folderPath) => new Promise((resolve, reject) => {
   }
 });
 
+const fileExists = (path) => new Promise((resolve) => {
+  fs.access(path, fs.F_OK, (err) => {
+    if (err) resolve(false);
+
+    resolve(true);
+  });
+});
+
 module.exports = {
   getFileContent,
   removeFolder,
+  fileExists,
 };
