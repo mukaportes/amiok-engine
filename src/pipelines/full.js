@@ -1,7 +1,7 @@
 const startDoctor = require('../process/clinic-doctor/start');
 const prepareTestScripts = require('../process/test-script/prepare');
 const executeTestScripts = require('../process/test-script/execute');
-const analyzeDoctor = require('../process/clinic-doctor/analyze');
+const analyzeStats = require('../process/stats/analyze');
 const clearDoctor = require('../process/clinic-doctor/clear');
 const shutdownDoctor = require('../process/clinic-doctor/shutdown');
 const getInfoApiPid = require('../process/info/api-pid');
@@ -19,7 +19,7 @@ module.exports = async (params) => {
   params.collectCallback = (filePath) => {
     const updatedParams = { ...params, filePath };
 
-    analyzeDoctor(updatedParams, context)
+    analyzeStats(updatedParams, context)
       .then(() => clearDoctor(updatedParams, context))
       .catch((error) => {
         console.error('Error at collectCallback()', error);

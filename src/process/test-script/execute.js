@@ -1,4 +1,5 @@
 const { runSequence } = require('../../modules/http');
+const { updateRoundStats, getRoundStatsTemplate } = require('../../modules/stats');
 const PROCESS_ENUM = require('../../enums/process');
 
 const updateStats = (stats, roundResults) => {
@@ -35,14 +36,7 @@ module.exports = async ({ }, context) => {
       staticDelay,
     } } = context[PROCESS_ENUM.SCRIPT_PREPARE];
 
-    const executionStats = {
-      responseStatus: {},
-      logs: [],
-      assert: {
-        pass: 0,
-        fail: 0,
-      },
-    };
+    const executionRoundsStats = getRoundStatsTemplate();
 
     if (!basePath) throw 'No valid AMIOK scripts basePath provided. Check your amiok-scripts.json file';
     if (!Array.isArray(testScripts) || !testScripts.length) throw 'No AMIOK test scripts provided. Check your amiok-scripts.json file';
@@ -50,14 +44,14 @@ module.exports = async ({ }, context) => {
     for (let round = 0; round < rounds; round += 1) {
       const roundResults = await Promise.all([...new Array(threads)].map(() => runSequence(testScripts)));
 
-      updateStats(executionStats, roundResults);
+      updateRoundStats(executionRoundsStats, roundResults);
       console.info(`Executed round ${round}`);
     }
 
     const endTime = new Date().getTime();
     await waitAfterExecute({ staticDelay });
 
-    return { key: PROCESS_ENUM.SCRIPT_EXECUTE, executionStats, startTime, endTime };
+    return { key: PROCESS_ENUM.SCRIPT_EXECUTE, executionRoundsStats, startTime, endTime };
   } catch (error) {
     console.error(`Error executing ${PROCESS_ENUM.SCRIPT_EXECUTE} process`, error);
 
