@@ -45,7 +45,7 @@ module.exports = async ({ }, context) => {
       const roundResults = await Promise.all([...new Array(threads)].map(() => runSequence(testScripts)));
 
       updateRoundStats(executionRoundsStats, roundResults);
-      console.info(`Executed round ${round}`);
+      console.info(`Executed round ${round} of ${rounds}`);
     }
 
     const endTime = new Date().getTime();

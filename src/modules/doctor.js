@@ -12,6 +12,7 @@ const execDoctor = (appStarterPath, afterCollectCallback) => new Promise(async (
     const doctor = new ClinicDoctor();
 
     doctor.collect(['node', appStarterPath], function (err, filepath) {
+      if (err) throw err;
       afterCollectCallback({ filePath: filepath });
     });
 
@@ -64,8 +65,6 @@ const getAnalysisFile = (port, pid = null) => new Promise(async (resolve, reject
     reject(error);
   }
 });
-
-// const getAverage
 
 module.exports = {
   execDoctor,
