@@ -5,7 +5,6 @@ const streamTemplate = require('stream-template')
 const ProcessStatDecoder = require('@nearform/doctor/format/process-stat-decoder');
 const ClinicDoctor = require('@nearform/doctor');
 const { netstatByPort } = require('../modules/cmd');
-const { getFileContent } = require('../modules/file');
 
 const execDoctor = (appStarterPath, afterCollectCallback) => new Promise(async (resolve, reject) => {
   try {
