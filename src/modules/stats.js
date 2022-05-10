@@ -12,7 +12,7 @@ const setItemResults = (results, resultItem) => {
 
 const toMB = (value) => Number(value) / 1024 / 1024;
 
-const formatAverageResults = (results) => ({
+const formatAverageResults = (results, rangeType) => ({
   delay: (results.delay / results.itemCount),
   cpu: (results.cpu / results.itemCount),
   memoryRss: (toMB(results.memory.rss / results.itemCount)),
@@ -21,6 +21,8 @@ const formatAverageResults = (results) => ({
   memoryExternal: (toMB(results.memory.external / results.itemCount)),
   memoryArrayBuffers: (toMB(results.memory.arrayBuffers / results.itemCount)),
   handles: (results.handles / results.itemCount),
+  itemCount: results.itemCount,
+  rangeType,
 });
 
 const getStatsTemplate = () => ({
