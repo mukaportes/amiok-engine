@@ -1,21 +1,5 @@
 const { runSequence } = require('../../modules/http');
-const { updateRoundStats, getRoundStatsTemplate } = require('../../modules/stats');
 const PROCESS_ENUM = require('../../enums/process');
-
-const updateStats = (stats, roundResults) => {
-  roundResults.forEach(({
-    responseStatus, assert, logs = [],
-  }) => {
-    Object.keys(responseStatus).forEach(status => {
-      stats.responseStatus[status] += responseStatus[status];
-    });
-
-    stats.assert.pass += assert.pass;
-    stats.assert.fail += assert.fail;
-
-    stats.logs.push(...logs);
-  });
-};
 
 const waitAfterExecute = ({ staticDelay = 5000 }) => new Promise((resolve) => {
   setTimeout(() => {
@@ -36,22 +20,35 @@ module.exports = async ({ }, context) => {
       staticDelay,
     } } = context[PROCESS_ENUM.SCRIPT_PREPARE];
 
-    const executionRoundsStats = getRoundStatsTemplate();
-
-    if (!basePath) throw 'No valid AMIOK scripts basePath provided. Check your amiok-scripts.json file';
-    if (!Array.isArray(testScripts) || !testScripts.length) throw 'No AMIOK test scripts provided. Check your amiok-scripts.json file';
+    if (!basePath) throw 'No valid AMIOK scripts basePath provided. Check your amiok.settings.json file';
+    if (!Array.isArray(testScripts) || !testScripts.length) throw 'No AMIOK test scripts provided. Check your amiok.settings.json file';
 
     for (let round = 0; round < rounds; round += 1) {
-      const roundResults = await Promise.all([...new Array(threads)].map(() => runSequence(testScripts)));
+      const roundResults = await Promise.all(
+        [...new Array(threads)].map(
+          () => runSequence(
+            {
+              basePath,
+              rounds,
+              threads,
+              staticDelay,
+            },
+            testScripts,
+          )
+        )
+      );
 
-      updateRoundStats(executionRoundsStats, roundResults);
+      await context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeTestResults(
+        context[PROCESS_ENUM.STORAGE_TEST_SETUP].id,
+        roundResults,
+      );
       console.info(`Executed round ${round} of ${rounds}`);
     }
 
     const endTime = new Date().getTime();
     await waitAfterExecute({ staticDelay });
 
-    return { key: PROCESS_ENUM.SCRIPT_EXECUTE, executionRoundsStats, startTime, endTime };
+    return { key: PROCESS_ENUM.SCRIPT_EXECUTE, startTime, endTime };
   } catch (error) {
     console.error(`Error executing ${PROCESS_ENUM.SCRIPT_EXECUTE} process`, error);
 
