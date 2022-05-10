@@ -37,6 +37,8 @@ const fileExists = (path) => new Promise((resolve) => {
   });
 });
 
+// const getFilesFromFolder = ();
+
 module.exports = {
   getFileContent,
   removeFolder,
