@@ -14,7 +14,7 @@ const setSequenceResponseStatus = (sequenceStats, responseStatus) => {
   else sequenceStats.responseStatus[responseStatus] = 1;
 };
 const setSequenceResponseAssert = (sequenceStats, responseData, expectedOutput) => {
-  if (assert.deepStrictEqual(responseData, texpectedOutput)) sequenceStats.assert.pass += 1;
+  if (assert.deepStrictEqual(responseData, expectedOutput)) sequenceStats.assert.pass += 1;
   else sequenceStats.assert.fail += 1;
 };
 
@@ -31,7 +31,7 @@ const runSequence = async (globalConfig, testScripts = []) => {
 
   for (let i = 0; i < testScripts.length; i += 1) {
     try {
-      const startTime = new Date().toISOString();
+      const startTime = new Date().getTime();
       const { data, status } = await axios({
         url: `${globalConfig.basePath}${testScripts[i].path}`,
         method: testScripts[i].method.toUpperCase(),
@@ -42,8 +42,8 @@ const runSequence = async (globalConfig, testScripts = []) => {
       else sequenceStats.responseStatus[status] = 1;
 
       setSequenceResponseStatus(sequenceStats, status);
-      setSequenceResponseAssert(sequenceStats, data, testScripts[i].output);
-      sequenceStats.logs.push({ path: testScripts[i].path, startTime, endTime: new Date().toISOString() })
+      setSequenceResponseAssert(sequenceStats, data, testScripts[i].assert);
+      sequenceStats.logs.push({ path: testScripts[i].path, startTime, endTime: new Date().getTime() })
 
       lastExec = { data, status };
     } catch (error) {
@@ -51,8 +51,8 @@ const runSequence = async (globalConfig, testScripts = []) => {
 
       if (error.response) {
         setSequenceResponseStatus(sequenceStats, error.response.status);
-        setSequenceResponseAssert(sequenceStats, error.response.data, testScripts[i].output);
-        sequenceStats.logs.push({ path: testScripts[i].path, startTime, endTime: new Date().toISOString() })
+        setSequenceResponseAssert(sequenceStats, error.response.data, testScripts[i].assert);
+        sequenceStats.logs.push({ path: testScripts[i].path, startTime, endTime: new Date().getTime() })
       }
     }
   }
