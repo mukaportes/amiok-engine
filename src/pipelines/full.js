@@ -1,6 +1,6 @@
 const PROCESS_ENUM = require('../enums/process');
 const startDoctor = require('../process/clinic-doctor/start');
-const prepareTestScripts = require('../process/test-script/prepare');
+const prepareSettings = require('../process/settings/prepare');
 const executeTestScripts = require('../process/test-script/execute');
 const analyzeStats = require('../process/stats/analyze');
 const clearDoctor = require('../process/clinic-doctor/clear');
@@ -13,8 +13,8 @@ const storeTest = require('../process/storage/store-test');
 module.exports = async (params) => {
   const context = {};
   const steps = [
+    prepareSettings,
     prepareStorage,
-    prepareTestScripts,
     startDoctor,
     getInfoApiPid,
     setupTest,

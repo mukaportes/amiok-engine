@@ -7,7 +7,7 @@ const waitAfterExecute = ({ staticDelay = 5000 }) => new Promise((resolve) => {
   }, staticDelay)
 });
 
-module.exports = async ({ }, context) => {
+module.exports = async (_, context) => {
   console.info(`Executing process ${PROCESS_ENUM.SCRIPT_EXECUTE}`);
   const startTime = new Date().getTime();
   try {
@@ -18,7 +18,7 @@ module.exports = async ({ }, context) => {
       threads = 10,
       testScripts = [],
       staticDelay,
-    } } = context[PROCESS_ENUM.SCRIPT_PREPARE];
+    } } = context[PROCESS_ENUM.SETTINGS_PREPARE];
 
     if (!basePath) throw 'No valid AMIOK scripts basePath provided. Check your amiok.settings.json file';
     if (!Array.isArray(testScripts) || !testScripts.length) throw 'No AMIOK test scripts provided. Check your amiok.settings.json file';

@@ -5,10 +5,10 @@ module.exports = async (_, context) => {
   try {
     const newTestProps = {
       ...context[PROCESS_ENUM.STORAGE_TEST_SETUP],
-      title: context[PROCESS_ENUM.SCRIPT_PREPARE].config.title,
-      basePath: context[PROCESS_ENUM.SCRIPT_PREPARE].config.basePath,
-      roundCount: context[PROCESS_ENUM.SCRIPT_PREPARE].config.rounds,
-      threadCount: context[PROCESS_ENUM.SCRIPT_PREPARE].config.threads,
+      title: context[PROCESS_ENUM.SETTINGS_PREPARE].config.title,
+      basePath: context[PROCESS_ENUM.SETTINGS_PREPARE].config.basePath,
+      roundCount: context[PROCESS_ENUM.SETTINGS_PREPARE].config.rounds,
+      threadCount: context[PROCESS_ENUM.SETTINGS_PREPARE].config.threads,
       startedAt: context[PROCESS_ENUM.SCRIPT_EXECUTE].startTime,
       endedAt: context[PROCESS_ENUM.SCRIPT_EXECUTE].endTime,
     };

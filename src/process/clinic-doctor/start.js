@@ -10,7 +10,7 @@ const waitAppStart = ({ staticDelay = 5000 }) => new Promise((resolve) => {
 module.exports = async ({ appStarterPath = '.', collectCallback }, context) => {
   console.info(`Executing process ${PROCESS_ENUM.DOCTOR_START}`);
   try {
-    const { config = {} } = context[PROCESS_ENUM.SCRIPT_PREPARE];
+    const { config = {} } = context[PROCESS_ENUM.SETTINGS_PREPARE];
 
     await execDoctor(appStarterPath, ({ filePath }) => {
       if (!context[PROCESS_ENUM.DOCTOR_START]) context[PROCESS_ENUM.DOCTOR_START] = { filePath };
