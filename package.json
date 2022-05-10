@@ -4,7 +4,8 @@
   "description": "AMIOK tester and profiler engine",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:fix": "eslint --ignore-path .eslintignore --ext .js ./bin --fix",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|json)\""
   },
   "repository": {
     "type": "git",
