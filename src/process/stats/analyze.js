@@ -1,5 +1,5 @@
 const { getAnalysisFile } = require('../../modules/doctor');
-const { setItemResults, getStatsTemplate } = require('../../modules/stats');
+const { setItemResults, getStatsTemplate, formatAverageResults } = require('../../modules/stats');
 const PROCESS_ENUM = require('../../enums/process');
 
 module.exports = async ({ }, context) => {
@@ -15,15 +15,18 @@ module.exports = async ({ }, context) => {
 
     const parsedResults = JSON.parse(results);
 
+    const { storage: { storeReportFile } } = context[PROCESS_ENUM.STORAGE_PREPARE];
+    await storeReportFile(context[PROCESS_ENUM.STORAGE_TEST_SETUP].id, parsedResults);
+
     const groupedResults = parsedResults.reduce((acc, item) => {
       let accProp = 'end';
 
       if (item.timestamp <= startTime) {
-        acc = 'start';
+        accProp = 'start';
       } else if (item.timestamp <= endTime) {
-        acc = 'tests';
+        accProp = 'tests';
       }
-        
+
       setItemResults(acc[accProp], item);
 
       return acc;
@@ -33,7 +36,7 @@ module.exports = async ({ }, context) => {
       end: getStatsTemplate(),
     });
 
-    const formattedResults = Object.keys(groupedResults).map(key => formatResults(groupedResults[key]));
+    const formattedResults = Object.keys(groupedResults).map(key => formatAverageResults(groupedResults[key], key));
 
     return { key: PROCESS_ENUM.STATS_ANALYZE, results: formattedResults };
   } catch (error) {
