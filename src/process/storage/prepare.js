@@ -12,7 +12,10 @@ module.exports = async (_, context) => {
 
     if (context[PROCESS_ENUM.SETTINGS_PREPARE].config.storageModule) {
       const execPath = process.cwd();
-      const fromPath = path.join(execPath, context[PROCESS_ENUM.SETTINGS_PREPARE].config.storageModule);
+      const fromPath = path.join(
+        execPath,
+        context[PROCESS_ENUM.SETTINGS_PREPARE].config.storageModule
+      );
       isValidFile = await fileExists(fromPath);
 
       if (isValidFile) {

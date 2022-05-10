@@ -2,7 +2,7 @@ const { getAnalysisFile } = require('../../modules/doctor');
 const { setItemResults, getStatsTemplate, formatAverageResults } = require('../../modules/stats');
 const PROCESS_ENUM = require('../../enums/process');
 
-module.exports = async ({ }, context) => {
+module.exports = async ({}, context) => {
   console.info(`Executing process ${PROCESS_ENUM.STATS_ANALYZE}`);
 
   try {
@@ -15,28 +15,35 @@ module.exports = async ({ }, context) => {
 
     const parsedResults = JSON.parse(results);
 
-    const { storage: { storeReportFile } } = context[PROCESS_ENUM.STORAGE_PREPARE];
+    const {
+      storage: { storeReportFile },
+    } = context[PROCESS_ENUM.STORAGE_PREPARE];
     await storeReportFile(context[PROCESS_ENUM.STORAGE_TEST_SETUP].id, parsedResults);
 
-    const groupedResults = parsedResults.reduce((acc, item) => {
-      let accProp = 'end';
+    const groupedResults = parsedResults.reduce(
+      (acc, item) => {
+        let accProp = 'end';
 
-      if (item.timestamp <= startTime) {
-        accProp = 'start';
-      } else if (item.timestamp <= endTime) {
-        accProp = 'tests';
+        if (item.timestamp <= startTime) {
+          accProp = 'start';
+        } else if (item.timestamp <= endTime) {
+          accProp = 'tests';
+        }
+
+        setItemResults(acc[accProp], item);
+
+        return acc;
+      },
+      {
+        start: getStatsTemplate(),
+        tests: getStatsTemplate(),
+        end: getStatsTemplate(),
       }
+    );
 
-      setItemResults(acc[accProp], item);
-
-      return acc;
-    }, {
-      start: getStatsTemplate(),
-      tests: getStatsTemplate(),
-      end: getStatsTemplate(),
-    });
-
-    const formattedResults = Object.keys(groupedResults).map(key => formatAverageResults(groupedResults[key], key));
+    const formattedResults = Object.keys(groupedResults).map((key) =>
+      formatAverageResults(groupedResults[key], key)
+    );
 
     return { key: PROCESS_ENUM.STATS_ANALYZE, results: formattedResults };
   } catch (error) {

@@ -2,15 +2,14 @@ const assert = require('assert');
 const axios = require('axios');
 
 const resolveAxiosParams = (globalConfig, itemConfig) => {
-  const {
-    params, query, headers, body,
-  } = { ...globalConfig, ...itemConfig };
+  const { params, query, headers, body } = { ...globalConfig, ...itemConfig };
 
   return { params, query, headers, body };
 };
 
 const setSequenceResponseStatus = (sequenceStats, responseStatus) => {
-  if (sequenceStats.responseStatus[responseStatus]) sequenceStats.responseStatus[responseStatus] += 1;
+  if (sequenceStats.responseStatus[responseStatus])
+    sequenceStats.responseStatus[responseStatus] += 1;
   else sequenceStats.responseStatus[responseStatus] = 1;
 };
 const setSequenceResponseAssert = (sequenceStats, responseData, expectedOutput) => {
@@ -43,7 +42,11 @@ const runSequence = async (globalConfig, testScripts = []) => {
 
       setSequenceResponseStatus(sequenceStats, status);
       setSequenceResponseAssert(sequenceStats, data, testScripts[i].assert);
-      sequenceStats.logs.push({ path: testScripts[i].path, startTime, endTime: new Date().getTime() })
+      sequenceStats.logs.push({
+        path: testScripts[i].path,
+        startTime,
+        endTime: new Date().getTime(),
+      });
 
       lastExec = { data, status };
     } catch (error) {
@@ -52,7 +55,11 @@ const runSequence = async (globalConfig, testScripts = []) => {
       if (error.response) {
         setSequenceResponseStatus(sequenceStats, error.response.status);
         setSequenceResponseAssert(sequenceStats, error.response.data, testScripts[i].assert);
-        sequenceStats.logs.push({ path: testScripts[i].path, startTime, endTime: new Date().getTime() })
+        sequenceStats.logs.push({
+          path: testScripts[i].path,
+          startTime,
+          endTime: new Date().getTime(),
+        });
       }
     }
   }

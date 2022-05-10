@@ -1,71 +1,70 @@
 const fs = require('fs');
 const pumpify = require('pumpify');
-const Stringify = require('streaming-json-stringify')
-const streamTemplate = require('stream-template')
+const Stringify = require('streaming-json-stringify');
+const streamTemplate = require('stream-template');
 const ProcessStatDecoder = require('@nearform/doctor/format/process-stat-decoder');
 const ClinicDoctor = require('@nearform/doctor');
 const { netstatByPort } = require('../modules/cmd');
 
-const execDoctor = (appStarterPath, afterCollectCallback) => new Promise(async (resolve, reject) => {
-  try {
-    const doctor = new ClinicDoctor();
+const execDoctor = (appStarterPath, afterCollectCallback) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      const doctor = new ClinicDoctor();
 
-    doctor.collect(['node', appStarterPath], function (err, filepath) {
-      if (err) throw err;
-      afterCollectCallback({ filePath: filepath });
-    });
+      doctor.collect(['node', appStarterPath], function (err, filepath) {
+        if (err) throw err;
+        afterCollectCallback({ filePath: filepath });
+      });
 
-    resolve(doctor.killCollectEmitter);
-  } catch (error) {
-    console.error('execDoctor error', error);
+      resolve(doctor.killCollectEmitter);
+    } catch (error) {
+      console.error('execDoctor error', error);
 
-    reject(error);
-  }
-});
-
-const getAnalysisFile = (port, pid = null) => new Promise(async (resolve, reject) => {
-  try {
-    let doctorProcessPid;
-
-    if (!pid) {
-      ({ pid: doctorProcessPid } = await netstatByPort(port));
-    } else {
-      doctorProcessPid = pid;
+      reject(error);
     }
+  });
 
-    const path = `${process.cwd()}/${doctorProcessPid}.clinic-doctor/${doctorProcessPid}.clinic-doctor-processstat`;
+const getAnalysisFile = (port, pid = null) =>
+  new Promise(async (resolve, reject) => {
+    try {
+      let doctorProcessPid;
 
-    const processStatReader = pumpify.obj(
-      fs.createReadStream(path),
-      new ProcessStatDecoder()
-    );
+      if (!pid) {
+        ({ pid: doctorProcessPid } = await netstatByPort(port));
+      } else {
+        doctorProcessPid = pid;
+      }
 
-    const processStatStringify = pumpify(
-      processStatReader,
-      new Stringify({
-        seperator: ',\n',
-        stringifier: JSON.stringify
-      })
-    );
+      const path = `${process.cwd()}/${doctorProcessPid}.clinic-doctor/${doctorProcessPid}.clinic-doctor-processstat`;
 
-    const processStatStream = streamTemplate`${processStatStringify}`;
-    let processstat = '';
+      const processStatReader = pumpify.obj(fs.createReadStream(path), new ProcessStatDecoder());
 
-    processStatStream.on('data', (data) => {
-      processstat += Buffer.from(data).toString();
-    });
+      const processStatStringify = pumpify(
+        processStatReader,
+        new Stringify({
+          seperator: ',\n',
+          stringifier: JSON.stringify,
+        })
+      );
 
-    processStatStream.on('end', () => {
-      resolve(processstat);
-    });
-  } catch (error) {
-    console.error('Error retrieving analysis file', error);
+      const processStatStream = streamTemplate`${processStatStringify}`;
+      let processstat = '';
 
-    reject(error);
-  }
-});
+      processStatStream.on('data', (data) => {
+        processstat += Buffer.from(data).toString();
+      });
+
+      processStatStream.on('end', () => {
+        resolve(processstat);
+      });
+    } catch (error) {
+      console.error('Error retrieving analysis file', error);
+
+      reject(error);
+    }
+  });
 
 module.exports = {
   execDoctor,
   getAnalysisFile,
-}
+};

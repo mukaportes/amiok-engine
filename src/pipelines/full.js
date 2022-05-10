@@ -25,10 +25,14 @@ module.exports = async (params) => {
 
   params.collectCallback = (filePath) => {
     const updatedParams = { ...params, filePath };
-    const { storage: { storeResourceStats } } = context[PROCESS_ENUM.STORAGE_PREPARE];
+    const {
+      storage: { storeResourceStats },
+    } = context[PROCESS_ENUM.STORAGE_PREPARE];
 
     analyzeStats(updatedParams, context)
-      .then(({ results }) => storeResourceStats(context[PROCESS_ENUM.STORAGE_TEST_SETUP].test.id, results))
+      .then(({ results }) =>
+        storeResourceStats(context[PROCESS_ENUM.STORAGE_TEST_SETUP].test.id, results)
+      )
       .then(() => clearDoctor(updatedParams, context))
       .catch((error) => {
         console.error('Error at collectCallback()', error);
@@ -45,7 +49,7 @@ module.exports = async (params) => {
     }
   } catch (error) {
     console.error('Error execting MAIN pipeline', error);
-    
+
     process.kill(process.pid, 1);
   }
 };

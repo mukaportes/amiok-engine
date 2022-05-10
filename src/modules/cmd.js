@@ -1,7 +1,6 @@
 const netstat = require('node-netstat');
 const { execSync } = require('child_process');
 
-
 const execCmd = async (cmd, fromPath) => {
   try {
     execSync(cmd, {
@@ -11,7 +10,7 @@ const execCmd = async (cmd, fromPath) => {
   } catch (error) {
     throw new Error(error);
   }
-}
+};
 
 const execCmdList = async (cmdList = [], fromPath) => {
   if (!fromPath) throw new Error('Origin path must be provided.');
@@ -29,17 +28,20 @@ const netstatByPort = (port) => {
   if (!port) throw 'A port must be provided.';
 
   return new Promise((resolve, reject) => {
-    netstat({
-      filter: {
-        local: {
-          port,
+    netstat(
+      {
+        filter: {
+          local: {
+            port,
+          },
         },
       },
-    }, (item, err) => {
-      if (err) reject(err);
+      (item, err) => {
+        if (err) reject(err);
 
-      resolve(item);
-    });
+        resolve(item);
+      }
+    );
   });
 };
 
