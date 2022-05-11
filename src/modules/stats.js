@@ -1,13 +1,17 @@
 const setItemResults = (results, resultItem) => {
-  results.delay += resultItem.delay;
-  results.cpu += resultItem.cpu;
-  results.memory.rss += resultItem.memory.rss;
-  results.memory.heapTotal += resultItem.memory.heapTotal;
-  results.memory.heapUsed += resultItem.memory.heapUsed;
-  results.memory.external += resultItem.memory.external;
-  results.memory.arrayBuffers += resultItem.memory.arrayBuffers;
-  results.handles += resultItem.handles;
-  results.itemCount += 1;
+  const formattedResults = { ...results };
+
+  formattedResults.delay += resultItem.delay;
+  formattedResults.cpu += resultItem.cpu;
+  formattedResults.memory.rss += resultItem.memory.rss;
+  formattedResults.memory.heapTotal += resultItem.memory.heapTotal;
+  formattedResults.memory.heapUsed += resultItem.memory.heapUsed;
+  formattedResults.memory.external += resultItem.memory.external;
+  formattedResults.memory.arrayBuffers += resultItem.memory.arrayBuffers;
+  formattedResults.handles += resultItem.handles;
+  formattedResults.itemCount += 1;
+
+  return formattedResults;
 };
 
 const toMB = (value) => Number(value) / 1024 / 1024;
@@ -48,21 +52,7 @@ const getRoundStatsTemplate = () => ({
   },
 });
 
-const updateRoundStats = (stats, roundResults) => {
-  roundResults.forEach(({ responseStatus, assert, logs = [] }) => {
-    Object.keys(responseStatus).forEach((status) => {
-      stats.responseStatus[status] += responseStatus[status];
-    });
-
-    stats.assert.pass += assert.pass;
-    stats.assert.fail += assert.fail;
-
-    stats.logs.push(...logs);
-  });
-};
-
 module.exports = {
-  updateRoundStats,
   setItemResults,
   toMB,
   formatAverageResults,

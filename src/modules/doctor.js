@@ -4,14 +4,13 @@ const Stringify = require('streaming-json-stringify');
 const streamTemplate = require('stream-template');
 const ProcessStatDecoder = require('@nearform/doctor/format/process-stat-decoder');
 const ClinicDoctor = require('@nearform/doctor');
-const { netstatByPort } = require('../modules/cmd');
 
 const execDoctor = (appStarterPath, afterCollectCallback) =>
-  new Promise(async (resolve, reject) => {
+  new Promise((resolve, reject) => {
     try {
       const doctor = new ClinicDoctor();
 
-      doctor.collect(['node', appStarterPath], function (err, filepath) {
+      doctor.collect(['node', appStarterPath], (err, filepath) => {
         if (err) throw err;
         afterCollectCallback({ filePath: filepath });
       });
@@ -24,17 +23,9 @@ const execDoctor = (appStarterPath, afterCollectCallback) =>
     }
   });
 
-const getAnalysisFile = (port, pid = null) =>
-  new Promise(async (resolve, reject) => {
+const getAnalysisFile = (port, doctorProcessPid = null) =>
+  new Promise((resolve, reject) => {
     try {
-      let doctorProcessPid;
-
-      if (!pid) {
-        ({ pid: doctorProcessPid } = await netstatByPort(port));
-      } else {
-        doctorProcessPid = pid;
-      }
-
       const path = `${process.cwd()}/${doctorProcessPid}.clinic-doctor/${doctorProcessPid}.clinic-doctor-processstat`;
 
       const processStatReader = pumpify.obj(fs.createReadStream(path), new ProcessStatDecoder());

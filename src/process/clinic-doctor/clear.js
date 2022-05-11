@@ -5,7 +5,7 @@ module.exports = async ({ filePath }, context) => {
   console.info(`Executing process ${PROCESS_ENUM.DOCTOR_CLEAR}`);
 
   try {
-    let path = filePath || context[PROCESS_ENUM.DOCTOR_START].filePath;
+    const path = filePath || context[PROCESS_ENUM.DOCTOR_START].filePath;
     const [parentFolder] = path.split('/');
     const folderName = `${process.cwd()}/${parentFolder}`;
 

@@ -19,6 +19,8 @@ module.exports = async (_, context) => {
       isValidFile = await fileExists(fromPath);
 
       if (isValidFile) {
+        // NOTE: need to dynamically require file to grab settings data
+        // eslint-disable-next-line import/no-dynamic-require, global-require
         const externalConfig = require(fromPath);
         configFile = { ...defaultStorage, ...externalConfig };
       }

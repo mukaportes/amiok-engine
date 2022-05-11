@@ -1,10 +1,9 @@
 const fs = require('fs');
-const path = require('path');
 const rimraf = require('rimraf');
 
 const getFileContent = (filePath) =>
   new Promise((resolve, reject) => {
-    fs.readFile(filePath, 'utf8', function (err, content) {
+    fs.readFile(filePath, 'utf8', (err, content) => {
       if (err) reject(err);
 
       resolve({
@@ -39,8 +38,6 @@ const fileExists = (path) =>
       resolve(true);
     });
   });
-
-// const getFilesFromFolder = ();
 
 module.exports = {
   getFileContent,

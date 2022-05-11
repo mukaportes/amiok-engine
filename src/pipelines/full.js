@@ -23,6 +23,8 @@ module.exports = async (params) => {
     shutdownDoctor,
   ];
 
+  // NOTE: disable param reassign because we need to dynamically set the collectCallback value
+  // eslint-disable-next-line no-param-reassign
   params.collectCallback = (filePath) => {
     const updatedParams = { ...params, filePath };
     const {
@@ -43,6 +45,7 @@ module.exports = async (params) => {
 
   try {
     for (let i = 0; i < steps.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
       const { key, ...values } = await steps[i](params, context);
 
       context[key] = values;

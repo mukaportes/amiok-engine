@@ -8,17 +8,28 @@ const resolveAxiosParams = (globalConfig, itemConfig) => {
 };
 
 const setSequenceResponseStatus = (sequenceStats, responseStatus) => {
-  if (sequenceStats.responseStatus[responseStatus])
-    sequenceStats.responseStatus[responseStatus] += 1;
-  else sequenceStats.responseStatus[responseStatus] = 1;
+  const stats = { ...sequenceStats };
+
+  if (stats.responseStatus[responseStatus]) {
+    stats.responseStatus[responseStatus] += 1;
+  } else {
+    stats.responseStatus[responseStatus] = 1;
+  }
+
+  return stats;
 };
+
 const setSequenceResponseAssert = (sequenceStats, responseData, expectedOutput) => {
-  if (assert.deepStrictEqual(responseData, expectedOutput)) sequenceStats.assert.pass += 1;
-  else sequenceStats.assert.fail += 1;
+  const stats = { ...sequenceStats };
+  const target = assert.deepStrictEqual(responseData, expectedOutput) ? 'pass' : 'fail';
+
+  stats.assert[target] += 1;
+
+  return stats;
 };
 
 const runSequence = async (globalConfig, testScripts = []) => {
-  const sequenceStats = {
+  let sequenceStats = {
     responseStatus: {},
     logs: [],
     assert: {
@@ -29,8 +40,9 @@ const runSequence = async (globalConfig, testScripts = []) => {
   // let lastExec; -----> use this when implementing the chain use of response data
 
   for (let i = 0; i < testScripts.length; i += 1) {
+    const startTime = new Date().getTime();
     try {
-      const startTime = new Date().getTime();
+      // eslint-disable-next-line no-await-in-loop
       const { data, status } = await axios({
         url: `${globalConfig.basePath}${testScripts[i].path}`,
         method: testScripts[i].method.toUpperCase(),
@@ -40,21 +52,25 @@ const runSequence = async (globalConfig, testScripts = []) => {
       if (sequenceStats.responseStatus[status]) sequenceStats.responseStatus[status] += 1;
       else sequenceStats.responseStatus[status] = 1;
 
-      setSequenceResponseStatus(sequenceStats, status);
-      setSequenceResponseAssert(sequenceStats, data, testScripts[i].assert);
+      sequenceStats = setSequenceResponseStatus(sequenceStats, status);
+      sequenceStats = setSequenceResponseAssert(sequenceStats, data, testScripts[i].assert);
       sequenceStats.logs.push({
         path: testScripts[i].path,
         startTime,
         endTime: new Date().getTime(),
       });
 
-      lastExec = { data, status };
+      // lastExec = { data, status };
     } catch (error) {
       console.error(`Error executing ${testScripts[i].method} request`, error);
 
       if (error.response) {
-        setSequenceResponseStatus(sequenceStats, error.response.status);
-        setSequenceResponseAssert(sequenceStats, error.response.data, testScripts[i].assert);
+        sequenceStats = setSequenceResponseStatus(sequenceStats, error.response.status);
+        sequenceStats = setSequenceResponseAssert(
+          sequenceStats,
+          error.response.data,
+          testScripts[i].assert
+        );
         sequenceStats.logs.push({
           path: testScripts[i].path,
           startTime,

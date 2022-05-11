@@ -9,8 +9,12 @@ module.exports = async () => {
     const fromPath = path.join(execPath, './amiok.settings.json');
     const isValidFile = await fileExists(fromPath);
 
-    if (!isValidFile) throw 'No valid AMIOK scripts provided. Check your amiok.settings.json file';
+    if (!isValidFile) {
+      throw new Error('No valid AMIOK scripts provided. Check your amiok.settings.json file');
+    }
 
+    // NOTE: need to dynamically require file to grab settings data
+    // eslint-disable-next-line import/no-dynamic-require, global-require
     const configFile = require(fromPath);
     configFile.title = configFile.title || 'AMIOK Test';
 
