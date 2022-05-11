@@ -23,12 +23,17 @@ module.exports = async (_, context) => {
       },
     } = context[PROCESS_ENUM.SETTINGS_PREPARE];
 
-    if (!basePath)
-      throw 'No valid AMIOK scripts basePath provided. Check your amiok.settings.json file';
-    if (!Array.isArray(testScripts) || !testScripts.length)
-      throw 'No AMIOK test scripts provided. Check your amiok.settings.json file';
+    if (!basePath) {
+      throw new Error(
+        'No valid AMIOK scripts basePath provided. Check your amiok.settings.json file'
+      );
+    }
+    if (!Array.isArray(testScripts) || !testScripts.length) {
+      throw new Error('No AMIOK test scripts provided. Check your amiok.settings.json file');
+    }
 
     for (let round = 0; round < rounds; round += 1) {
+      // eslint-disable-next-line no-await-in-loop
       const roundResults = await Promise.all(
         [...new Array(threads)].map(() =>
           runSequence(
@@ -43,7 +48,7 @@ module.exports = async (_, context) => {
         )
       );
 
-      await context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeTestResults(
+      context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeTestResults(
         context[PROCESS_ENUM.STORAGE_TEST_SETUP].id,
         roundResults
       );
