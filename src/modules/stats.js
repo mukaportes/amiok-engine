@@ -1,4 +1,4 @@
-const setItemResults = (results, resultItem) => {
+const mergeItemToResults = (results, resultItem) => {
   const formattedResults = { ...results };
 
   formattedResults.delay += resultItem.delay;
@@ -53,7 +53,7 @@ const getRoundStatsTemplate = () => ({
 });
 
 module.exports = {
-  setItemResults,
+  mergeItemToResults,
   toMB,
   formatAverageResults,
   getStatsTemplate,

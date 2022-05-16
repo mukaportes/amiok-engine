@@ -1,5 +1,5 @@
 const { getAnalysisFile } = require('../../modules/doctor');
-const { setItemResults, getStatsTemplate, formatAverageResults } = require('../../modules/stats');
+const { mergeItemToResults, getStatsTemplate, formatAverageResults } = require('../../modules/stats');
 const PROCESS_ENUM = require('../../enums/process');
 
 module.exports = async ({}, context) => {
@@ -30,7 +30,7 @@ module.exports = async ({}, context) => {
           accProp = 'tests';
         }
 
-        acc[accProp] = setItemResults(acc[accProp], item);
+        acc[accProp] = mergeItemToResults(acc[accProp], item);
 
         return acc;
       },
