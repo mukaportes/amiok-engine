@@ -26,7 +26,6 @@
     "axios": "^0.21.1",
     "node-netstat": "^1.8.0",
     "pumpify": "^2.0.1",
-    "rimraf": "^3.0.2",
     "stream-template": "0.0.10",
     "streaming-json-stringify": "^3.1.0"
   },
@@ -43,6 +42,7 @@
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.5.0",
     "jest": "^28.1.0",
+    "nock": "^13.2.4",
     "prettier": "^2.6.2"
   }
 }
