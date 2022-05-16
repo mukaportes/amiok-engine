@@ -21,9 +21,13 @@ const setSequenceResponseStatus = (sequenceStats, responseStatus) => {
 
 const setSequenceResponseAssert = (sequenceStats, responseData, expectedOutput) => {
   const stats = { ...sequenceStats };
-  const target = assert.deepStrictEqual(responseData, expectedOutput) ? 'pass' : 'fail';
 
-  stats.assert[target] += 1;
+  try {
+    assert.deepStrictEqual(responseData, expectedOutput);
+    stats.assert.pass += 1;
+  } catch (error) {
+    stats.assert.fail += 1;
+  }
 
   return stats;
 };
@@ -49,9 +53,6 @@ const runSequence = async (globalConfig, testScripts = []) => {
         ...resolveAxiosParams(globalConfig, testScripts[i]),
       });
 
-      if (sequenceStats.responseStatus[status]) sequenceStats.responseStatus[status] += 1;
-      else sequenceStats.responseStatus[status] = 1;
-
       sequenceStats = setSequenceResponseStatus(sequenceStats, status);
       sequenceStats = setSequenceResponseAssert(sequenceStats, data, testScripts[i].assert);
       sequenceStats.logs.push({
@@ -59,8 +60,6 @@ const runSequence = async (globalConfig, testScripts = []) => {
         startTime,
         endTime: new Date().getTime(),
       });
-
-      // lastExec = { data, status };
     } catch (error) {
       console.error(`Error executing ${testScripts[i].method} request`, error);
 
