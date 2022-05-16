@@ -8,12 +8,12 @@ const waitAppStart = ({ staticDelay = 5000 }) =>
     }, staticDelay);
   });
 
-module.exports = async ({ appStarterPath = '.', collectCallback }, context) => {
+module.exports = async ({ entrypointPath = '.', collectCallback }, context) => {
   console.info(`Executing process ${PROCESS_ENUM.DOCTOR_START}`);
   try {
     const { config = {} } = context[PROCESS_ENUM.SETTINGS_PREPARE];
 
-    await execDoctor(appStarterPath, ({ filePath }) => {
+    await execDoctor(entrypointPath, ({ filePath }) => {
       if (!context[PROCESS_ENUM.DOCTOR_START]) context[PROCESS_ENUM.DOCTOR_START] = { filePath };
       else context[PROCESS_ENUM.DOCTOR_START].filePath = filePath;
 
