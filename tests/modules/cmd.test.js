@@ -1,4 +1,3 @@
-const netstat = require('node-netstat');
 const { execSync } = require('child_process');
 const cmdModule = require('../../src/modules/cmd');
 
