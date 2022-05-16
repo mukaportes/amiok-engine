@@ -5,12 +5,12 @@ const streamTemplate = require('stream-template');
 const ProcessStatDecoder = require('@nearform/doctor/format/process-stat-decoder');
 const ClinicDoctor = require('@nearform/doctor');
 
-const execDoctor = (appStarterPath, afterCollectCallback) =>
+const execDoctor = (entrypointPath, afterCollectCallback) =>
   new Promise((resolve, reject) => {
     try {
       const doctor = new ClinicDoctor();
 
-      doctor.collect(['node', appStarterPath], (err, filepath) => {
+      doctor.collect(['node', entrypointPath], (err, filepath) => {
         if (err) throw err;
         afterCollectCallback({ filePath: filepath });
       });
@@ -23,9 +23,10 @@ const execDoctor = (appStarterPath, afterCollectCallback) =>
     }
   });
 
-const getAnalysisFile = (port, doctorProcessPid = null) =>
+const getAnalysisFile = (doctorProcessPid) =>
   new Promise((resolve, reject) => {
     try {
+      if (!doctorProcessPid) reject('A process pid must be provided.');
       const path = `${process.cwd()}/${doctorProcessPid}.clinic-doctor/${doctorProcessPid}.clinic-doctor-processstat`;
 
       const processStatReader = pumpify.obj(fs.createReadStream(path), new ProcessStatDecoder());
@@ -33,11 +34,11 @@ const getAnalysisFile = (port, doctorProcessPid = null) =>
       const processStatStringify = pumpify(
         processStatReader,
         new Stringify({
-          seperator: ',\n',
+          separator: ',\n',
           stringifier: JSON.stringify,
         })
       );
-
+      
       const processStatStream = streamTemplate`${processStatStringify}`;
       let processstat = '';
 
@@ -47,6 +48,10 @@ const getAnalysisFile = (port, doctorProcessPid = null) =>
 
       processStatStream.on('end', () => {
         resolve(processstat);
+      });
+
+      processStatStream.on('error', (error) => {
+        reject(error);
       });
     } catch (error) {
       console.error('Error retrieving analysis file', error);
