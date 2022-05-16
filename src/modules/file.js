@@ -1,43 +1,34 @@
-const fs = require('fs');
-const rimraf = require('rimraf');
+const fs = require('fs/promises');
 
-const getFileContent = (filePath) =>
-  new Promise((resolve, reject) => {
-    fs.readFile(filePath, 'utf8', (err, content) => {
-      if (err) reject(err);
+const getFileContent = async (filePath) => {
+  try {
+    const content = await fs.readFile(filePath, 'utf8');
 
-      resolve({
-        type: typeof content,
-        content,
-      });
-    });
-  });
+    return { type: typeof content, content };
+  } catch (error) {
+    console.error('Error while reading file', error);
+    throw new Error(error);
+  }
+};
 
-const removeFolder = (folderPath) =>
-  new Promise((resolve, reject) => {
-    try {
-      rimraf(folderPath, (err) => {
-        if (err) throw err;
+const removeFolder = async (folderPath) => {
+  try {
+    await fs.rm(folderPath, { recursive: true, force: true });
+  } catch (error) {
+    console.error('Error while removing folder', error);
+    throw new Error(error);
+  }
+};
 
-        console.log(`Removed all content from folder at ${folderPath}`);
-
-        resolve();
-      });
-    } catch (error) {
-      console.error('removeFolder() error', error);
-
-      reject(error);
-    }
-  });
-
-const fileExists = (path) =>
-  new Promise((resolve) => {
-    fs.access(path, fs.F_OK, (err) => {
-      if (err) resolve(false);
-
-      resolve(true);
-    });
-  });
+const fileExists = async (path) => {
+  try {
+    await fs.access(path, fs.F_OK);
+    return true;
+  } catch (error) {
+    console.error('Error while verifying if file exists', error);
+    return false;
+  }
+};
 
 module.exports = {
   getFileContent,
