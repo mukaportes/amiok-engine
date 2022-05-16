@@ -1,5 +1,6 @@
 const assert = require('assert');
 const axios = require('axios');
+const { getRoundStatsTemplate } = require('./stats');
 
 const resolveAxiosParams = (globalConfig, itemConfig) => {
   const { params, query, headers, body } = { ...globalConfig, ...itemConfig };
@@ -33,14 +34,7 @@ const setSequenceResponseAssert = (sequenceStats, responseData, expectedOutput) 
 };
 
 const runSequence = async (globalConfig, testScripts = []) => {
-  let sequenceStats = {
-    responseStatus: {},
-    logs: [],
-    assert: {
-      pass: 0,
-      fail: 0,
-    },
-  };
+  let sequenceStats = getRoundStatsTemplate();
   // let lastExec; -----> use this when implementing the chain use of response data
 
   for (let i = 0; i < testScripts.length; i += 1) {
