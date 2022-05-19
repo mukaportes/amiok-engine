@@ -1,14 +1,14 @@
 const PROCESS_ENUM = require('../../enums/process');
 const { execDoctor } = require('../../modules/doctor');
 
-const waitAppStart = ({ staticDelay = 5000 }) =>
+const waitAppStart = ({ staticDelay = 3000 }) =>
   new Promise((resolve) => {
     setTimeout(() => {
       resolve();
     }, staticDelay);
   });
 
-module.exports = async ({ entrypointPath = '.', collectCallback }, context) => {
+module.exports = async ({ entrypointPath = '.', collectCallback } = {}, context = {}) => {
   console.info(`Executing process ${PROCESS_ENUM.DOCTOR_START}`);
   try {
     const { config = {} } = context[PROCESS_ENUM.SETTINGS_PREPARE];
