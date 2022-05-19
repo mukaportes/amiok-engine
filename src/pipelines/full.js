@@ -25,22 +25,20 @@ module.exports = async (params) => {
 
   // NOTE: disable param reassign because we need to dynamically set the collectCallback value
   // eslint-disable-next-line no-param-reassign
-  params.collectCallback = (filePath) => {
-    const updatedParams = { ...params, filePath };
-    const {
-      storage: { storeResourceStats },
-    } = context[PROCESS_ENUM.STORAGE_PREPARE];
+  params.collectCallback = async (filePath) => {
+    try {
+      const updatedParams = { ...params, filePath };
+      const {
+        storage: { storeResourceStats },
+      } = context[PROCESS_ENUM.STORAGE_PREPARE];
 
-    analyzeStats(updatedParams, context)
-      .then(({ results }) =>
-        storeResourceStats(context[PROCESS_ENUM.STORAGE_TEST_SETUP].test.id, results)
-      )
-      .then(() => clearDoctor(updatedParams, context))
-      .catch((error) => {
-        console.error('Error at collectCallback()', error);
-
-        throw error;
-      });
+      const { results } = await analyzeStats(updatedParams, context);
+      await storeResourceStats(context[PROCESS_ENUM.STORAGE_TEST_SETUP].test.id, results);
+      await clearDoctor(updatedParams, context);
+    } catch (error) {
+      console.error('Error @ collectCallback()', error);
+      process.kill(process.pid, 1);
+    }
   };
 
   try {
