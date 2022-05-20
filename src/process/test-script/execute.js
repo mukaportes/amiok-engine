@@ -15,7 +15,6 @@ module.exports = async (_, context) => {
     const {
       config: {
         basePath,
-        // runInSequence = true,
         rounds = 200,
         threads = 10,
         testScripts = [],
