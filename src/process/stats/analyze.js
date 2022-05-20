@@ -2,7 +2,7 @@ const { getAnalysisFile } = require('../../modules/doctor');
 const { mergeItemToResults, getStatsTemplate, formatAverageResults } = require('../../modules/stats');
 const PROCESS_ENUM = require('../../enums/process');
 
-module.exports = async ({}, context) => {
+module.exports = async (_, context) => {
   console.info(`Executing process ${PROCESS_ENUM.STATS_ANALYZE}`);
 
   try {
