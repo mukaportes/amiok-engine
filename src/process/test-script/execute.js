@@ -1,7 +1,7 @@
 const { runSequence } = require('../../modules/http');
 const PROCESS_ENUM = require('../../enums/process');
 
-const waitAfterExecute = ({ staticDelay = 5000 }) =>
+const waitAfterExecute = ({ staticDelay = 3000 }) =>
   new Promise((resolve) => {
     setTimeout(() => {
       resolve();
