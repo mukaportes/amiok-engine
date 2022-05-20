@@ -43,6 +43,7 @@ describe('Settings Prepare Process Tests', () => {
       try {
         await settingsPrepare();
       } catch (error) {
+        expect(stubCwd).toHaveBeenCalled();
         expect(error).toEqual(new Error('No valid AMIOK scripts provided. Check your amiok.settings.json file'));
       }
     });
