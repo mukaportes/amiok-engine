@@ -7,3 +7,10 @@ interface TestDB {
   startedAt: number;
   endedAt: number;
 }
+
+interface StorageModule {
+  storeTest: function;
+  storeTestResults: function;
+  storeResourceStats: function;
+  storeReportFile: function;
+}
