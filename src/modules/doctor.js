@@ -5,6 +5,12 @@ const streamTemplate = require('stream-template');
 const ProcessStatDecoder = require('@nearform/doctor/format/process-stat-decoder');
 const ClinicDoctor = require('@nearform/doctor');
 
+/**
+ * 
+ * @param {string} entrypointPath path to the app's entrypoint
+ * @param {function} afterCollectCallback callback to be executed after collect report data
+ * @returns {Promise}
+ */
 const execDoctor = (entrypointPath, afterCollectCallback) =>
   new Promise((resolve, reject) => {
     try {
@@ -23,6 +29,11 @@ const execDoctor = (entrypointPath, afterCollectCallback) =>
     }
   });
 
+/**
+ * 
+ * @param {number} doctorProcessPid PID of the process running by Clinic Doctor
+ * @returns {Promise} string when resolved
+ */
 const getAnalysisFile = (doctorProcessPid) =>
   new Promise((resolve, reject) => {
     try {
@@ -38,7 +49,7 @@ const getAnalysisFile = (doctorProcessPid) =>
           stringifier: JSON.stringify,
         })
       );
-      
+
       const processStatStream = streamTemplate`${processStatStringify}`;
       let processstat = '';
 

@@ -1,6 +1,10 @@
 const netstat = require('node-netstat');
 const { execSync } = require('child_process');
 
+/**
+ * 
+ * @param {string} cmd Command to be executed 
+ */
 const execCmd = (cmd) => {
   try {
     if (!cmd) throw new Error('A command must be provided.');
@@ -12,10 +16,14 @@ const execCmd = (cmd) => {
   }
 };
 
+/**
+ * 
+ * @param {number} port Port to be searched 
+ * @returns {Promise} { port: number } when resolved
+ */
 const netstatByPort = (port) => {
-  if (!port) throw new Error('A port must be provided.');
-
   return new Promise((resolve, reject) => {
+    if (!port) reject('A port must be provided.');
     netstat(
       {
         filter: {

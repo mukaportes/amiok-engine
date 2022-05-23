@@ -1,5 +1,10 @@
 const fs = require('fs/promises');
 
+/**
+ * 
+ * @param {string} filePath 
+ * @returns {object} { type: string, content: string }
+ */
 const getFileContent = async (filePath) => {
   try {
     const content = await fs.readFile(filePath, 'utf8');
@@ -11,6 +16,10 @@ const getFileContent = async (filePath) => {
   }
 };
 
+/**
+ * 
+ * @param {string} folderPath 
+ */
 const removeFolder = async (folderPath) => {
   try {
     await fs.rm(folderPath, { recursive: true, force: true });
@@ -20,6 +29,11 @@ const removeFolder = async (folderPath) => {
   }
 };
 
+/**
+ * 
+ * @param {string} path 
+ * @returns {boolean}
+ */
 const fileExists = async (path) => {
   try {
     await fs.access(path, fs.F_OK);

@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param {StatsTemplate} results 
+ * @param {StatsTemplate} resultItem 
+ * @returns {StatsTemplate}
+ */
 const mergeItemToResults = (results, resultItem) => {
   const formattedResults = { ...results };
 
@@ -14,8 +20,19 @@ const mergeItemToResults = (results, resultItem) => {
   return formattedResults;
 };
 
+/**
+ * 
+ * @param {string | number} value 
+ * @returns {number}
+ */
 const toMB = (value) => Number(value) / 1024 / 1024;
 
+/**
+ * 
+ * @param {StatsTemplate} results 
+ * @param {string} rangeType 
+ * @returns {StatsTemplateDb}
+ */
 const formatAverageResults = (results, rangeType) => ({
   delay: results.delay / results.itemCount,
   cpu: results.cpu / results.itemCount,
@@ -29,6 +46,10 @@ const formatAverageResults = (results, rangeType) => ({
   rangeType,
 });
 
+/**
+ * 
+ * @returns {StatsTemplate}
+ */
 const getStatsTemplate = () => ({
   delay: 0,
   cpu: 0,
@@ -43,6 +64,10 @@ const getStatsTemplate = () => ({
   itemCount: 0,
 });
 
+/**
+ * 
+ * @returns {SequenceStats}
+ */
 const getRoundStatsTemplate = () => ({
   responseStatus: {},
   logs: [],

@@ -2,12 +2,24 @@ const assert = require('assert');
 const axios = require('axios');
 const { getRoundStatsTemplate } = require('./stats');
 
+/**
+ * 
+ * @param {GlobalConfig} globalConfig AMIOK config
+ * @param {TestScript} itemConfig Test scripts' item config
+ * @returns {AxiosParams}
+ */
 const resolveAxiosParams = (globalConfig, itemConfig) => {
   const { params, query, headers, body } = { ...globalConfig, ...itemConfig };
 
   return { params, query, headers, body };
 };
 
+/**
+ * 
+ * @param {SequenceStats} sequenceStats 
+ * @param {number} responseStatus 
+ * @returns {SequenceStats}
+ */
 const setSequenceResponseStatus = (sequenceStats, responseStatus) => {
   const stats = { ...sequenceStats };
 
@@ -20,6 +32,13 @@ const setSequenceResponseStatus = (sequenceStats, responseStatus) => {
   return stats;
 };
 
+/**
+ * 
+ * @param {SequenceStats} sequenceStats 
+ * @param {any} responseData 
+ * @param {any} expectedOutput 
+ * @returns {SequenceStats}
+ */
 const setSequenceResponseAssert = (sequenceStats, responseData, expectedOutput) => {
   const stats = { ...sequenceStats };
 
@@ -33,6 +52,12 @@ const setSequenceResponseAssert = (sequenceStats, responseData, expectedOutput) 
   return stats;
 };
 
+/**
+ * 
+ * @param {GlobalConfig} globalConfig 
+ * @param {TestScripts} testScripts 
+ * @returns {SequenceStats}
+ */
 const runSequence = async (globalConfig, testScripts = []) => {
   let sequenceStats = getRoundStatsTemplate();
   // let lastExec; -----> use this when implementing the chain use of response data
