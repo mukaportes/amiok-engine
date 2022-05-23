@@ -29,11 +29,12 @@ describe('Store Module Tests', () => {
   describe('storeResourceStats()', () => {
     it('prints args', () => {
       const stubConsole = jest.spyOn(global.console, 'log');
+      const id = 'someData';
       const resourceStats = ['someData'];
 
-      storeModule.storeResourceStats(resourceStats);
+      storeModule.storeResourceStats(id, resourceStats);
 
-      expect(stubConsole).toHaveBeenCalledWith('Called storeResourceStats()', { resourceStats });
+      expect(stubConsole).toHaveBeenCalledWith('Called storeResourceStats()', { id, resourceStats });
 
       stubConsole.mockClear();
     });
@@ -41,11 +42,12 @@ describe('Store Module Tests', () => {
   describe('storeReportFile()', () => {
     it('prints args', () => {
       const stubConsole = jest.spyOn(global.console, 'log');
+      const id = 'someData';
       const reportFile = ['someData'];
 
-      storeModule.storeReportFile(reportFile);
+      storeModule.storeReportFile(id, reportFile);
 
-      expect(stubConsole).toHaveBeenCalledWith('Called storeReportFile()', { reportFile });
+      expect(stubConsole).toHaveBeenCalledWith('Called storeReportFile()', { id, reportFile });
 
       stubConsole.mockClear();
     });

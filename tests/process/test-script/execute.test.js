@@ -27,7 +27,9 @@ describe('Test Script Execute Process Tests', () => {
             },
           },
           [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
-            id: mockData.string(),
+            test: {
+              id: mockData.integer(),
+            }
           },
         };
 
@@ -61,7 +63,9 @@ describe('Test Script Execute Process Tests', () => {
             },
           },
           [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
-            id: mockData.string(),
+            test: {
+              id: mockData.integer(),
+            }
           },
         };
 
@@ -90,7 +94,9 @@ describe('Test Script Execute Process Tests', () => {
             },
           },
           [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
-            id: mockData.string(),
+            test: {
+              id: mockData.integer(),
+            }
           },
         };
 
@@ -118,7 +124,9 @@ describe('Test Script Execute Process Tests', () => {
             },
           },
           [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
-            id: mockData.string(),
+            test: {
+              id: mockData.integer(),
+            }
           },
         };
 
@@ -146,7 +154,9 @@ describe('Test Script Execute Process Tests', () => {
             },
           },
           [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
-            id: mockData.string(),
+            test: {
+              id: mockData.integer(),
+            }
           },
         };
 

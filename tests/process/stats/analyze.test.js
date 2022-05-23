@@ -34,7 +34,9 @@ describe('Stats Analyze Process Tests', () => {
             },
           },
           [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
-            id: mockData.integer(),
+            test: {
+              id: mockData.integer(),
+            }
           },
         };
 
@@ -70,7 +72,9 @@ describe('Stats Analyze Process Tests', () => {
             },
           },
           [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
-            id: mockData.integer(),
+            test: {
+              id: mockData.integer(),
+            }
           },
         };
 

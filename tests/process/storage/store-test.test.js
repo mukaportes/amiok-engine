@@ -10,7 +10,9 @@ describe('Storage Store Test Process Tests', () => {
         const storeTestMock = jest.fn();
         const context = {
           [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
-            id: mockData.string(),
+            test: {
+              id: mockData.integer(),
+            }
           },
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
             config: {
@@ -33,7 +35,7 @@ describe('Storage Store Test Process Tests', () => {
         const newCtxData = await storeTest(undefined, context);
 
         expect(storeTestMock).toHaveBeenCalledWith({
-          id: context[PROCESS_ENUM.STORAGE_TEST_SETUP].id,
+          id: context[PROCESS_ENUM.STORAGE_TEST_SETUP].test.id,
           title: context[PROCESS_ENUM.SETTINGS_PREPARE].config.title,
           basePath: context[PROCESS_ENUM.SETTINGS_PREPARE].config.basePath,
           roundCount: context[PROCESS_ENUM.SETTINGS_PREPARE].config.rounds,
