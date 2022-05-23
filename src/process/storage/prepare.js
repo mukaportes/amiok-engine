@@ -3,6 +3,12 @@ const { fileExists } = require('../../modules/file');
 const storage = require('../../modules/store');
 const PROCESS_ENUM = require('../../enums/process');
 
+/**
+ * 
+ * @param {Params} _ 
+ * @param {Context} context 
+ * @returns {StoragePrepareContext}
+ */
 module.exports = async (_, context) => {
   console.info(`Executing process ${PROCESS_ENUM.STORAGE_PREPARE}`);
   try {

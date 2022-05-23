@@ -8,6 +8,12 @@ const waitAfterExecute = ({ staticDelay = 3000 }) =>
     }, staticDelay);
   });
 
+/**
+ * 
+ * @param {Params} _ 
+ * @param {Context} context 
+ * @returns {TestScriptsExecuteContext}
+ */
 module.exports = async (_, context) => {
   console.info(`Executing process ${PROCESS_ENUM.SCRIPT_EXECUTE}`);
   const startTime = new Date().getTime();
@@ -48,7 +54,7 @@ module.exports = async (_, context) => {
       );
 
       context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeTestResults(
-        context[PROCESS_ENUM.STORAGE_TEST_SETUP].id,
+        context[PROCESS_ENUM.STORAGE_TEST_SETUP].test.id,
         roundResults
       );
       console.info(`Executed round ${round} of ${rounds}`);

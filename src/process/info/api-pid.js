@@ -1,6 +1,12 @@
 const PROCESS_ENUM = require('../../enums/process');
 const { netstatByPort } = require('../../modules/cmd');
 
+/**
+ * 
+ * @param {Params} _ 
+ * @param {Context} context 
+ * @returns {InfoApiPidContext}
+ */
 module.exports = async (_, context) => {
   console.info(`Executing process ${PROCESS_ENUM.INFO_API_PID}`);
   try {

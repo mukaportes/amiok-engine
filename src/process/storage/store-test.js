@@ -1,10 +1,16 @@
 const PROCESS_ENUM = require('../../enums/process');
 
+/**
+ * 
+ * @param {Params} _ 
+ * @param {Context} context 
+ * @returns {NewContextData}
+ */
 module.exports = async (_, context) => {
   console.info(`Executing process ${PROCESS_ENUM.STORAGE_TEST}`);
   try {
     const newTestProps = {
-      ...context[PROCESS_ENUM.STORAGE_TEST_SETUP],
+      ...context[PROCESS_ENUM.STORAGE_TEST_SETUP].test,
       title: context[PROCESS_ENUM.SETTINGS_PREPARE].config.title,
       basePath: context[PROCESS_ENUM.SETTINGS_PREPARE].config.basePath,
       roundCount: context[PROCESS_ENUM.SETTINGS_PREPARE].config.rounds,

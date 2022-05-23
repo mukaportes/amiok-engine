@@ -1,11 +1,16 @@
 const { removeFolder } = require('../../modules/file');
 const PROCESS_ENUM = require('../../enums/process');
 
-module.exports = async ({ filePath }, context) => {
+/**
+ * 
+ * @param {Params} params
+ * @param {Context} context 
+ */
+module.exports = async (params, context) => {
   console.info(`Executing process ${PROCESS_ENUM.DOCTOR_CLEAR}`);
 
   try {
-    const path = filePath || context[PROCESS_ENUM.DOCTOR_START].filePath;
+    const path = params.filePath || context[PROCESS_ENUM.DOCTOR_START].filePath;
     const [parentFolder] = path.split('/');
     const folderName = `${process.cwd()}/${parentFolder}`;
 

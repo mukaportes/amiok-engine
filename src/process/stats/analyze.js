@@ -2,6 +2,12 @@ const { getAnalysisFile } = require('../../modules/doctor');
 const { mergeItemToResults, getStatsTemplate, formatAverageResults } = require('../../modules/stats');
 const PROCESS_ENUM = require('../../enums/process');
 
+/**
+ * 
+ * @param {Params} _ 
+ * @param {Context} context 
+ * @returns {StatsAnalyzeContext}
+ */
 module.exports = async (_, context) => {
   console.info(`Executing process ${PROCESS_ENUM.STATS_ANALYZE}`);
 
@@ -18,7 +24,7 @@ module.exports = async (_, context) => {
     const {
       storage: { storeReportFile },
     } = context[PROCESS_ENUM.STORAGE_PREPARE];
-    storeReportFile(context[PROCESS_ENUM.STORAGE_TEST_SETUP].id, parsedResults);
+    storeReportFile(context[PROCESS_ENUM.STORAGE_TEST_SETUP].test.id, parsedResults);
 
     const groupedResults = parsedResults.reduce(
       (acc, item) => {

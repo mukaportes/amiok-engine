@@ -8,9 +8,16 @@ const waitAppStart = ({ staticDelay = 3000 }) =>
     }, staticDelay);
   });
 
-module.exports = async ({ entrypointPath = '.', collectCallback } = {}, context = {}) => {
+/**
+ * 
+ * @param {Params} params 
+ * @param {Context} context 
+ * @returns {NewContextData}
+ */
+module.exports = async (params, context) => {
   console.info(`Executing process ${PROCESS_ENUM.DOCTOR_START}`);
   try {
+    const { entrypointPath = '.', collectCallback } = params;
     const { config = {} } = context[PROCESS_ENUM.SETTINGS_PREPARE];
 
     await execDoctor(entrypointPath, ({ filePath }) => {

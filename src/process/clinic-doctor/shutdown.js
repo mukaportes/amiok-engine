@@ -1,5 +1,11 @@
 const PROCESS_ENUM = require('../../enums/process');
 
+/**
+ * 
+ * @param {Params} _ 
+ * @param {Context} context 
+ * @returns {NewContextData}
+ */
 module.exports = async (_, context) => {
   console.info(`Executing process ${PROCESS_ENUM.DOCTOR_SHUTDOWN}`);
   try {

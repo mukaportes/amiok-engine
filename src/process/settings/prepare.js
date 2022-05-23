@@ -2,6 +2,10 @@ const path = require('path');
 const { fileExists } = require('../../modules/file');
 const PROCESS_ENUM = require('../../enums/process');
 
+/**
+ * 
+ * @returns {SettingsPrepareContext}
+ */
 module.exports = async () => {
   console.info(`Executing process ${PROCESS_ENUM.SETTINGS_PREPARE}`);
   try {
