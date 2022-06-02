@@ -77,12 +77,21 @@ describe('Storage Prepare Process Tests', () => {
     });
   });
   describe('unhappy path', () => {
-    it('should return new context data with default storage config', async () => {
-      const stubConsole = jest.spyOn(global.console, 'error');
+    it('should throw an error when SETTINGS_PREPARE context data is missing', async () => {
       try {
         await storagePrepare();
       } catch (error) {
-        expect(stubConsole).toHaveBeenCalled();
+        expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
+      }
+    });
+    it('should throw an error when SETTINGS_PREPARE config is missing', async () => {
+      try {
+        const context = {
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {},
+        };
+        await storagePrepare(undefined, context);
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('Missing settings config'));
       }
     });
   });

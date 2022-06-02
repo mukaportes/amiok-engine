@@ -3,15 +3,22 @@ const { fileExists } = require('../../modules/file');
 const storage = require('../../modules/store');
 const PROCESS_ENUM = require('../../enums/process');
 
+const validate = (context) => {
+  if (!context[PROCESS_ENUM.SETTINGS_PREPARE]) throw new Error('Missing SETTINGS_PREPARE context data');
+  if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config) throw new Error('Missing settings config');
+};
+
 /**
  * 
  * @param {Params} _ 
  * @param {Context} context 
  * @returns {StoragePrepareContext}
  */
-module.exports = async (_, context) => {
+module.exports = async (_, context = {}) => {
   console.info(`Executing process ${PROCESS_ENUM.STORAGE_PREPARE}`);
   try {
+    validate(context);
+
     const defaultStorage = { ...storage };
     let isValidFile = false;
     let configFile = defaultStorage;
