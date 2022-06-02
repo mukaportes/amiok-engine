@@ -54,10 +54,7 @@ describe('Clinic Doctor Clear Process', () => {
   describe('unhappy path', () => {
     it('should throw an error filePath is not provided with missing DOCTOR_START context data', async () => {
       try {
-        const params = {};
-        const context = {};
-
-        await clinicDoctorClear(params, context);
+        await clinicDoctorClear();
       } catch (error) {
         expect(error).toEqual(new Error('Missing DOCTOR_START context data'));
       }

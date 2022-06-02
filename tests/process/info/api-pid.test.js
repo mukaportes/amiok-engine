@@ -38,8 +38,7 @@ describe('Info API PID Process Tests', () => {
     });
     it('throws new error when SETTINGS_PREPARE context data is missing', async () => {
       try {
-        const context = {};
-        await infoApiPid(undefined, context);
+        await infoApiPid();
       } catch (error) {
         expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }

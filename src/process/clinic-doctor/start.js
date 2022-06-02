@@ -13,7 +13,7 @@ const validate = (params, context) => {
  * @param {Context} context 
  * @returns {NewContextData}
  */
-module.exports = async (params, context) => {
+module.exports = async (params = {}, context = {}) => {
   console.info(`Executing process ${PROCESS_ENUM.DOCTOR_START}`);
   try {
     validate(params, context);

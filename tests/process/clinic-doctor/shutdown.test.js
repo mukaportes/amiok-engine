@@ -27,8 +27,7 @@ describe('Clinic Doctor Shutdown Tests', () => {
   describe('unhappy path', () => {
     it('throws error when context is missing INFO_API_PID data', async () => {
       try {
-        const context = {};
-        await clinicDoctorShutdown(undefined, context);
+        await clinicDoctorShutdown();
       } catch (error) {
         expect(error).toEqual(new Error('Missing INFO_API_PID context data'));
       }

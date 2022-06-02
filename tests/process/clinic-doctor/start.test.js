@@ -51,9 +51,7 @@ describe('Clinic Doctor Start Tests', () => {
   describe('unhappy path', () => {
     it('throws error when no collectCallback params is provided', async () => {
       try {
-        const params = {};
-        const context = {};
-        await clinicDoctorStart({}, {});
+        await clinicDoctorStart();
       } catch (error) {
         expect(error).toStrictEqual(new Error('Missing collectCallback method'));
       }

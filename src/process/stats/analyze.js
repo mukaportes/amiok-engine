@@ -19,7 +19,7 @@ const validate = (context) => {
  * @param {Context} context 
  * @returns {StatsAnalyzeContext}
  */
-module.exports = async (_, context) => {
+module.exports = async (_, context = {}) => {
   console.info(`Executing process ${PROCESS_ENUM.STATS_ANALYZE}`);
 
   try {

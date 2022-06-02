@@ -85,9 +85,7 @@ describe('Stats Analyze Process Tests', () => {
     });
     it('should throw an error when INFO_API_PID is missing', async () => {
       try {
-        const context = {};
-
-        await statsAnalyze(undefined, context);
+        await statsAnalyze();
       } catch (error) {
         expect(error).toEqual(new Error('Missing INFO_API_PID context data'));
       }

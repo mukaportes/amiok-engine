@@ -13,7 +13,7 @@ const validate = (context) => {
  * @param {Context} context 
  * @returns {InfoApiPidContext}
  */
-module.exports = async (_, context) => {
+module.exports = async (_, context = {}) => {
   console.info(`Executing process ${PROCESS_ENUM.INFO_API_PID}`);
   try {
     validate(context);

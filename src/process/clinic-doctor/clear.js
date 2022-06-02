@@ -14,7 +14,7 @@ const validate = (params, context) => {
  * @param {Params} params
  * @param {Context} context 
  */
-module.exports = async (params, context) => {
+module.exports = async (params = {}, context = {}) => {
   console.info(`Executing process ${PROCESS_ENUM.DOCTOR_CLEAR}`);
 
   try {
