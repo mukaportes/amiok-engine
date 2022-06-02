@@ -52,16 +52,26 @@ describe('Clinic Doctor Clear Process', () => {
     });
   });
   describe('unhappy path', () => {
-    it('should throw an error if an exception occurs', async () => {
-      const stubConsoleError = jest.spyOn(global.console, 'error');
+    it('should throw an error filePath is not provided with missing DOCTOR_START context data', async () => {
       try {
-        const parentFolder = 'path';
         const params = {};
         const context = {};
 
         await clinicDoctorClear(params, context);
       } catch (error) {
-        expect(stubConsoleError).toHaveBeenCalled();
+        expect(error).toEqual(new Error('Missing DOCTOR_START context data'));
+      }
+    });
+    it('should throw an error filePath is not provided with missing DOCTOR_START filePath', async () => {
+      try {
+        const params = {};
+        const context = {
+          [PROCESS_ENUM.DOCTOR_START]: {},
+        };
+
+        await clinicDoctorClear(params, context);
+      } catch (error) {
+        expect(error).toEqual(new Error('Missing Doctor filePath'));
       }
     });
   });
