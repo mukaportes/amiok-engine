@@ -25,13 +25,22 @@ describe('Clinic Doctor Shutdown Tests', () => {
     });
   });
   describe('unhappy path', () => {
-    it('throws error when an exception occurs', async () => {
-      const stubConsoleError = jest.spyOn(global.console, 'error');
+    it('throws error when context is missing INFO_API_PID data', async () => {
       try {
         const context = {};
         await clinicDoctorShutdown(undefined, context);
       } catch (error) {
-        expect(stubConsoleError).toHaveBeenCalled();
+        expect(error).toEqual(new Error('Missing INFO_API_PID context data'));
+      }
+    });
+    it('throws error when context is missing INFO_API_PID apiPid', async () => {
+      try {
+        const context = {
+          [PROCESS_ENUM.INFO_API_PID]: {},
+        };
+        await clinicDoctorShutdown(undefined, context);
+      } catch (error) {
+        expect(error).toEqual(new Error('Missing API PID'));
       }
     });
   });
