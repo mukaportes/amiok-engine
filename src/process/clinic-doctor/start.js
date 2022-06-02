@@ -1,12 +1,11 @@
 const PROCESS_ENUM = require('../../enums/process');
+const { waitFor } = require('../../modules/utils');
 const { execDoctor } = require('../../modules/doctor');
 
-const waitAppStart = ({ staticDelay = 3000 }) =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, staticDelay);
-  });
+const validate = (params, context) => {
+  if (!params.collectCallback) throw new Error('Missing collectCallback method');
+  if (!context[PROCESS_ENUM.SETTINGS_PREPARE]) throw new Error('Missing SETTINGS_PREPARE context data');
+};
 
 /**
  * 
@@ -17,6 +16,8 @@ const waitAppStart = ({ staticDelay = 3000 }) =>
 module.exports = async (params, context) => {
   console.info(`Executing process ${PROCESS_ENUM.DOCTOR_START}`);
   try {
+    validate(params, context);
+
     const { entrypointPath = '.', collectCallback } = params;
     const { config = {} } = context[PROCESS_ENUM.SETTINGS_PREPARE];
 
@@ -27,7 +28,7 @@ module.exports = async (params, context) => {
       collectCallback(filePath);
     });
 
-    await waitAppStart(config);
+    await waitFor(config.staticDelay);
 
     return { key: PROCESS_ENUM.DOCTOR_START };
   } catch (error) {

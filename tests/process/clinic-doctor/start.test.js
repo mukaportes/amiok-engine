@@ -5,7 +5,7 @@ jest.mock('../../../src/modules/doctor', () => ({
   execDoctor: jest.fn((_, cb) => cb({ filePath: '/path/file.js' })),
 }));
 
-describe('Clinic Doctor Shutdown Tests', () => {
+describe('Clinic Doctor Start Tests', () => {
   describe('happy path', () => {
     it('should add filePath to context, call collect callback and return new context data', async () => {
       try {
@@ -49,19 +49,22 @@ describe('Clinic Doctor Shutdown Tests', () => {
     });
   });
   describe('unhappy path', () => {
-    it('throws error when an exception occurs', async () => {
-      const stubConsoleError = jest.spyOn(global.console, 'error');
+    it('throws error when no collectCallback params is provided', async () => {
       try {
+        const params = {};
+        const context = {};
         await clinicDoctorStart({}, {});
       } catch (error) {
-        expect(stubConsoleError).toHaveBeenCalled();
+        expect(error).toStrictEqual(new Error('Missing collectCallback method'));
       }
     });
-    it('throws error when an exception occurs', async () => {
+    it('throws error when SETTINGS_PREPARE context data is missing', async () => {
       try {
-        await clinicDoctorStart();
+        const params = { collectCallback: () => { } };
+        const context = {};
+        await clinicDoctorStart(params, context);
       } catch (error) {
-        expect(error).toBeInstanceOf(Error);
+        expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }
     });
   });
