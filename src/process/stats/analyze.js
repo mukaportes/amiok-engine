@@ -2,6 +2,17 @@ const { getAnalysisFile } = require('../../modules/doctor');
 const { mergeItemToResults, getStatsTemplate, formatAverageResults } = require('../../modules/stats');
 const PROCESS_ENUM = require('../../enums/process');
 
+const validate = (context) => {
+  if (!context[PROCESS_ENUM.INFO_API_PID]) throw new Error('Missing INFO_API_PID context data');
+  if (!context[PROCESS_ENUM.INFO_API_PID].apiPid) throw new Error('Missing API PID');
+  if (!context[PROCESS_ENUM.SCRIPT_EXECUTE]) throw new Error('Missing SCRIPT_EXECUTE context data');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE]) throw new Error('Missing STORAGE_PREPARE context data');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage) throw new Error('Missing STORAGE_PREPARE storage module');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeReportFile) throw new Error('Missing STORAGE_PREPARE storage module storeReportFile()');
+  if (!context[PROCESS_ENUM.STORAGE_TEST_SETUP]) throw new Error('Missing STORAGE_TEST_SETUP context data');
+  if (!context[PROCESS_ENUM.STORAGE_TEST_SETUP].test) throw new Error('Missing STORAGE_TEST_SETUP test');
+};
+
 /**
  * 
  * @param {Params} _ 
@@ -12,6 +23,8 @@ module.exports = async (_, context) => {
   console.info(`Executing process ${PROCESS_ENUM.STATS_ANALYZE}`);
 
   try {
+    validate(context);
+
     const { apiPid } = context[PROCESS_ENUM.INFO_API_PID];
     const { startTime, endTime } = context[PROCESS_ENUM.SCRIPT_EXECUTE];
 
