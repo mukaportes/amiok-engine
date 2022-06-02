@@ -168,14 +168,96 @@ describe('Test Script Execute Process Tests', () => {
         ));
       }
     });
-    it('should throw error when an exception occurs', async () => {
-      const mockStoreTestResults = jest.fn();
+    it('should throw error when SETTINGS_PREPARE context data is missing', async () => {
       try {
-        const context = {};
-
+        await testScriptExecute();
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
+      }
+    });
+    it('should throw error when SETTINGS_PREPARE config is missing', async () => {
+      try {
+        const context = {
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {},
+        };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(mockStoreTestResults).not.toHaveBeenCalled();
+        expect(error).toStrictEqual(new Error('Missing settings config'));
+      }
+    });
+    it('should throw error when STORAGE_PREPARE context data is missing', async () => {
+      try {
+        const context = {
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {},
+          },
+        };
+        await testScriptExecute(undefined, context);
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE context data'));
+      }
+    });
+    it('should throw error when STORAGE_PREPARE storage module is missing', async () => {
+      try {
+        const context = {
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {},
+          },
+          [PROCESS_ENUM.STORAGE_PREPARE]: {},
+        };
+        await testScriptExecute(undefined, context);
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE storage module'));
+      }
+    });
+    it('should throw error when STORAGE_PREPARE storage module storeTestResults() is missing', async () => {
+      try {
+        const context = {
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {},
+          },
+          [PROCESS_ENUM.STORAGE_PREPARE]: {
+            storage: {},
+          },
+        };
+        await testScriptExecute(undefined, context);
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE storage module storeTestResults()'));
+      }
+    });
+    it('should throw error when STORAGE_TEST_SETUP context data is missing', async () => {
+      try {
+        const context = {
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {},
+          },
+          [PROCESS_ENUM.STORAGE_PREPARE]: {
+            storage: {
+              storeTestResults: () => { },
+            },
+          },
+        };
+        await testScriptExecute(undefined, context);
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('Missing STORAGE_TEST_SETUP context data'));
+      }
+    });
+    it('should throw error when STORAGE_TEST_SETUP test is missing', async () => {
+      try {
+        const context = {
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {},
+          },
+          [PROCESS_ENUM.STORAGE_PREPARE]: {
+            storage: {
+              storeTestResults: () => { },
+            },
+          },
+          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {},
+        };
+        await testScriptExecute(undefined, context);
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('Missing STORAGE_TEST_SETUP test'));
       }
     });
   });

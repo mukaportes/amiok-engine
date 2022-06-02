@@ -1,12 +1,16 @@
+const { waitFor } = require('../../modules/utils');
 const { runSequence } = require('../../modules/http');
 const PROCESS_ENUM = require('../../enums/process');
 
-const waitAfterExecute = ({ staticDelay = 3000 }) =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, staticDelay);
-  });
+const validate = (context) => {
+  if (!context[PROCESS_ENUM.SETTINGS_PREPARE]) throw new Error('Missing SETTINGS_PREPARE context data');
+  if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config) throw new Error('Missing settings config');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE]) throw new Error('Missing STORAGE_PREPARE context data');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage) throw new Error('Missing STORAGE_PREPARE storage module');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeTestResults) throw new Error('Missing STORAGE_PREPARE storage module storeTestResults()');
+  if (!context[PROCESS_ENUM.STORAGE_TEST_SETUP]) throw new Error('Missing STORAGE_TEST_SETUP context data');
+  if (!context[PROCESS_ENUM.STORAGE_TEST_SETUP].test) throw new Error('Missing STORAGE_TEST_SETUP test');
+};
 
 /**
  * 
@@ -14,10 +18,12 @@ const waitAfterExecute = ({ staticDelay = 3000 }) =>
  * @param {Context} context 
  * @returns {TestScriptsExecuteContext}
  */
-module.exports = async (_, context) => {
+module.exports = async (_, context = {}) => {
   console.info(`Executing process ${PROCESS_ENUM.SCRIPT_EXECUTE}`);
   const startTime = new Date().getTime();
   try {
+    validate(context);
+
     const {
       config: {
         basePath,
@@ -61,7 +67,7 @@ module.exports = async (_, context) => {
     }
 
     const endTime = new Date().getTime();
-    await waitAfterExecute({ staticDelay });
+    await waitFor({ staticDelay });
 
     return { key: PROCESS_ENUM.SCRIPT_EXECUTE, startTime, endTime };
   } catch (error) {
