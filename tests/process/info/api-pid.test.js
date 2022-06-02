@@ -36,12 +36,34 @@ describe('Info API PID Process Tests', () => {
         expect(stubConsoleError).toHaveBeenCalled();
       }
     });
-    it('throws new error when an exception occurs', async () => {
-      const stubConsoleError = jest.spyOn(global.console, 'error');
+    it('throws new error when SETTINGS_PREPARE context data is missing', async () => {
       try {
-        await infoApiPid();
+        const context = {};
+        await infoApiPid(undefined, context);
       } catch (error) {
-        expect(stubConsoleError).toHaveBeenCalled();
+        expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
+      }
+    });
+    it('throws new error when SETTINGS_PREPARE config is missing', async () => {
+      try {
+        const context = {
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {}
+        };
+        await infoApiPid(undefined, context);
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('Missing settings config'));
+      }
+    });
+    it('throws new error when SETTINGS_PREPARE port is missing', async () => {
+      try {
+        const context = {
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {},
+          },
+        };
+        await infoApiPid(undefined, context);
+      } catch (error) {
+        expect(error).toStrictEqual(new Error('Missing settings config port'));
       }
     });
   });
