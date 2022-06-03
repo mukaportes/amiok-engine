@@ -32,7 +32,8 @@ const getAnalysis = (targetProcess) => {
 
   outputStr += `${cpuUsage}-`;
   outputStr += `${memory.rss}-${memory.heapTotal}-${memory.heapUsed}-${memory.external}-${memory.arrayBuffers}-`;
-  outputStr += `${numActiveHandles}`;
+  outputStr += `${numActiveHandles}-`;
+  outputStr += `${new Date().toISOString()}`;
 
   return outputStr;
 };
