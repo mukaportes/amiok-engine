@@ -1,3 +1,6 @@
+const fs = require('fs/promises');
+const { createFile } = require("./file");
+
 /**
  * 
  * @param {StatsTemplate} results 
@@ -7,7 +10,6 @@
 const mergeItemToResults = (results, resultItem) => {
   const formattedResults = { ...results };
 
-  formattedResults.delay += resultItem.delay;
   formattedResults.cpu += resultItem.cpu;
   formattedResults.memory.rss += resultItem.memory.rss;
   formattedResults.memory.heapTotal += resultItem.memory.heapTotal;
@@ -34,13 +36,12 @@ const toMB = (value) => Number(value) / 1024 / 1024;
  * @returns {StatsTemplateDb}
  */
 const formatAverageResults = (results, rangeType) => ({
-  delay: results.delay / results.itemCount,
   cpu: results.cpu / results.itemCount,
-  memoryRss: toMB(results.memory.rss / results.itemCount),
-  memoryHeapTotal: toMB(results.memory.heapTotal / results.itemCount),
-  memoryHeapUsed: toMB(results.memory.heapUsed / results.itemCount),
-  memoryExternal: toMB(results.memory.external / results.itemCount),
-  memoryArrayBuffers: toMB(results.memory.arrayBuffers / results.itemCount),
+  memoryRss: results.memory.rss / results.itemCount,
+  memoryHeapTotal: results.memory.heapTotal / results.itemCount,
+  memoryHeapUsed: results.memory.heapUsed / results.itemCount,
+  memoryExternal: results.memory.external / results.itemCount,
+  memoryArrayBuffers: results.memory.arrayBuffers / results.itemCount,
   handles: results.handles / results.itemCount,
   itemCount: results.itemCount,
   rangeType,
@@ -51,7 +52,6 @@ const formatAverageResults = (results, rangeType) => ({
  * @returns {StatsTemplate}
  */
 const getStatsTemplate = () => ({
-  delay: 0,
   cpu: 0,
   memory: {
     rss: 0,
@@ -77,10 +77,71 @@ const getRoundStatsTemplate = () => ({
   },
 });
 
+const fileFolder = `${process.cwd()}/_amiokstats`;
+const fileName = `${testId}_${new Date().getTime()}.stats`;
+
+/**
+ * 
+ * @param {StatsTemplate} stats 
+ * @param {string} line 
+ */
+const processStatsRow = (stats, line) => {
+  const [
+    cpu,
+    memoryRss,
+    memoryHeapTotal,
+    memoryHeapUsed,
+    memoryExternal,
+    memoryArrayBuffers,
+    numActiveHandles,
+  ] = line.split('-');
+
+  return mergeItemToResults(stats, {
+    cpu,
+    memory: {
+      rss: toMB(Number(memoryRss)),
+      heapTotal: toMB(Number(memoryHeapTotal)),
+      heapUsed: toMB(Number(memoryHeapUsed)),
+      external: toMB(Number(memoryExternal)),
+      arrayBuffers: toMB(Number(memoryArrayBuffers)),
+    },
+    activeHandles: Number(numActiveHandles),
+  });
+};
+
+/**
+ * 
+ * @param {string} newLine 
+ * @returns {Promise}
+ */
+const addStatsToFile = (newLine) => {
+  const filePath = `${fileFolder}/${fileName}`;
+
+  return fs.appendFile(filePath, newLine);
+};
+
+/**
+ * 
+ * @param {string} testId 
+ * @returns {boolean}
+ */
+const createStatsFile = (testId) => {
+  try {
+    await createFile(fileFolder, fileName);
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 module.exports = {
   mergeItemToResults,
   toMB,
   formatAverageResults,
   getStatsTemplate,
   getRoundStatsTemplate,
+  createStatsFile,
+  processStatsRow,
+  addStatsToFile,
 };
