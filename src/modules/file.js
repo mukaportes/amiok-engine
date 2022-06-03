@@ -34,7 +34,7 @@ const removeFolder = async (folderPath) => {
  * @param {string} path 
  * @returns {boolean}
  */
-const fileExists = async (path) => {
+const pathExists = async (path) => {
   try {
     await fs.access(path, fs.F_OK);
     return true;
@@ -44,8 +44,23 @@ const fileExists = async (path) => {
   }
 };
 
+const createFile = async (fileFolder, fileName) => {
+  try {
+    const folderExists = await pathExists();
+
+    if (!folderExists) {
+      await fs.mkdir(fileFolder);
+    }
+
+    await fs.writeFile(`${fileFolder}/${fileName}`);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   getFileContent,
   removeFolder,
-  fileExists,
+  pathExists,
+  createFile,
 };
