@@ -22,12 +22,8 @@
   },
   "homepage": "https://github.com/mukaportes/amiok-engine#readme",
   "dependencies": {
-    "@nearform/doctor": "^8.0.0",
     "axios": "^0.21.4",
-    "node-netstat": "^1.8.0",
-    "pumpify": "^2.0.1",
-    "stream-template": "0.0.10",
-    "streaming-json-stringify": "^3.1.0"
+    "node-netstat": "^1.8.0"
   },
   "devDependencies": {
     "chance": "^1.1.8",
