@@ -26,7 +26,7 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: mockStoreTestResults,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -62,7 +62,7 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: mockStoreTestResults,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -93,7 +93,7 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: mockStoreTestResults,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -123,7 +123,7 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: mockStoreTestResults,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -153,7 +153,7 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: mockStoreTestResults,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -225,7 +225,7 @@ describe('Test Script Execute Process Tests', () => {
         expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE storage module storeTestResults()'));
       }
     });
-    it('should throw error when STORAGE_TEST_SETUP context data is missing', async () => {
+    it('should throw error when TEST_SETUP context data is missing', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
@@ -239,10 +239,10 @@ describe('Test Script Execute Process Tests', () => {
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_TEST_SETUP context data'));
+        expect(error).toStrictEqual(new Error('Missing TEST_SETUP context data'));
       }
     });
-    it('should throw error when STORAGE_TEST_SETUP test is missing', async () => {
+    it('should throw error when TEST_SETUP test is missing', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
@@ -253,11 +253,11 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: () => { },
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {},
+          [PROCESS_ENUM.TEST_SETUP]: {},
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_TEST_SETUP test'));
+        expect(error).toStrictEqual(new Error('Missing TEST_SETUP test'));
       }
     });
   });

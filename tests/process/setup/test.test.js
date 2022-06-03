@@ -1,7 +1,7 @@
 const PROCESS_ENUM = require('../../../src/enums/process');
-const setupTest = require('../../../src/process/storage/setup-test');
+const setupTest = require('../../../src/process/setup/test');
 
-describe('Storage Setup Test Process Tests', () => {
+describe('Setup Test Process Tests', () => {
   describe('happy path', () => {
     it('should return new context data containing the test id', async () => {
       try {

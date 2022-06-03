@@ -65,14 +65,14 @@ describe('File Module Tests', () => {
       });
     });
   });
-  describe('fileExists()', () => {
+  describe('pathExists()', () => {
     describe('happy path', () => {
       it('returns true when file exists', async () => {
         try {
           const path = '/path/file.js';
-          const fileExists = await fileModule.fileExists(path);
+          const pathExists = await fileModule.pathExists(path);
 
-          expect(fileExists).toBe(true);
+          expect(pathExists).toBe(true);
         } catch (error) {
           throw new Error(error);
         }
@@ -82,9 +82,9 @@ describe('File Module Tests', () => {
       it('returns false when an error occurs or file does not exist', async () => {
         try {
           const path = '/path/error.js';
-          const fileExists = await fileModule.fileExists(path);
+          const pathExists = await fileModule.pathExists(path);
 
-          expect(fileExists).toBe(false);
+          expect(pathExists).toBe(false);
         } catch (error) {
           throw new Error(error);
         }

@@ -9,7 +9,7 @@ describe('Storage Store Test Process Tests', () => {
       try {
         const storeTestMock = jest.fn();
         const context = {
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -35,7 +35,7 @@ describe('Storage Store Test Process Tests', () => {
         const newCtxData = await storeTest(undefined, context);
 
         expect(storeTestMock).toHaveBeenCalledWith({
-          id: context[PROCESS_ENUM.STORAGE_TEST_SETUP].test.id,
+          id: context[PROCESS_ENUM.TEST_SETUP].test.id,
           title: context[PROCESS_ENUM.SETTINGS_PREPARE].config.title,
           basePath: context[PROCESS_ENUM.SETTINGS_PREPARE].config.basePath,
           roundCount: context[PROCESS_ENUM.SETTINGS_PREPARE].config.rounds,
@@ -50,17 +50,17 @@ describe('Storage Store Test Process Tests', () => {
     });
   });
   describe('unhappy path', () => {
-    it('should throw an error when STORAGE_TEST_SETUP context data is missing', async () => {
+    it('should throw an error when TEST_SETUP context data is missing', async () => {
       try {
         await storeTest();
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_TEST_SETUP context data'));
+        expect(error).toStrictEqual(new Error('Missing TEST_SETUP context data'));
       }
     });
-    it('should throw an error when STORAGE_TEST_SETUP test is missing', async () => {
+    it('should throw an error when TEST_SETUP test is missing', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {},
+          [PROCESS_ENUM.TEST_SETUP]: {},
         };
         await storeTest(undefined, context);
       } catch (error) {
@@ -70,7 +70,7 @@ describe('Storage Store Test Process Tests', () => {
     it('should throw an error when SETTINGS_PREPARE context data is missing', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -84,7 +84,7 @@ describe('Storage Store Test Process Tests', () => {
     it('should throw an error when SETTINGS_PREPARE config is missing', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -99,7 +99,7 @@ describe('Storage Store Test Process Tests', () => {
     it('should throw an error when SCRIPT_EXECUTE context data is missing', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -121,7 +121,7 @@ describe('Storage Store Test Process Tests', () => {
     it('should throw an error when STORAGE_PREPARE context data is missing', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -147,7 +147,7 @@ describe('Storage Store Test Process Tests', () => {
     it('should throw an error when STORAGE_PREPARE storage module is missing', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -174,7 +174,7 @@ describe('Storage Store Test Process Tests', () => {
     it('should throw an error when STORAGE_PREPARE storage module storeTest() is missing', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }

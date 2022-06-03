@@ -33,7 +33,7 @@ describe('Stats Analyze Process Tests', () => {
               storeReportFile,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -71,7 +71,7 @@ describe('Stats Analyze Process Tests', () => {
               storeReportFile,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.TEST_SETUP]: {
             test: {
               id: mockData.integer(),
             }
@@ -161,7 +161,7 @@ describe('Stats Analyze Process Tests', () => {
         expect(error).toEqual(new Error('Missing STORAGE_PREPARE storage module storeReportFile()'));
       }
     });
-    it('should throw an error when STORAGE_TEST_SETUP context data is missing', async () => {
+    it('should throw an error when TEST_SETUP context data is missing', async () => {
       try {
         const context = {
           [PROCESS_ENUM.INFO_API_PID]: { apiPid: 404 },
@@ -178,10 +178,10 @@ describe('Stats Analyze Process Tests', () => {
 
         await statsAnalyze(undefined, context);
       } catch (error) {
-        expect(error).toEqual(new Error('Missing STORAGE_TEST_SETUP context data'));
+        expect(error).toEqual(new Error('Missing TEST_SETUP context data'));
       }
     });
-    it('should throw an error when STORAGE_TEST_SETUP test is missing', async () => {
+    it('should throw an error when TEST_SETUP test is missing', async () => {
       try {
         const context = {
           [PROCESS_ENUM.INFO_API_PID]: { apiPid: 404 },
@@ -194,12 +194,12 @@ describe('Stats Analyze Process Tests', () => {
               storeReportFile: () => { },
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {},
+          [PROCESS_ENUM.TEST_SETUP]: {},
         };
 
         await statsAnalyze(undefined, context);
       } catch (error) {
-        expect(error).toEqual(new Error('Missing STORAGE_TEST_SETUP test'));
+        expect(error).toEqual(new Error('Missing TEST_SETUP test'));
       }
     });
   });

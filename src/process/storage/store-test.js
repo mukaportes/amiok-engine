@@ -1,8 +1,8 @@
 const PROCESS_ENUM = require('../../enums/process');
 
 const validate = (context) => {
-  if (!context[PROCESS_ENUM.STORAGE_TEST_SETUP]) throw new Error('Missing STORAGE_TEST_SETUP context data');
-  if (!context[PROCESS_ENUM.STORAGE_TEST_SETUP].test) throw new Error('Missing storage test data');
+  if (!context[PROCESS_ENUM.TEST_SETUP]) throw new Error('Missing TEST_SETUP context data');
+  if (!context[PROCESS_ENUM.TEST_SETUP].test) throw new Error('Missing storage test data');
   if (!context[PROCESS_ENUM.SETTINGS_PREPARE]) throw new Error('Missing SETTINGS_PREPARE context data');
   if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config) throw new Error('Missing settings config');
   if (!context[PROCESS_ENUM.SCRIPT_EXECUTE]) throw new Error('Missing SCRIPT_EXECUTE context data');
@@ -23,7 +23,7 @@ module.exports = async (_, context = {}) => {
     validate(context);
 
     const newTestProps = {
-      ...context[PROCESS_ENUM.STORAGE_TEST_SETUP].test,
+      ...context[PROCESS_ENUM.TEST_SETUP].test,
       title: context[PROCESS_ENUM.SETTINGS_PREPARE].config.title,
       basePath: context[PROCESS_ENUM.SETTINGS_PREPARE].config.basePath,
       roundCount: context[PROCESS_ENUM.SETTINGS_PREPARE].config.rounds,

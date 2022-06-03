@@ -7,7 +7,7 @@ const clearDoctor = require('../process/clinic-doctor/clear');
 const shutdownDoctor = require('../process/clinic-doctor/shutdown');
 const getInfoApiPid = require('../process/info/api-pid');
 const prepareStorage = require('../process/storage/prepare');
-const setupTest = require('../process/storage/setup-test');
+const setupTest = require('../process/setup/test');
 const storeTest = require('../process/storage/store-test');
 
 module.exports = async (params) => {
@@ -33,7 +33,7 @@ module.exports = async (params) => {
       } = context[PROCESS_ENUM.STORAGE_PREPARE];
 
       const { results } = await analyzeStats(updatedParams, context);
-      await storeResourceStats(context[PROCESS_ENUM.STORAGE_TEST_SETUP].test.id, results);
+      await storeResourceStats(context[PROCESS_ENUM.TEST_SETUP].test.id, results);
       await clearDoctor(updatedParams, context);
     } catch (error) {
       console.error('Error @ collectCallback()', error);

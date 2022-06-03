@@ -1,5 +1,5 @@
 const path = require('path');
-const { fileExists } = require('../../modules/file');
+const { pathExists } = require('../../modules/file');
 const storage = require('../../modules/store');
 const PROCESS_ENUM = require('../../enums/process');
 
@@ -29,7 +29,7 @@ module.exports = async (_, context = {}) => {
         execPath,
         context[PROCESS_ENUM.SETTINGS_PREPARE].config.storageModule
       );
-      isValidFile = await fileExists(fromPath);
+      isValidFile = await pathExists(fromPath);
 
       if (isValidFile) {
         // NOTE: need to dynamically require file to grab settings data

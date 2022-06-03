@@ -38,7 +38,7 @@ jest.mock('../../src/process/storage/prepare', () => jest.fn()
 jest.mock('../../src/process/storage/setup-test', () => jest
   .fn((params) => new Promise((resolve, reject) => {
     if (params.errorSteps) reject('Force exception');
-    else resolve({ key: 'STORAGE_TEST_SETUP', test: { id: 1 } });
+    else resolve({ key: 'TEST_SETUP', test: { id: 1 } });
   })));
 jest.mock('../../src/process/storage/store-test', () => jest.fn()
   .mockResolvedValue({ key: 'STORAGE_TEST', val: 1 }));

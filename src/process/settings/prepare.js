@@ -1,5 +1,5 @@
 const path = require('path');
-const { fileExists } = require('../../modules/file');
+const { pathExists } = require('../../modules/file');
 const PROCESS_ENUM = require('../../enums/process');
 
 /**
@@ -11,7 +11,7 @@ module.exports = async () => {
   try {
     const execPath = process.cwd();
     const fromPath = path.join(execPath, './amiok.settings.json');
-    const isValidFile = await fileExists(fromPath);
+    const isValidFile = await pathExists(fromPath);
 
     if (!isValidFile) {
       throw new Error('No valid AMIOK scripts provided. Check your amiok.settings.json file');

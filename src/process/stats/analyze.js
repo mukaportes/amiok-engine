@@ -9,8 +9,8 @@ const validate = (context) => {
   if (!context[PROCESS_ENUM.STORAGE_PREPARE]) throw new Error('Missing STORAGE_PREPARE context data');
   if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage) throw new Error('Missing STORAGE_PREPARE storage module');
   if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeReportFile) throw new Error('Missing STORAGE_PREPARE storage module storeReportFile()');
-  if (!context[PROCESS_ENUM.STORAGE_TEST_SETUP]) throw new Error('Missing STORAGE_TEST_SETUP context data');
-  if (!context[PROCESS_ENUM.STORAGE_TEST_SETUP].test) throw new Error('Missing STORAGE_TEST_SETUP test');
+  if (!context[PROCESS_ENUM.TEST_SETUP]) throw new Error('Missing TEST_SETUP context data');
+  if (!context[PROCESS_ENUM.TEST_SETUP].test) throw new Error('Missing TEST_SETUP test');
 };
 
 /**
@@ -37,7 +37,7 @@ module.exports = async (_, context = {}) => {
     const {
       storage: { storeReportFile },
     } = context[PROCESS_ENUM.STORAGE_PREPARE];
-    storeReportFile(context[PROCESS_ENUM.STORAGE_TEST_SETUP].test.id, parsedResults);
+    storeReportFile(context[PROCESS_ENUM.TEST_SETUP].test.id, parsedResults);
 
     const groupedResults = parsedResults.reduce(
       (acc, item) => {
