@@ -1,20 +1,4 @@
 const netstat = require('node-netstat');
-const { execSync } = require('child_process');
-
-/**
- * 
- * @param {string} cmd Command to be executed 
- */
-const execCmd = (cmd) => {
-  try {
-    if (!cmd) throw new Error('A command must be provided.');
-    execSync(cmd, {
-      stdio: [0, 1, 2], // print the command output
-    });
-  } catch (error) {
-    throw new Error(error);
-  }
-};
 
 /**
  * 
