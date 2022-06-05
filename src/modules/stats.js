@@ -1,10 +1,10 @@
 const fs = require('fs/promises');
-const { createFile } = require("./file");
+const { createFile } = require('./file');
 
 /**
- * 
- * @param {StatsTemplate} results 
- * @param {StatsTemplate} resultItem 
+ *
+ * @param {StatsTemplate} results
+ * @param {StatsTemplate} resultItem
  * @returns {StatsTemplate}
  */
 const mergeItemToResults = (results, resultItem) => {
@@ -23,19 +23,19 @@ const mergeItemToResults = (results, resultItem) => {
 };
 
 /**
- * 
- * @param {string | number} value 
+ *
+ * @param {string | number} value
  * @returns {number}
  */
 const toMB = (value) => Number(value) / 1024 / 1024;
 
 /**
- * 
- * @param {StatsTemplate} results 
- * @param {string} rangeType 
+ *
+ * @param {StatsTemplate} results
+ * @param {string} rangeType
  * @returns {StatsTemplateDb}
  */
-const formatAverageResults = (results, rangeType) => ({
+const formatAverageResults = (results) => ({
   cpu: results.cpu / results.itemCount,
   memoryRss: results.memory.rss / results.itemCount,
   memoryHeapTotal: results.memory.heapTotal / results.itemCount,
@@ -44,11 +44,10 @@ const formatAverageResults = (results, rangeType) => ({
   memoryArrayBuffers: results.memory.arrayBuffers / results.itemCount,
   handles: results.handles / results.itemCount,
   itemCount: results.itemCount,
-  rangeType,
 });
 
 /**
- * 
+ *
  * @returns {StatsTemplate}
  */
 const getStatsTemplate = () => ({
@@ -65,7 +64,7 @@ const getStatsTemplate = () => ({
 });
 
 /**
- * 
+ *
  * @returns {SequenceStats}
  */
 const getRoundStatsTemplate = () => ({
@@ -77,13 +76,25 @@ const getRoundStatsTemplate = () => ({
   },
 });
 
-const fileFolder = `${process.cwd()}/_amiokstats`;
-const fileName = `${testId}_${new Date().getTime()}.stats`;
+let currentTestId;
+const setCurrentTestId = (testId) => {
+  currentTestId = testId;
+};
+const getReportFilePath = () => {
+  const fileFolder = `${process.cwd()}/_amiokstats`;
+  const fileName = `${currentTestId}.stat`;
+
+  return {
+    fileFolder,
+    fileName,
+    path: `${fileFolder}/${fileName}`,
+  };
+};
 
 /**
- * 
- * @param {StatsTemplate} stats 
- * @param {string} line 
+ *
+ * @param {StatsTemplate} stats
+ * @param {string} line
  */
 const processStatsRow = (stats, line) => {
   const [
@@ -94,7 +105,7 @@ const processStatsRow = (stats, line) => {
     memoryExternal,
     memoryArrayBuffers,
     numActiveHandles,
-  ] = line.split('-');
+  ] = line.split('|');
 
   return mergeItemToResults(stats, {
     cpu,
@@ -110,27 +121,30 @@ const processStatsRow = (stats, line) => {
 };
 
 /**
- * 
- * @param {string} newLine 
+ *
+ * @param {string} newLine
  * @returns {Promise}
  */
-const addStatsToFile = (newLine) => {
-  const filePath = `${fileFolder}/${fileName}`;
-
-  return fs.appendFile(filePath, newLine);
+const addStatsToFile = async (newLine) => {
+  const { path } = getReportFilePath();
+  console.log('path @ addStatsToFile', path);
+  await fs.appendFile(path, `${newLine}\n`);
 };
 
 /**
- * 
- * @param {string} testId 
+ *
+ * @param {string} testId
  * @returns {boolean}
  */
-const createStatsFile = (testId) => {
+const createStatsFile = async () => {
   try {
+    const { fileFolder, fileName } = getReportFilePath();
+    console.log('{ fileFolder, fileName } @ createStatsFile', { fileFolder, fileName });
     await createFile(fileFolder, fileName);
 
     return true;
   } catch (error) {
+    console.error('error creating stats file', error);
     return false;
   }
 };
@@ -144,4 +158,6 @@ module.exports = {
   createStatsFile,
   processStatsRow,
   addStatsToFile,
+  setCurrentTestId,
+  getReportFilePath,
 };

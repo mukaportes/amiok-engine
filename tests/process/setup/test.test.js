@@ -7,7 +7,7 @@ describe('Setup Test Process Tests', () => {
       try {
         const newCtxData = await setupTest();
 
-        expect(newCtxData.key).toBe(PROCESS_ENUM.TEST_SETUP);
+        expect(newCtxData.key).toBe(PROCESS_ENUM.SETUP_TEST);
         expect(newCtxData.test.id).toBeDefined();
       } catch (error) {
         throw new Error(error);

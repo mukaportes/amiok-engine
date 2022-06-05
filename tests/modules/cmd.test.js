@@ -1,9 +1,11 @@
 const cmdModule = require('../../src/modules/cmd');
 
-jest.mock('node-netstat', () => jest.fn((options, callback) => {
-  if (options.filter.local.port === 9999) return callback({ process: 123 }, 'Netstat error');
-  else return callback({ process: 123 });
-}));
+jest.mock('node-netstat', () =>
+  jest.fn((options, callback) => {
+    if (options.filter.local.port === 9999) return callback({ process: 123 }, 'Netstat error');
+    else return callback({ process: 123 });
+  })
+);
 
 describe('Cmd Module Tests', () => {
   describe('execCmd()', () => {

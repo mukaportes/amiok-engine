@@ -7,4 +7,4 @@ const waitFor = (staticDelay = 3000) =>
 
 module.exports = {
   waitFor,
-}
+};

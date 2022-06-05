@@ -1,18 +1,27 @@
 const fileModule = require('../../src/modules/file');
 
 jest.mock('fs/promises', () => ({
-  readFile: jest.fn((path) => new Promise((resolve, reject) => {
-    if (path === '/path/error.js') reject('Error reading file');
-    else resolve({ prop: true });
-  })),
-  rm: jest.fn((path) => new Promise((resolve, reject) => {
-    if (path === '/path/error') reject('Error removing folder');
-    else resolve();
-  })),
-  access: jest.fn((path) => new Promise((resolve, reject) => {
-    if (path === '/path/error.js') reject('Error');
-    else resolve(true);
-  })),
+  readFile: jest.fn(
+    (path) =>
+      new Promise((resolve, reject) => {
+        if (path === '/path/error.js') reject('Error reading file');
+        else resolve({ prop: true });
+      })
+  ),
+  rm: jest.fn(
+    (path) =>
+      new Promise((resolve, reject) => {
+        if (path === '/path/error') reject('Error removing folder');
+        else resolve();
+      })
+  ),
+  access: jest.fn(
+    (path) =>
+      new Promise((resolve, reject) => {
+        if (path === '/path/error.js') reject('Error');
+        else resolve(true);
+      })
+  ),
 }));
 
 describe('File Module Tests', () => {

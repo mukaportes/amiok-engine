@@ -3,17 +3,22 @@ const PROCESS_ENUM = require('../../../src/enums/process');
 const statsAnalyze = require('../../../src/process/stats/analyze');
 
 jest.mock('../../../src/modules/doctor', () => ({
-  getAnalysisFile: jest.fn((pid) => new Promise((resolve) => {
-    if (pid === 404) {
-      resolve();
-    } else {
-      resolve(JSON.stringify([
-        { timestamp: 3, memory: {} },
-        { timestamp: 7, memory: {} },
-        { timestamp: 15, memory: {} },
-      ]));
-    }
-  })),
+  getAnalysisFile: jest.fn(
+    (pid) =>
+      new Promise((resolve) => {
+        if (pid === 404) {
+          resolve();
+        } else {
+          resolve(
+            JSON.stringify([
+              { timestamp: 3, memory: {} },
+              { timestamp: 7, memory: {} },
+              { timestamp: 15, memory: {} },
+            ])
+          );
+        }
+      })
+  ),
 }));
 
 describe('Stats Analyze Process Tests', () => {
@@ -33,10 +38,10 @@ describe('Stats Analyze Process Tests', () => {
               storeReportFile,
             },
           },
-          [PROCESS_ENUM.TEST_SETUP]: {
+          [PROCESS_ENUM.SETUP_TEST]: {
             test: {
               id: mockData.integer(),
-            }
+            },
           },
         };
 
@@ -71,10 +76,10 @@ describe('Stats Analyze Process Tests', () => {
               storeReportFile,
             },
           },
-          [PROCESS_ENUM.TEST_SETUP]: {
+          [PROCESS_ENUM.SETUP_TEST]: {
             test: {
               id: mockData.integer(),
-            }
+            },
           },
         };
 
@@ -158,7 +163,9 @@ describe('Stats Analyze Process Tests', () => {
 
         await statsAnalyze(undefined, context);
       } catch (error) {
-        expect(error).toEqual(new Error('Missing STORAGE_PREPARE storage module storeReportFile()'));
+        expect(error).toEqual(
+          new Error('Missing STORAGE_PREPARE storage module storeReportFile()')
+        );
       }
     });
     it('should throw an error when TEST_SETUP context data is missing', async () => {
@@ -194,7 +201,7 @@ describe('Stats Analyze Process Tests', () => {
               storeReportFile: () => { },
             },
           },
-          [PROCESS_ENUM.TEST_SETUP]: {},
+          [PROCESS_ENUM.SETUP_TEST]: {},
         };
 
         await statsAnalyze(undefined, context);

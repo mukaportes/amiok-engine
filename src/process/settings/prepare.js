@@ -3,7 +3,7 @@ const { pathExists } = require('../../modules/file');
 const PROCESS_ENUM = require('../../enums/process');
 
 /**
- * 
+ *
  * @returns {SettingsPrepareContext}
  */
 module.exports = async () => {

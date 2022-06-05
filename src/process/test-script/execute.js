@@ -3,19 +3,23 @@ const { runSequence } = require('../../modules/http');
 const PROCESS_ENUM = require('../../enums/process');
 
 const validate = (context) => {
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE]) throw new Error('Missing SETTINGS_PREPARE context data');
+  if (!context[PROCESS_ENUM.SETTINGS_PREPARE])
+    throw new Error('Missing SETTINGS_PREPARE context data');
   if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config) throw new Error('Missing settings config');
-  if (!context[PROCESS_ENUM.STORAGE_PREPARE]) throw new Error('Missing STORAGE_PREPARE context data');
-  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage) throw new Error('Missing STORAGE_PREPARE storage module');
-  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeTestResults) throw new Error('Missing STORAGE_PREPARE storage module storeTestResults()');
-  if (!context[PROCESS_ENUM.TEST_SETUP]) throw new Error('Missing TEST_SETUP context data');
-  if (!context[PROCESS_ENUM.TEST_SETUP].test) throw new Error('Missing TEST_SETUP test');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE])
+    throw new Error('Missing STORAGE_PREPARE context data');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage)
+    throw new Error('Missing STORAGE_PREPARE storage module');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeTestResults)
+    throw new Error('Missing STORAGE_PREPARE storage module storeTestResults()');
+  if (!context[PROCESS_ENUM.SETUP_TEST]) throw new Error('Missing TEST_SETUP context data');
+  if (!context[PROCESS_ENUM.SETUP_TEST].test) throw new Error('Missing TEST_SETUP test');
 };
 
 /**
- * 
- * @param {Params} _ 
- * @param {Context} context 
+ *
+ * @param {Params} _
+ * @param {Context} context
  * @returns {TestScriptsExecuteContext}
  */
 module.exports = async (_, context = {}) => {
@@ -25,13 +29,7 @@ module.exports = async (_, context = {}) => {
     validate(context);
 
     const {
-      config: {
-        basePath,
-        rounds = 200,
-        threads = 10,
-        testScripts = [],
-        staticDelay,
-      },
+      config: { basePath, rounds = 200, threads = 10, testScripts = [], staticDelay },
     } = context[PROCESS_ENUM.SETTINGS_PREPARE];
 
     if (!basePath) {
@@ -60,7 +58,7 @@ module.exports = async (_, context = {}) => {
       );
 
       context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeTestResults(
-        context[PROCESS_ENUM.TEST_SETUP].test.id,
+        context[PROCESS_ENUM.SETUP_TEST].test.id,
         roundResults
       );
       console.info(`Executed round ${round} of ${rounds}`);

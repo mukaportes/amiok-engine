@@ -22,7 +22,8 @@ describe('Stats Module Tests', () => {
         const formattedResults = statsModule.mergeItemToResults(results, item);
 
         expect(formattedResults).toStrictEqual({
-          ...item, itemCount: 1,
+          ...item,
+          itemCount: 1,
         });
       });
     });
@@ -46,14 +47,22 @@ describe('Stats Module Tests', () => {
 
         const formattedAverage = statsModule.formatAverageResults(results, rangeType);
 
-        expect(formattedAverage.delay).toBe((results.delay / itemCount));
-        expect(formattedAverage.cpu).toBe((results.cpu / itemCount));
-        expect(formattedAverage.memoryArrayBuffers).toBe(statsModule.toMB((results.memory.arrayBuffers / itemCount)));
-        expect(formattedAverage.memoryHeapTotal).toBe(statsModule.toMB((results.memory.heapTotal / itemCount)));
-        expect(formattedAverage.memoryHeapUsed).toBe(statsModule.toMB((results.memory.heapUsed / itemCount)));
-        expect(formattedAverage.memoryExternal).toBe(statsModule.toMB((results.memory.external / itemCount)));
-        expect(formattedAverage.memoryRss).toBe(statsModule.toMB((results.memory.rss / itemCount)));
-        expect(formattedAverage.handles).toBe((results.handles / itemCount));
+        expect(formattedAverage.delay).toBe(results.delay / itemCount);
+        expect(formattedAverage.cpu).toBe(results.cpu / itemCount);
+        expect(formattedAverage.memoryArrayBuffers).toBe(
+          statsModule.toMB(results.memory.arrayBuffers / itemCount)
+        );
+        expect(formattedAverage.memoryHeapTotal).toBe(
+          statsModule.toMB(results.memory.heapTotal / itemCount)
+        );
+        expect(formattedAverage.memoryHeapUsed).toBe(
+          statsModule.toMB(results.memory.heapUsed / itemCount)
+        );
+        expect(formattedAverage.memoryExternal).toBe(
+          statsModule.toMB(results.memory.external / itemCount)
+        );
+        expect(formattedAverage.memoryRss).toBe(statsModule.toMB(results.memory.rss / itemCount));
+        expect(formattedAverage.handles).toBe(results.handles / itemCount);
         expect(formattedAverage.itemCount).toBe(itemCount);
       });
     });

@@ -1,13 +1,13 @@
 const netstat = require('node-netstat');
 
 /**
- * 
- * @param {number} port Port to be searched 
+ *
+ * @param {number} port Port to be searched
  * @returns {Promise} { port: number } when resolved
  */
-const netstatByPort = (port) => {
-  return new Promise((resolve, reject) => {
-    if (!port) reject('A port must be provided.');
+const netstatByPort = (port) =>
+  new Promise((resolve, reject) => {
+    if (!port) reject(new Error('A port must be provided.'));
     netstat(
       {
         filter: {
@@ -20,9 +20,7 @@ const netstatByPort = (port) => {
       }
     );
   });
-};
 
 module.exports = {
-  execCmd,
   netstatByPort,
 };

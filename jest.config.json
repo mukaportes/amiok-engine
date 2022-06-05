@@ -2,20 +2,14 @@
   "testEnvironment": "node",
   "collectCoverage": true,
   "coverageThreshold": {
-     "global": {
-        "branches": 100,
-        "functions": 100,
-        "lines": 100,
-        "statements": 100
-     }
+    "global": {
+      "branches": 100,
+      "functions": 100,
+      "lines": 100,
+      "statements": 100
+    }
   },
-  "collectCoverageFrom": [
-     "src/**/*.js"
-   ],
-  "testMatch": [
-     "**/?(*.)(test).js?(x)"
-  ],
-  "testPathIgnorePatterns": [
-     "<rootDir>/node_modules"
-  ]
+  "collectCoverageFrom": ["src/**/*.js"],
+  "testMatch": ["**/?(*.)(test).js?(x)"],
+  "testPathIgnorePatterns": ["<rootDir>/node_modules"]
 }

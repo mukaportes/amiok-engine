@@ -11,30 +11,26 @@ describe('HTTP Module Tests', () => {
           };
           const testScripts = [
             {
-              path: "/test",
-              method: "GET",
+              path: '/test',
+              method: 'GET',
               headers: {
-                Authorization: "someToken",
+                Authorization: 'someToken',
               },
               assert: {
-                mock: [1, 2, 3]
+                mock: [1, 2, 3],
               },
             },
             {
-              path: "/test",
-              method: "POST",
+              path: '/test',
+              method: 'POST',
               assert: {
-                mock: [{ prop: true }]
+                mock: [{ prop: true }],
               },
             },
           ];
 
-          nock(config.basePath)
-            .get(testScripts[0].path)
-            .reply(200, testScripts[0].assert);
-          nock(config.basePath)
-            .post(testScripts[1].path)
-            .reply(200, testScripts[1].assert);
+          nock(config.basePath).get(testScripts[0].path).reply(200, testScripts[0].assert);
+          nock(config.basePath).post(testScripts[1].path).reply(200, testScripts[1].assert);
 
           const stats = await httpModule.runSequence(config, testScripts);
 
@@ -73,30 +69,26 @@ describe('HTTP Module Tests', () => {
           };
           const testScripts = [
             {
-              path: "/test",
-              method: "GET",
+              path: '/test',
+              method: 'GET',
               headers: {
-                Authorization: "someToken",
+                Authorization: 'someToken',
               },
               assert: {
-                mock: [1, 2, 3]
+                mock: [1, 2, 3],
               },
             },
             {
-              path: "/test",
-              method: "POST",
+              path: '/test',
+              method: 'POST',
               assert: {
-                mock: [{ prop: true }]
+                mock: [{ prop: true }],
               },
             },
           ];
 
-          nock(config.basePath)
-            .get(testScripts[0].path)
-            .reply(200, testScripts[0].assert);
-          nock(config.basePath)
-            .post(testScripts[1].path)
-            .reply(200, { forceError: true });
+          nock(config.basePath).get(testScripts[0].path).reply(200, testScripts[0].assert);
+          nock(config.basePath).post(testScripts[1].path).reply(200, { forceError: true });
 
           const stats = await httpModule.runSequence(config, testScripts);
 
@@ -121,30 +113,26 @@ describe('HTTP Module Tests', () => {
           };
           const testScripts = [
             {
-              path: "/test",
-              method: "GET",
+              path: '/test',
+              method: 'GET',
               headers: {
-                Authorization: "someToken",
+                Authorization: 'someToken',
               },
               assert: {
-                mock: [1, 2, 3]
+                mock: [1, 2, 3],
               },
             },
             {
-              path: "/test",
-              method: "POST",
+              path: '/test',
+              method: 'POST',
               assert: {
-                mock: [{ prop: true }]
+                mock: [{ prop: true }],
               },
             },
           ];
 
-          nock(config.basePath)
-            .get(testScripts[0].path)
-            .reply(200, testScripts[0].assert);
-          nock(config.basePath)
-            .post(testScripts[1].path)
-            .reply(500, { forceError: true });
+          nock(config.basePath).get(testScripts[0].path).reply(200, testScripts[0].assert);
+          nock(config.basePath).post(testScripts[1].path).reply(500, { forceError: true });
 
           const stats = await httpModule.runSequence(config, testScripts);
 
@@ -170,14 +158,14 @@ describe('HTTP Module Tests', () => {
           };
           const testScripts = [
             {
-              path: "/test",
+              path: '/test',
               // NOTE: force string error
               method: [1234],
               headers: {
-                Authorization: "someToken",
+                Authorization: 'someToken',
               },
               assert: {
-                mock: [1, 2, 3]
+                mock: [1, 2, 3],
               },
             },
           ];
