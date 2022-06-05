@@ -31,5 +31,4 @@ interface StatsTemplateDb {
   memoryArrayBuffers: number;
   handles: number;
   itemCount: number;
-  rangeType: string;
 }

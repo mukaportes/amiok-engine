@@ -11,9 +11,6 @@ interface Context {
       id: string;
     }
   };
-  DOCTOR_START?: {
-    filePath: string;
-  };
   INFO_API_PID?: {
     apiPid: number;
   };
