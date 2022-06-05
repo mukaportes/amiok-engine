@@ -1,10 +1,9 @@
-const PROCESS_ENUM = require('../enums/process');
-const startDoctor = require('../process/clinic-doctor/start');
+const appStart = require('../process/app/start');
+const appShutdown = require('../process/app/shutdown');
+const programShutdown = require('../process/program/shutdown');
 const prepareSettings = require('../process/settings/prepare');
 const executeTestScripts = require('../process/test-script/execute');
 const analyzeStats = require('../process/stats/analyze');
-const clearDoctor = require('../process/clinic-doctor/clear');
-const shutdownDoctor = require('../process/clinic-doctor/shutdown');
 const getInfoApiPid = require('../process/info/api-pid');
 const prepareStorage = require('../process/storage/prepare');
 const setupTest = require('../process/setup/test');
@@ -15,31 +14,15 @@ module.exports = async (params) => {
   const steps = [
     prepareSettings,
     prepareStorage,
-    startDoctor,
-    getInfoApiPid,
+    appStart,
     setupTest,
+    getInfoApiPid,
     executeTestScripts,
+    appShutdown,
+    analyzeStats,
     storeTest,
-    shutdownDoctor,
+    programShutdown,
   ];
-
-  // NOTE: disable param reassign because we need to dynamically set the collectCallback value
-  // eslint-disable-next-line no-param-reassign
-  params.collectCallback = async (filePath) => {
-    try {
-      const updatedParams = { ...params, filePath };
-      const {
-        storage: { storeResourceStats },
-      } = context[PROCESS_ENUM.STORAGE_PREPARE];
-
-      const { results } = await analyzeStats(updatedParams, context);
-      await storeResourceStats(context[PROCESS_ENUM.TEST_SETUP].test.id, results);
-      await clearDoctor(updatedParams, context);
-    } catch (error) {
-      console.error('Error @ collectCallback()', error);
-      process.kill(process.pid, 1);
-    }
-  };
 
   try {
     for (let i = 0; i < steps.length; i += 1) {
