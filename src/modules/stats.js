@@ -76,10 +76,21 @@ const getRoundStatsTemplate = () => ({
   },
 });
 
+// GLOBAL STORE OF TEST UID
 let currentTestId;
+
+/**
+ *
+ * @param {string} testId
+ */
 const setCurrentTestId = (testId) => {
   currentTestId = testId;
 };
+
+/**
+ *
+ * @returns {ReportFilePathData}
+ */
 const getReportFilePath = () => {
   const fileFolder = `${process.cwd()}/_amiokstats`;
   const fileName = `${currentTestId}.stat`;
@@ -108,7 +119,7 @@ const processStatsRow = (stats, line) => {
   ] = line.split('|');
 
   return mergeItemToResults(stats, {
-    cpu,
+    cpu: Number(cpu),
     memory: {
       rss: toMB(Number(memoryRss)),
       heapTotal: toMB(Number(memoryHeapTotal)),
@@ -116,7 +127,7 @@ const processStatsRow = (stats, line) => {
       external: toMB(Number(memoryExternal)),
       arrayBuffers: toMB(Number(memoryArrayBuffers)),
     },
-    activeHandles: Number(numActiveHandles),
+    handles: Number(numActiveHandles),
   });
 };
 
@@ -127,7 +138,6 @@ const processStatsRow = (stats, line) => {
  */
 const addStatsToFile = async (newLine) => {
   const { path } = getReportFilePath();
-  console.log('path @ addStatsToFile', path);
   await fs.appendFile(path, `${newLine}\n`);
 };
 
@@ -139,12 +149,11 @@ const addStatsToFile = async (newLine) => {
 const createStatsFile = async () => {
   try {
     const { fileFolder, fileName } = getReportFilePath();
-    console.log('{ fileFolder, fileName } @ createStatsFile', { fileFolder, fileName });
     await createFile(fileFolder, fileName);
 
     return true;
   } catch (error) {
-    console.error('error creating stats file', error);
+    console.error('Error creating stats file', error);
     return false;
   }
 };
