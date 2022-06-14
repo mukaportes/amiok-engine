@@ -1,28 +1,50 @@
 const crypto = require('crypto');
 const os = require('os');
 const { createFile } = require('./file');
-const { addStatsToFile, getReportFilePath } = require('./stats');
+const { addStatsToFile, getReportFilePath, setCurrentTestId } = require('./stats');
 
-const getCpuPercentage = (targetProcess) => {
-  // Take the first CPU, considering every CPUs have the same specs
-  // and every NodeJS process only uses one at a time.
+let previousIdle = 0;
+let previousTotal = 0;
+
+/**
+ *
+ * @returns {number}
+ */
+const getCpuPercentage = () => {
+  let totalIdle = 0;
+  let totalTick = 0;
   const cpus = os.cpus();
-  const cpu = cpus[0];
 
-  // Accumulate every CPU times values
-  const total = Object.values(cpu.times).reduce((acc, tv) => acc + tv, 0);
+  for (let i = 0, len = cpus.length; i < len; i += 1) {
+    const cpu = cpus[i];
+    // eslint-disable-next-line
+    for (const type in cpu.times) {
+      totalTick += cpu.times[type];
+    }
+    totalIdle += cpu.times.idle;
+  }
 
-  // Normalize the one returned by process.cpuUsage()
-  // (microseconds VS miliseconds)
-  const usage = targetProcess.cpuUsage();
-  const currentCpuUsage = (usage.user + usage.system) * 1000;
+  const avgIdle = totalIdle / cpus.length;
+  const avgTotal = totalTick / cpus.length;
 
-  // Find out the percentage used for this specific CPU
-  return (currentCpuUsage / total) * 100;
+  const idle = previousIdle ? avgIdle : avgIdle - previousIdle;
+  const total = previousTotal ? avgTotal : avgTotal - previousTotal;
+
+  if (previousIdle && previousTotal) {
+    previousIdle = avgIdle;
+    previousTotal = avgTotal;
+  }
+
+  return (10000 - Math.round((10000 * idle) / total)) / 100;
 };
 
+/**
+ *
+ * @param {object} targetProcess NodeJS process
+ * @returns {string}
+ */
 const getAnalysis = (targetProcess) => {
-  const cpuUsage = getCpuPercentage(targetProcess);
+  const cpuUsage = getCpuPercentage();
   const memory = targetProcess.memoryUsage();
   // eslint-disable-next-line no-underscore-dangle
   const numActiveHandles = targetProcess._getActiveHandles().length;
@@ -39,10 +61,14 @@ const getAnalysis = (targetProcess) => {
 
 let interval;
 
+/**
+ *
+ * @param {object} targetProcess NodeJS process
+ */
 const startAmiok = async (targetProcess) => {
   const { fileFolder, fileName } = getReportFilePath();
   const testId = crypto.randomUUID();
-  console.log('{ fileFolder, fileName } @ createStatsFile', { fileFolder, fileName });
+  setCurrentTestId(testId);
   await createFile(fileFolder, fileName.replace('undefined', testId));
 
   interval = setInterval(() => {
