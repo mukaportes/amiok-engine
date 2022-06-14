@@ -26,11 +26,15 @@ module.exports = async (_, context = {}) => {
     // const { startTime, endTime } = context[PROCESS_ENUM.SCRIPT_EXECUTE];
 
     const { path } = getReportFilePath();
-    console.log('path @ analyzeProcess', path);
     const statsTemplate = getStatsTemplate();
     const results = await readFileLines(path, processStatsRow, statsTemplate);
 
-    return { key: PROCESS_ENUM.STATS_ANALYZE, results: formatAverageResults(results) };
+    const { id } = context[PROCESS_ENUM.SETUP_TEST].test;
+    await context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeResourceStats(id, [
+      formatAverageResults(results),
+    ]);
+
+    return { key: PROCESS_ENUM.STATS_ANALYZE };
   } catch (error) {
     console.error(`Error executing ${PROCESS_ENUM.STATS_ANALYZE} process`, error);
 
