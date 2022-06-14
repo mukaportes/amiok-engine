@@ -32,7 +32,7 @@ module.exports = async (params) => {
       context[key] = values;
     }
   } catch (error) {
-    console.error('Error execting MAIN pipeline', error);
+    console.error('Error executing MAIN pipeline', error);
 
     process.kill(process.pid, 1);
   }

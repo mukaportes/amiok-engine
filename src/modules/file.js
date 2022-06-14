@@ -50,14 +50,11 @@ const pathExists = async (path) => {
 const createFile = async (fileFolder, fileName) => {
   try {
     const folderExists = await pathExists(fileFolder);
-    console.log('\n\nfolderExists', folderExists);
-    console.log('\n\nfileFolder', fileFolder);
-    console.log('\n\nfileName', fileName);
     if (!folderExists) {
       await fs.mkdir(fileFolder);
     }
 
-    await fs.writeFile(`${fileFolder}/${fileName}`, '');
+    return fs.writeFile(`${fileFolder}/${fileName}`, '');
   } catch (error) {
     throw new Error(error);
   }
@@ -72,7 +69,6 @@ const readFileLines = (filePath, processLineFn, statsTemplate) =>
       const rlInterface = readline.createInterface(inputStream, outputStream);
 
       rlInterface.on('line', (lineData) => {
-        console.log('lineData', lineData);
         results = processLineFn(results, lineData);
       });
 

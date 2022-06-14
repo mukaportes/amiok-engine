@@ -24,7 +24,6 @@ module.exports = async (params = {}, context = {}) => {
     validate(params, context);
 
     const { config = {} } = context[PROCESS_ENUM.SETTINGS_PREPARE];
-    console.log('\n\ngetReportFilePath()', getReportFilePath());
 
     const [firstArg, ...restArgs] = config.initApp.split(' ');
     spawn(firstArg, restArgs, { stdio: 'inherit' });
