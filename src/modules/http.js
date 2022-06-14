@@ -43,7 +43,7 @@ const setSequenceResponseAssert = (sequenceStats, responseData, expectedOutput) 
   const stats = { ...sequenceStats };
 
   try {
-    assert.deepStrictEqual(responseData, expectedOutput);
+    if (expectedOutput) assert.deepStrictEqual(responseData, expectedOutput);
     stats.assert.pass += 1;
   } catch (error) {
     stats.assert.fail += 1;
