@@ -32,3 +32,9 @@ interface StatsTemplateDb {
   handles: number;
   itemCount: number;
 }
+
+interface ReportFilePathData {
+  fileFolder: string;
+  fileName: string;
+  path: string;
+}
