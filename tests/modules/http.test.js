@@ -118,9 +118,6 @@ describe('HTTP Module Tests', () => {
               headers: {
                 Authorization: 'someToken',
               },
-              assert: {
-                mock: [1, 2, 3],
-              },
             },
             {
               path: '/test',
