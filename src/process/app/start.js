@@ -1,9 +1,8 @@
 const { spawn } = require('child_process');
 const PROCESS_ENUM = require('../../enums/process');
-const { getReportFilePath } = require('../../modules/stats');
 const { waitFor } = require('../../modules/utils');
 
-const validate = (params, context) => {
+const validate = (context) => {
   if (!context[PROCESS_ENUM.SETTINGS_PREPARE])
     throw new Error('Missing SETTINGS_PREPARE context data');
   if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config)
@@ -18,12 +17,12 @@ const validate = (params, context) => {
  * @param {Context} context
  * @returns {NewContextData}
  */
-module.exports = async (params = {}, context = {}) => {
+module.exports = async (context = {}) => {
   console.info(`Executing process ${PROCESS_ENUM.APP_START}`);
   try {
-    validate(params, context);
+    validate(context);
 
-    const { config = {} } = context[PROCESS_ENUM.SETTINGS_PREPARE];
+    const { config } = context[PROCESS_ENUM.SETTINGS_PREPARE];
 
     const [firstArg, ...restArgs] = config.initApp.split(' ');
     spawn(firstArg, restArgs, { stdio: 'inherit' });
