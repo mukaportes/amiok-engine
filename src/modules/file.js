@@ -47,6 +47,11 @@ const pathExists = async (path) => {
   }
 };
 
+/**
+ *
+ * @param {string} fileFolder 
+ * @param {string} fileName 
+ */
 const createFile = async (fileFolder, fileName) => {
   try {
     const folderExists = await pathExists(fileFolder);
@@ -54,12 +59,19 @@ const createFile = async (fileFolder, fileName) => {
       await fs.mkdir(fileFolder);
     }
 
-    return fs.writeFile(`${fileFolder}/${fileName}`, '');
+    await fs.writeFile(`${fileFolder}/${fileName}`, '');
   } catch (error) {
     throw new Error(error);
   }
 };
 
+/**
+ * 
+ * @param {string} filePath 
+ * @param {function} processLineFn 
+ * @param {StatsTemplate} statsTemplate 
+ * @returns 
+ */
 const readFileLines = (filePath, processLineFn, statsTemplate) =>
   new Promise((resolve, reject) => {
     try {
@@ -80,6 +92,11 @@ const readFileLines = (filePath, processLineFn, statsTemplate) =>
     }
   });
 
+/**
+ * 
+ * @param {string} folderPath 
+ * @returns {string}
+ */
 const getFirstFileFromFolder = async (folderPath) => {
   try {
     const files = await fs.readdir(folderPath);
