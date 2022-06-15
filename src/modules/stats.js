@@ -77,14 +77,13 @@ const getRoundStatsTemplate = () => ({
 });
 
 // GLOBAL STORE OF TEST UID
-let currentTestId;
 
 /**
  *
  * @param {string} testId
  */
 const setCurrentTestId = (testId) => {
-  currentTestId = testId;
+  global.amiokCurrentTestId = testId;
 };
 
 /**
@@ -93,7 +92,7 @@ const setCurrentTestId = (testId) => {
  */
 const getReportFilePath = () => {
   const fileFolder = `${process.cwd()}/_amiokstats`;
-  const fileName = `${currentTestId}.stat`;
+  const fileName = `${global.amiokCurrentTestId}.stat`;
 
   return {
     fileFolder,

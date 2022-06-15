@@ -3,8 +3,8 @@ const os = require('os');
 const { createFile } = require('./file');
 const { addStatsToFile, getReportFilePath, setCurrentTestId } = require('./stats');
 
-let previousIdle = 0;
-let previousTotal = 0;
+global.amiokPreviousCpuIdle = 0;
+global.amiokPreviousCpuTotal = 0;
 
 /**
  *
@@ -27,13 +27,11 @@ const getCpuPercentage = () => {
   const avgIdle = totalIdle / cpus.length;
   const avgTotal = totalTick / cpus.length;
 
-  const idle = previousIdle ? avgIdle : avgIdle - previousIdle;
-  const total = previousTotal ? avgTotal : avgTotal - previousTotal;
+  const idle = global.amiokPreviousCpuIdle ? avgIdle : avgIdle - global.amiokPreviousCpuIdle;
+  const total = global.amiokPreviousCpuTotal ? avgTotal : avgTotal - global.amiokPreviousCpuTotal;
 
-  if (previousIdle && previousTotal) {
-    previousIdle = avgIdle;
-    previousTotal = avgTotal;
-  }
+  global.amiokPreviousCpuIdle = avgIdle;
+  global.amiokPreviousCpuTotal = avgTotal;
 
   return (10000 - Math.round((10000 * idle) / total)) / 100;
 };
@@ -67,8 +65,10 @@ let interval;
  */
 const startAmiok = async (targetProcess) => {
   const { fileFolder, fileName } = getReportFilePath();
+
   const testId = crypto.randomUUID();
   setCurrentTestId(testId);
+
   await createFile(fileFolder, fileName.replace('undefined', testId));
 
   interval = setInterval(() => {
@@ -76,9 +76,10 @@ const startAmiok = async (targetProcess) => {
   }, 10);
 };
 
-const stopAmiok = () => interval.clearInterval();
+const stopAmiok = () => clearInterval(interval);
 
 module.exports = {
+  getCpuPercentage,
   startAmiok,
   stopAmiok,
 };
