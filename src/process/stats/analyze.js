@@ -1,13 +1,13 @@
 const PROCESS_ENUM = require('../../enums/process');
-const { readFileLines } = require('../../modules/file');
 const {
   formatAverageResults,
   getReportFilePath,
-  getStatsTemplate,
   processStatsRow,
+  readReportFileLines,
 } = require('../../modules/stats');
 
 const validate = (context) => {
+  if (!context[PROCESS_ENUM.SCRIPT_EXECUTE]) throw new Error('Missing SCRIPT_EXECUTE context data');
   if (!context[PROCESS_ENUM.SETUP_TEST]) throw new Error('Missing SETUP_TEST context data');
   if (!context[PROCESS_ENUM.SETUP_TEST].test) throw new Error('Missing SETUP_TEST test data');
   if (!context[PROCESS_ENUM.STORAGE_PREPARE])
@@ -30,14 +30,21 @@ module.exports = async (_, context = {}) => {
   try {
     validate(context);
 
-    const { path } = getReportFilePath();
-    const statsTemplate = getStatsTemplate();
-    const results = await readFileLines(path, processStatsRow, statsTemplate);
+    const { path: filePath } = getReportFilePath();
+    const { startTime, endTime } = context[PROCESS_ENUM.SCRIPT_EXECUTE];
+    const results = await readReportFileLines({
+      filePath,
+      processLineFn: processStatsRow,
+      startTime,
+      endTime,
+    });
 
     const { id } = context[PROCESS_ENUM.SETUP_TEST].test;
-    await context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeResourceStats(id, [
-      formatAverageResults(results),
-    ]);
+    const formattedResults = Object.keys(results).map((key) =>
+      formatAverageResults(results[key], key)
+    );
+
+    await context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeResourceStats(id, formattedResults);
 
     return { key: PROCESS_ENUM.STATS_ANALYZE };
   } catch (error) {
