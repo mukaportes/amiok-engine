@@ -17,7 +17,7 @@ const validate = (context) => {
  * @param {Context} context
  * @returns {NewContextData}
  */
-module.exports = async (context = {}) => {
+module.exports = async (_, context = {}) => {
   console.info(`Executing process ${PROCESS_ENUM.APP_START}`);
   try {
     validate(context);

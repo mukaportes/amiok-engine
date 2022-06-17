@@ -9,7 +9,14 @@
       "statements": 100
     }
   },
-  "collectCoverageFrom": ["src/**/*.js"],
-  "testMatch": ["**/?(*.)(test).js?(x)"],
-  "testPathIgnorePatterns": ["<rootDir>/node_modules"]
+  "collectCoverageFrom": [
+    "src/**/*.js"
+  ],
+  "testMatch": [
+    "**/?(*.)(test).js?(x)"
+  ],
+  "testPathIgnorePatterns": [
+    "<rootDir>/node_modules",
+    "<rootDir>/src"
+  ]
 }

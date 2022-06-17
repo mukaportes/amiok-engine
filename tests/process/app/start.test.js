@@ -24,7 +24,7 @@ describe('App Start Process', () => {
           },
         };
 
-        const newCtxData = await appStartProcess(context);
+        const newCtxData = await appStartProcess(undefined, context);
 
         expect(newCtxData).toHaveProperty('key', PROCESS_ENUM.APP_START);
         expect(spawn).toHaveBeenCalledWith(arg1, [arg2, arg3], { stdio: 'inherit' });
@@ -47,7 +47,7 @@ describe('App Start Process', () => {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {}
         };
 
-        await appStartProcess(context);
+        await appStartProcess(undefined, context);
       } catch (error) {
         expect(error.message).toBe('Missing SETTINGS_PREPARE config');
       }
@@ -59,7 +59,7 @@ describe('App Start Process', () => {
             config: {}
           },
         };
-        await appStartProcess(context);
+        await appStartProcess(undefined, context);
       } catch (error) {
         expect(error.message).toBe('Missing SETTINGS_PREPARE config init app');
       }

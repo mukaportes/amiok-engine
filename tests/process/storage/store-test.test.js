@@ -43,7 +43,7 @@ describe('Storage Store Test Process Tests', () => {
           startedAt: context[PROCESS_ENUM.SCRIPT_EXECUTE].startTime,
           endedAt: context[PROCESS_ENUM.SCRIPT_EXECUTE].endTime,
         });
-        expect(newCtxData.key).toBe(PROCESS_ENUM.STORAGE_TEST);
+        expect(newCtxData.key).toBe(PROCESS_ENUM.STORAGE_TEST_RESULT);
       } catch (error) {
         throw new Error(error);
       }

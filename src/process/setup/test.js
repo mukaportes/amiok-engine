@@ -1,4 +1,3 @@
-const crypto = require('crypto');
 const PROCESS_ENUM = require('../../enums/process');
 const { getFirstFileFromFolder } = require('../../modules/file');
 const { setCurrentTestId } = require('../../modules/stats');

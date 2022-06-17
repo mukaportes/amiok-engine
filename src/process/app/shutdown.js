@@ -18,7 +18,7 @@ module.exports = async (_, context = {}) => {
     validate(context);
     const { apiPid } = context[PROCESS_ENUM.INFO_API_PID];
 
-    waitFor(5000);
+    await waitFor(2000);
 
     process.kill(apiPid, 'SIGINT');
 

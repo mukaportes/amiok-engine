@@ -8,7 +8,14 @@ const {
 } = require('../../modules/stats');
 
 const validate = (context) => {
-  if (!context[PROCESS_ENUM.SCRIPT_EXECUTE]) throw new Error('Missing SCRIPT_EXECUTE context data');
+  if (!context[PROCESS_ENUM.SETUP_TEST]) throw new Error('Missing SETUP_TEST context data');
+  if (!context[PROCESS_ENUM.SETUP_TEST].test) throw new Error('Missing SETUP_TEST test data');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE])
+    throw new Error('Missing STORAGE_PREPARE context data');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage)
+    throw new Error('Missing STORAGE_PREPARE storage module');
+  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeResourceStats)
+    throw new Error('Missing STORAGE_PREPARE storage module storeResourceStats()');
 };
 
 /**
@@ -22,8 +29,6 @@ module.exports = async (_, context = {}) => {
 
   try {
     validate(context);
-
-    // const { startTime, endTime } = context[PROCESS_ENUM.SCRIPT_EXECUTE];
 
     const { path } = getReportFilePath();
     const statsTemplate = getStatsTemplate();
