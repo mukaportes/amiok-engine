@@ -1,8 +1,11 @@
 const fs = require('fs/promises');
+const { createReadStream } = require('fs');
+const readline = require('readline');
+const Stream = require('stream');
 
 /**
- * 
- * @param {string} filePath 
+ *
+ * @param {string} filePath
  * @returns {object} { type: string, content: string }
  */
 const getFileContent = async (filePath) => {
@@ -17,8 +20,8 @@ const getFileContent = async (filePath) => {
 };
 
 /**
- * 
- * @param {string} folderPath 
+ *
+ * @param {string} folderPath
  */
 const removeFolder = async (folderPath) => {
   try {
@@ -30,11 +33,11 @@ const removeFolder = async (folderPath) => {
 };
 
 /**
- * 
- * @param {string} path 
+ *
+ * @param {string} path
  * @returns {boolean}
  */
-const fileExists = async (path) => {
+const pathExists = async (path) => {
   try {
     await fs.access(path, fs.F_OK);
     return true;
@@ -44,8 +47,72 @@ const fileExists = async (path) => {
   }
 };
 
+/**
+ *
+ * @param {string} fileFolder 
+ * @param {string} fileName 
+ */
+const createFile = async (fileFolder, fileName) => {
+  try {
+    const folderExists = await pathExists(fileFolder);
+    if (!folderExists) {
+      await fs.mkdir(fileFolder);
+    }
+
+    await fs.writeFile(`${fileFolder}/${fileName}`, '');
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * 
+ * @param {string} filePath 
+ * @param {function} processLineFn 
+ * @param {StatsTemplate} statsTemplate 
+ * @returns 
+ */
+const readFileLines = (filePath, processLineFn, statsTemplate) =>
+  new Promise((resolve, reject) => {
+    try {
+      let results = statsTemplate;
+      const inputStream = createReadStream(filePath);
+      const outputStream = new Stream();
+      const rlInterface = readline.createInterface(inputStream, outputStream);
+
+      rlInterface.on('line', (lineData) => {
+        results = processLineFn(results, lineData);
+      });
+
+      rlInterface.on('close', () => resolve(results));
+    } catch (error) {
+      console.error('Error while reading report file', error);
+
+      reject(new Error(error));
+    }
+  });
+
+/**
+ * 
+ * @param {string} folderPath 
+ * @returns {string}
+ */
+const getFirstFileFromFolder = async (folderPath) => {
+  try {
+    const files = await fs.readdir(folderPath);
+
+    return files[0];
+  } catch (error) {
+    console.error('Error getting first file from folder', error);
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   getFileContent,
   removeFolder,
-  fileExists,
+  pathExists,
+  createFile,
+  readFileLines,
+  getFirstFileFromFolder,
 };

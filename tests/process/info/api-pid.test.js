@@ -2,10 +2,13 @@ const PROCESS_ENUM = require('../../../src/enums/process');
 const infoApiPid = require('../../../src/process/info/api-pid');
 
 jest.mock('../../../src/modules/cmd', () => ({
-  netstatByPort: jest.fn((port) => new Promise(resolve => {
-    if (port === 404) resolve(false);
-    else resolve({ pid: 123 });
-  })),
+  netstatByPort: jest.fn(
+    (port) =>
+      new Promise((resolve) => {
+        if (port === 404) resolve(false);
+        else resolve({ pid: 123 });
+      })
+  ),
 }));
 
 describe('Info API PID Process Tests', () => {
@@ -46,7 +49,7 @@ describe('Info API PID Process Tests', () => {
     it('throws new error when SETTINGS_PREPARE config is missing', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.SETTINGS_PREPARE]: {}
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {},
         };
         await infoApiPid(undefined, context);
       } catch (error) {

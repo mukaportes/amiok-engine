@@ -3,7 +3,7 @@ const axios = require('axios');
 const { getRoundStatsTemplate } = require('./stats');
 
 /**
- * 
+ *
  * @param {GlobalConfig} globalConfig AMIOK config
  * @param {TestScript} itemConfig Test scripts' item config
  * @returns {AxiosParams}
@@ -15,9 +15,9 @@ const resolveAxiosParams = (globalConfig, itemConfig) => {
 };
 
 /**
- * 
- * @param {SequenceStats} sequenceStats 
- * @param {number} responseStatus 
+ *
+ * @param {SequenceStats} sequenceStats
+ * @param {number} responseStatus
  * @returns {SequenceStats}
  */
 const setSequenceResponseStatus = (sequenceStats, responseStatus) => {
@@ -33,17 +33,17 @@ const setSequenceResponseStatus = (sequenceStats, responseStatus) => {
 };
 
 /**
- * 
- * @param {SequenceStats} sequenceStats 
- * @param {any} responseData 
- * @param {any} expectedOutput 
+ *
+ * @param {SequenceStats} sequenceStats
+ * @param {any} responseData
+ * @param {any} expectedOutput
  * @returns {SequenceStats}
  */
 const setSequenceResponseAssert = (sequenceStats, responseData, expectedOutput) => {
   const stats = { ...sequenceStats };
 
   try {
-    assert.deepStrictEqual(responseData, expectedOutput);
+    if (expectedOutput) assert.deepStrictEqual(responseData, expectedOutput);
     stats.assert.pass += 1;
   } catch (error) {
     stats.assert.fail += 1;
@@ -53,9 +53,9 @@ const setSequenceResponseAssert = (sequenceStats, responseData, expectedOutput) 
 };
 
 /**
- * 
- * @param {GlobalConfig} globalConfig 
- * @param {TestScripts} testScripts 
+ *
+ * @param {GlobalConfig} globalConfig
+ * @param {TestScripts} testScripts
  * @returns {SequenceStats}
  */
 const runSequence = async (globalConfig, testScripts = []) => {

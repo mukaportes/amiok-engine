@@ -31,5 +31,10 @@ interface StatsTemplateDb {
   memoryArrayBuffers: number;
   handles: number;
   itemCount: number;
-  rangeType: string;
+}
+
+interface ReportFilePathData {
+  fileFolder: string;
+  fileName: string;
+  path: string;
 }

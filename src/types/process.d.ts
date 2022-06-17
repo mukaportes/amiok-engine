@@ -6,13 +6,10 @@ interface Context {
   STORAGE_PREPARE?: {
     storage: StorageModule;
   };
-  STORAGE_TEST_SETUP?: {
+  TEST_SETUP?: {
     test: {
       id: string;
     }
-  };
-  DOCTOR_START?: {
-    filePath: string;
   };
   INFO_API_PID?: {
     apiPid: number;

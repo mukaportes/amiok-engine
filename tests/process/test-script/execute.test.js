@@ -26,10 +26,10 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: mockStoreTestResults,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.SETUP_TEST]: {
             test: {
               id: mockData.integer(),
-            }
+            },
           },
         };
 
@@ -62,10 +62,10 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: mockStoreTestResults,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.SETUP_TEST]: {
             test: {
               id: mockData.integer(),
-            }
+            },
           },
         };
 
@@ -93,19 +93,19 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: mockStoreTestResults,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.SETUP_TEST]: {
             test: {
               id: mockData.integer(),
-            }
+            },
           },
         };
 
         await testScriptExecute(undefined, context);
       } catch (error) {
         expect(mockStoreTestResults).not.toHaveBeenCalled();
-        expect(error).toEqual(new Error(
-          'No valid AMIOK scripts basePath provided. Check your amiok.settings.json file'
-        ));
+        expect(error).toEqual(
+          new Error('No valid AMIOK scripts basePath provided. Check your amiok.settings.json file')
+        );
       }
     });
     it('should throw error when testScripts is not an array', async () => {
@@ -123,19 +123,19 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: mockStoreTestResults,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.SETUP_TEST]: {
             test: {
               id: mockData.integer(),
-            }
+            },
           },
         };
 
         await testScriptExecute(undefined, context);
       } catch (error) {
         expect(mockStoreTestResults).not.toHaveBeenCalled();
-        expect(error).toEqual(new Error(
-          'No AMIOK test scripts provided. Check your amiok.settings.json file'
-        ));
+        expect(error).toEqual(
+          new Error('No AMIOK test scripts provided. Check your amiok.settings.json file')
+        );
       }
     });
     it('should throw error when testScripts is an empty array', async () => {
@@ -153,19 +153,19 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: mockStoreTestResults,
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {
+          [PROCESS_ENUM.SETUP_TEST]: {
             test: {
               id: mockData.integer(),
-            }
+            },
           },
         };
 
         await testScriptExecute(undefined, context);
       } catch (error) {
         expect(mockStoreTestResults).not.toHaveBeenCalled();
-        expect(error).toEqual(new Error(
-          'No AMIOK test scripts provided. Check your amiok.settings.json file'
-        ));
+        expect(error).toEqual(
+          new Error('No AMIOK test scripts provided. Check your amiok.settings.json file')
+        );
       }
     });
     it('should throw error when SETTINGS_PREPARE context data is missing', async () => {
@@ -222,10 +222,12 @@ describe('Test Script Execute Process Tests', () => {
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE storage module storeTestResults()'));
+        expect(error).toStrictEqual(
+          new Error('Missing STORAGE_PREPARE storage module storeTestResults()')
+        );
       }
     });
-    it('should throw error when STORAGE_TEST_SETUP context data is missing', async () => {
+    it('should throw error when TEST_SETUP context data is missing', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
@@ -239,10 +241,10 @@ describe('Test Script Execute Process Tests', () => {
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_TEST_SETUP context data'));
+        expect(error).toStrictEqual(new Error('Missing TEST_SETUP context data'));
       }
     });
-    it('should throw error when STORAGE_TEST_SETUP test is missing', async () => {
+    it('should throw error when TEST_SETUP test is missing', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
@@ -253,11 +255,11 @@ describe('Test Script Execute Process Tests', () => {
               storeTestResults: () => { },
             },
           },
-          [PROCESS_ENUM.STORAGE_TEST_SETUP]: {},
+          [PROCESS_ENUM.SETUP_TEST]: {},
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_TEST_SETUP test'));
+        expect(error).toStrictEqual(new Error('Missing TEST_SETUP test'));
       }
     });
   });

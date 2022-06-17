@@ -34,7 +34,10 @@ describe('Store Module Tests', () => {
 
       storeModule.storeResourceStats(id, resourceStats);
 
-      expect(stubConsole).toHaveBeenCalledWith('Called storeResourceStats()', { id, resourceStats });
+      expect(stubConsole).toHaveBeenCalledWith('Called storeResourceStats()', {
+        id,
+        resourceStats,
+      });
 
       stubConsole.mockClear();
     });

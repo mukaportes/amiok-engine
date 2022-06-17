@@ -4,13 +4,16 @@ const defaultStorageModule = require('../../../src/modules/store');
 const customStorageModule = require('../../mocks/amiok.storage');
 
 jest.mock('fs/promises', () => ({
-  access: jest.fn((path) => new Promise((resolve, reject) => {
-    if (path.includes('/path/error')) {
-      reject();
-    } else {
-      resolve();
-    }
-  })),
+  access: jest.fn(
+    (path) =>
+      new Promise((resolve, reject) => {
+        if (path.includes('/path/error')) {
+          reject();
+        } else {
+          resolve();
+        }
+      })
+  ),
 }));
 
 describe('Storage Prepare Process Tests', () => {
@@ -33,9 +36,7 @@ describe('Storage Prepare Process Tests', () => {
           key: PROCESS_ENUM.STORAGE_PREPARE,
           storage: customStorageModule,
         });
-      } catch (error) {
-
-      }
+      } catch (error) {}
     });
     it('should return new context data with custom storage config when no storageModule path is defined', async () => {
       try {

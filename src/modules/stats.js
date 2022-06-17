@@ -1,13 +1,15 @@
+const fs = require('fs/promises');
+const { createFile } = require('./file');
+
 /**
- * 
- * @param {StatsTemplate} results 
- * @param {StatsTemplate} resultItem 
+ *
+ * @param {StatsTemplate} results
+ * @param {StatsTemplate} resultItem
  * @returns {StatsTemplate}
  */
 const mergeItemToResults = (results, resultItem) => {
   const formattedResults = { ...results };
 
-  formattedResults.delay += resultItem.delay;
   formattedResults.cpu += resultItem.cpu;
   formattedResults.memory.rss += resultItem.memory.rss;
   formattedResults.memory.heapTotal += resultItem.memory.heapTotal;
@@ -21,37 +23,34 @@ const mergeItemToResults = (results, resultItem) => {
 };
 
 /**
- * 
- * @param {string | number} value 
+ *
+ * @param {string | number} value
  * @returns {number}
  */
 const toMB = (value) => Number(value) / 1024 / 1024;
 
 /**
- * 
- * @param {StatsTemplate} results 
- * @param {string} rangeType 
+ *
+ * @param {StatsTemplate} results
+ * @param {string} rangeType
  * @returns {StatsTemplateDb}
  */
-const formatAverageResults = (results, rangeType) => ({
-  delay: results.delay / results.itemCount,
+const formatAverageResults = (results) => ({
   cpu: results.cpu / results.itemCount,
-  memoryRss: toMB(results.memory.rss / results.itemCount),
-  memoryHeapTotal: toMB(results.memory.heapTotal / results.itemCount),
-  memoryHeapUsed: toMB(results.memory.heapUsed / results.itemCount),
-  memoryExternal: toMB(results.memory.external / results.itemCount),
-  memoryArrayBuffers: toMB(results.memory.arrayBuffers / results.itemCount),
+  memoryRss: results.memory.rss / results.itemCount,
+  memoryHeapTotal: results.memory.heapTotal / results.itemCount,
+  memoryHeapUsed: results.memory.heapUsed / results.itemCount,
+  memoryExternal: results.memory.external / results.itemCount,
+  memoryArrayBuffers: results.memory.arrayBuffers / results.itemCount,
   handles: results.handles / results.itemCount,
   itemCount: results.itemCount,
-  rangeType,
 });
 
 /**
- * 
+ *
  * @returns {StatsTemplate}
  */
 const getStatsTemplate = () => ({
-  delay: 0,
   cpu: 0,
   memory: {
     rss: 0,
@@ -65,7 +64,7 @@ const getStatsTemplate = () => ({
 });
 
 /**
- * 
+ *
  * @returns {SequenceStats}
  */
 const getRoundStatsTemplate = () => ({
@@ -77,10 +76,96 @@ const getRoundStatsTemplate = () => ({
   },
 });
 
+// GLOBAL STORE OF TEST UID
+
+/**
+ *
+ * @param {string} testId
+ */
+const setCurrentTestId = (testId) => {
+  global.amiokCurrentTestId = testId;
+};
+
+/**
+ *
+ * @returns {ReportFilePathData}
+ */
+const getReportFilePath = () => {
+  const fileFolder = `${process.cwd()}/_amiokstats`;
+  const fileName = `${global.amiokCurrentTestId}.stat`;
+
+  return {
+    fileFolder,
+    fileName,
+    path: `${fileFolder}/${fileName}`,
+  };
+};
+
+/**
+ *
+ * @param {StatsTemplate} stats
+ * @param {string} line
+ */
+const processStatsRow = (stats, line) => {
+  const [
+    cpu,
+    memoryRss,
+    memoryHeapTotal,
+    memoryHeapUsed,
+    memoryExternal,
+    memoryArrayBuffers,
+    numActiveHandles,
+  ] = line.split('|');
+
+  return mergeItemToResults(stats, {
+    cpu: Number(cpu),
+    memory: {
+      rss: toMB(Number(memoryRss)),
+      heapTotal: toMB(Number(memoryHeapTotal)),
+      heapUsed: toMB(Number(memoryHeapUsed)),
+      external: toMB(Number(memoryExternal)),
+      arrayBuffers: toMB(Number(memoryArrayBuffers)),
+    },
+    handles: Number(numActiveHandles),
+  });
+};
+
+/**
+ *
+ * @param {string} newLine
+ * @returns {Promise}
+ */
+const addStatsToFile = async (newLine) => {
+  const { path } = getReportFilePath();
+  await fs.appendFile(path, `${newLine}\n`);
+};
+
+/**
+ *
+ * @param {string} testId
+ * @returns {boolean}
+ */
+const createStatsFile = async () => {
+  try {
+    const { fileFolder, fileName } = getReportFilePath();
+    await createFile(fileFolder, fileName);
+
+    return true;
+  } catch (error) {
+    console.error('Error creating stats file', error);
+    return false;
+  }
+};
+
 module.exports = {
   mergeItemToResults,
   toMB,
   formatAverageResults,
   getStatsTemplate,
   getRoundStatsTemplate,
+  createStatsFile,
+  processStatsRow,
+  addStatsToFile,
+  setCurrentTestId,
+  getReportFilePath,
 };
