@@ -1,7 +1,4 @@
 const fs = require('fs/promises');
-const { createReadStream } = require('fs');
-const readline = require('readline');
-const Stream = require('stream');
 
 /**
  *
@@ -67,33 +64,6 @@ const createFile = async (fileFolder, fileName) => {
 
 /**
  * 
- * @param {string} filePath 
- * @param {function} processLineFn 
- * @param {StatsTemplate} statsTemplate 
- * @returns 
- */
-const readFileLines = (filePath, processLineFn, statsTemplate) =>
-  new Promise((resolve, reject) => {
-    try {
-      let results = statsTemplate;
-      const inputStream = createReadStream(filePath);
-      const outputStream = new Stream();
-      const rlInterface = readline.createInterface(inputStream, outputStream);
-
-      rlInterface.on('line', (lineData) => {
-        results = processLineFn(results, lineData);
-      });
-
-      rlInterface.on('close', () => resolve(results));
-    } catch (error) {
-      console.error('Error while reading report file', error);
-
-      reject(new Error(error));
-    }
-  });
-
-/**
- * 
  * @param {string} folderPath 
  * @returns {string}
  */
@@ -113,6 +83,5 @@ module.exports = {
   removeFolder,
   pathExists,
   createFile,
-  readFileLines,
   getFirstFileFromFolder,
 };
