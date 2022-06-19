@@ -163,10 +163,25 @@ const createStatsFile = async () => {
 
 /**
  *
- * @param {string} filePath
- * @param {function} processLineFn
- * @param {StatsTemplate} statsTemplate
- * @returns
+ * @param {TimeLabel}
+ * @returns {string}
+ */
+const getTimeLabel = ({ time, startTime, endTime }) => {
+  let label = 'end';
+
+  if (time < startTime) {
+    label = 'start';
+  } else if (time <= endTime) {
+    label = 'tests';
+  }
+
+  return label;
+};
+
+/**
+ *
+ * @param {ReadReportLines}
+ * @returns {ReadReportLinesResponse}
  */
 const readReportFileLines = ({ filePath, startTime, endTime }) =>
   new Promise((resolve, reject) => {
@@ -185,14 +200,11 @@ const readReportFileLines = ({ filePath, startTime, endTime }) =>
         const splitLine = newLine.split('|');
         const dateStr = splitLine.pop();
         const date = new Date(dateStr);
-        console.log('date', date);
-        let resultsKey = 'end';
-
-        if (date.getTime() < startTime) {
-          resultsKey = 'start';
-        } else if (date.getTime() <= endTime) {
-          resultsKey = 'tests';
-        }
+        const resultsKey = getTimeLabel({
+          startTime,
+          endTime,
+          time: date.getTime(),
+        });
 
         results[resultsKey] = processStatsRow(results[resultsKey], splitLine);
       });
@@ -217,4 +229,5 @@ module.exports = {
   setCurrentTestId,
   getReportFilePath,
   readReportFileLines,
+  getTimeLabel,
 };

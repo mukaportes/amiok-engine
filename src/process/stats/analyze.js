@@ -2,7 +2,6 @@ const PROCESS_ENUM = require('../../enums/process');
 const {
   formatAverageResults,
   getReportFilePath,
-  processStatsRow,
   readReportFileLines,
 } = require('../../modules/stats');
 
@@ -34,7 +33,6 @@ module.exports = async (_, context = {}) => {
     const { startTime, endTime } = context[PROCESS_ENUM.SCRIPT_EXECUTE];
     const results = await readReportFileLines({
       filePath,
-      processLineFn: processStatsRow,
       startTime,
       endTime,
     });
