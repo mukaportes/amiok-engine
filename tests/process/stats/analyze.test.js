@@ -90,14 +90,14 @@ describe('Stats Analyze Process Tests', () => {
     });
   });
   describe('unhappy path', () => {
-    it('throws an error when SCRIPT_EXECUTE context data is not found', async () => {
+    it('should throw an error when SCRIPT_EXECUTE context data is not found', async () => {
       try {
         await statsAnalyze();
       } catch (error) {
         expect(error).toStrictEqual(new Error('Missing SCRIPT_EXECUTE context data'));
       }
     })
-    it('throws an error when SETUP_TEST context data is not found', async () => {
+    it('should throw an error when SETUP_TEST context data is not found', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SCRIPT_EXECUTE]: {},
@@ -107,7 +107,7 @@ describe('Stats Analyze Process Tests', () => {
         expect(error).toStrictEqual(new Error('Missing SETUP_TEST context data'));
       }
     })
-    it('throws an error when SETUP_TEST test data is not found', async () => {
+    it('should throw an error when SETUP_TEST test data is not found', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SCRIPT_EXECUTE]: {},
@@ -119,7 +119,7 @@ describe('Stats Analyze Process Tests', () => {
         expect(error).toStrictEqual(new Error('Missing SETUP_TEST test data'));
       }
     })
-    it('throws an error when STORAGE_PREPARE context data is not found', async () => {
+    it('should throw an error when STORAGE_PREPARE context data is not found', async () => {
       try {
         const testId = randomData.string();
         const context = {
@@ -136,7 +136,7 @@ describe('Stats Analyze Process Tests', () => {
         expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE context data'));
       }
     })
-    it('throws an error when STORAGE_PREPARE storage module is not found', async () => {
+    it('should throw an error when STORAGE_PREPARE storage module is not found', async () => {
       try {
         const testId = randomData.string();
         const context = {
@@ -154,7 +154,7 @@ describe('Stats Analyze Process Tests', () => {
         expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE storage module'));
       }
     })
-    it('throws an error when STORAGE_PREPARE storage module storeResourceStats() is not found', async () => {
+    it('should throw an error when STORAGE_PREPARE storage module storeResourceStats() is not found', async () => {
       try {
         const testId = randomData.string();
         const context = {

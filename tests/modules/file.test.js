@@ -64,7 +64,7 @@ describe('File Module Tests', () => {
       });
     });
     describe('unhappy path', () => {
-      it('throws exception when an error occurs', async () => {
+      it('should throw exception when an error occurs', async () => {
         try {
           const path = '/path/error.js';
           await fileModule.getFileContent(path);
@@ -88,7 +88,7 @@ describe('File Module Tests', () => {
       });
     });
     describe('unhappy path', () => {
-      it('throws exception when an error occurs', async () => {
+      it('should throw exception when an error occurs', async () => {
         try {
           const path = '/path/error';
           await fileModule.removeFolder(path);
@@ -112,7 +112,7 @@ describe('File Module Tests', () => {
       });
     });
     describe('unhappy path', () => {
-      it('throws an exception when an error occurs', async () => {
+      it('should throw an exception when an error occurs', async () => {
         try {
           const path = '/path/error.js';
           const pathExists = await fileModule.pathExists(path);
@@ -179,7 +179,7 @@ describe('File Module Tests', () => {
       });
     });
     describe('unhappy path', () => {
-      it('throws an exception when an error occurs', async () => {
+      it('should throw an exception when an error occurs', async () => {
         try {
           const path = '/error';
           await fileModule.getFirstFileFromFolder(path);
