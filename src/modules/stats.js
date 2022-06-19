@@ -1,4 +1,7 @@
 const fs = require('fs/promises');
+const { createReadStream } = require('fs');
+const readline = require('readline');
+const Stream = require('stream');
 const { createFile } = require('./file');
 
 /**
@@ -35,7 +38,7 @@ const toMB = (value) => Number(value) / 1024 / 1024;
  * @param {string} rangeType
  * @returns {StatsTemplateDb}
  */
-const formatAverageResults = (results) => ({
+const formatAverageResults = (results, rangeType) => ({
   cpu: results.cpu / results.itemCount,
   memoryRss: results.memory.rss / results.itemCount,
   memoryHeapTotal: results.memory.heapTotal / results.itemCount,
@@ -44,6 +47,7 @@ const formatAverageResults = (results) => ({
   memoryArrayBuffers: results.memory.arrayBuffers / results.itemCount,
   handles: results.handles / results.itemCount,
   itemCount: results.itemCount,
+  rangeType,
 });
 
 /**
@@ -115,7 +119,7 @@ const processStatsRow = (stats, line) => {
     memoryExternal,
     memoryArrayBuffers,
     numActiveHandles,
-  ] = line.split('|');
+  ] = line;
 
   return mergeItemToResults(stats, {
     cpu: Number(cpu),
@@ -157,6 +161,62 @@ const createStatsFile = async () => {
   }
 };
 
+/**
+ *
+ * @param {TimeLabel}
+ * @returns {string}
+ */
+const getTimeLabel = ({ time, startTime, endTime }) => {
+  let label = 'end';
+
+  if (time < startTime) {
+    label = 'start';
+  } else if (time <= endTime) {
+    label = 'tests';
+  }
+
+  return label;
+};
+
+/**
+ *
+ * @param {ReadReportLines}
+ * @returns {ReadReportLinesResponse}
+ */
+const readReportFileLines = ({ filePath, startTime, endTime }) =>
+  new Promise((resolve, reject) => {
+    try {
+      const results = {
+        start: getStatsTemplate(),
+        tests: getStatsTemplate(),
+        end: getStatsTemplate(),
+      };
+
+      const inputStream = createReadStream(filePath);
+      const outputStream = new Stream();
+      const rlInterface = readline.createInterface(inputStream, outputStream);
+
+      rlInterface.on('line', (newLine) => {
+        const splitLine = newLine.split('|');
+        const dateStr = splitLine.pop();
+        const date = new Date(dateStr);
+        const resultsKey = getTimeLabel({
+          startTime,
+          endTime,
+          time: date.getTime(),
+        });
+
+        results[resultsKey] = processStatsRow(results[resultsKey], splitLine);
+      });
+
+      rlInterface.on('close', () => resolve(results));
+    } catch (error) {
+      console.error('Error while reading report file', error);
+
+      reject(new Error(error));
+    }
+  });
+
 module.exports = {
   mergeItemToResults,
   toMB,
@@ -168,4 +228,6 @@ module.exports = {
   addStatsToFile,
   setCurrentTestId,
   getReportFilePath,
+  readReportFileLines,
+  getTimeLabel,
 };

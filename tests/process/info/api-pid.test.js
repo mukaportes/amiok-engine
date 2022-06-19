@@ -27,7 +27,7 @@ describe('Info API PID Process Tests', () => {
     });
   });
   describe('unhappy path', () => {
-    it('throws new error when no API PID is returned', async () => {
+    it('should throw new error when no API PID is returned', async () => {
       const stubConsoleError = jest.spyOn(global.console, 'error');
       try {
         const context = {
@@ -39,14 +39,14 @@ describe('Info API PID Process Tests', () => {
         expect(stubConsoleError).toHaveBeenCalled();
       }
     });
-    it('throws new error when SETTINGS_PREPARE context data is missing', async () => {
+    it('should throw new error when SETTINGS_PREPARE context data is missing', async () => {
       try {
         await infoApiPid();
       } catch (error) {
         expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }
     });
-    it('throws new error when SETTINGS_PREPARE config is missing', async () => {
+    it('should throw new error when SETTINGS_PREPARE config is missing', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {},
@@ -56,7 +56,7 @@ describe('Info API PID Process Tests', () => {
         expect(error).toStrictEqual(new Error('Missing settings config'));
       }
     });
-    it('throws new error when SETTINGS_PREPARE port is missing', async () => {
+    it('should throw new error when SETTINGS_PREPARE port is missing', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {

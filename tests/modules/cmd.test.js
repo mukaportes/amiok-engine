@@ -23,7 +23,7 @@ describe('Cmd Module Tests', () => {
       });
     });
     describe('unhappy path', () => {
-      it('throws exception when no port is provided', async () => {
+      it('should throw exception when no port is provided', async () => {
         try {
           await cmdModule.netstatByPort();
         } catch (error) {

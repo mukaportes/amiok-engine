@@ -1,17 +1,5 @@
 const fs = require('fs/promises');
-const { createReadStream } = require('fs');
-const readline = require('readline');
-const Stream = require('stream');
 const fileModule = require('../../src/modules/file');
-const { getStatsTemplate, mergeItemToResults } = require('../../src/modules/stats');
-
-// Mocking: fs module
-jest.mock('fs', () => ({
-  createReadStream: jest.fn((filePath) => {
-    if (filePath === '/path/error.js') throw 'Error creating file read stream';
-    else return true;
-  }),
-}));
 
 // Mocking: fs promises module
 jest.mock('fs/promises', () => ({
@@ -60,28 +48,6 @@ jest.mock('fs/promises', () => ({
   ),
 }));
 
-// Mocking: readline module
-jest.mock('readline', () => ({
-  createInterface: jest.fn(() => ({
-    on: jest.fn((_, callback) => {
-      callback({
-        cpu: 1,
-        memory: {
-          rss: 1,
-          heapTotal: 1,
-          heapUsed: 1,
-          external: 1,
-          arrayBuffers: 1,
-        },
-        handles: 1,
-      });
-    }),
-  })),
-}));
-
-// Mocking: stream module constructor
-jest.mock('stream', () => jest.fn().mockImplementation(() => ({})));
-
 describe('File Module Tests', () => {
   describe('getFileContent()', () => {
     describe('happy path', () => {
@@ -98,7 +64,7 @@ describe('File Module Tests', () => {
       });
     });
     describe('unhappy path', () => {
-      it('throws exception when an error occurs', async () => {
+      it('should throw exception when an error occurs', async () => {
         try {
           const path = '/path/error.js';
           await fileModule.getFileContent(path);
@@ -122,7 +88,7 @@ describe('File Module Tests', () => {
       });
     });
     describe('unhappy path', () => {
-      it('throws exception when an error occurs', async () => {
+      it('should throw exception when an error occurs', async () => {
         try {
           const path = '/path/error';
           await fileModule.removeFolder(path);
@@ -146,7 +112,7 @@ describe('File Module Tests', () => {
       });
     });
     describe('unhappy path', () => {
-      it('throws an exception when an error occurs', async () => {
+      it('should throw an exception when an error occurs', async () => {
         try {
           const path = '/path/error.js';
           const pathExists = await fileModule.pathExists(path);
@@ -199,49 +165,6 @@ describe('File Module Tests', () => {
       });
     });
   });
-  describe('readFileLines()', () => {
-    describe('happy path', () => {
-      it('returns stats template results', async () => {
-        try {
-          const filePath = '/path/file.js';
-          const processLineFn = jest.fn((results, lineData) =>
-            mergeItemToResults(results, lineData)
-          );
-          const statsTemplate = getStatsTemplate();
-          const fileLines = await fileModule.readFileLines(filePath, processLineFn, statsTemplate);
-
-          expect(fileLines).toStrictEqual({
-            cpu: 1,
-            memory: {
-              rss: 1,
-              heapTotal: 1,
-              heapUsed: 1,
-              external: 1,
-              arrayBuffers: 1,
-            },
-            handles: 1,
-            itemCount: 1,
-          });
-        } catch (error) {
-          throw new Error(error);
-        }
-      });
-    });
-    describe('unhappy path', () => {
-      it('returns false when an error occurs or file does not exist', async () => {
-        try {
-          const filePath = '/path/error.js';
-          const processLineFn = jest.fn((results, lineData) =>
-            mergeItemToResults(results, lineData)
-          );
-          const statsTemplate = getStatsTemplate();
-          await fileModule.readFileLines(filePath, processLineFn, statsTemplate);
-        } catch (error) {
-          expect(error.message).toBe('Error creating file read stream');
-        }
-      });
-    });
-  });
   describe('getFirstFileFromFolder()', () => {
     describe('happy path', () => {
       it('returns first file name from the folder provided', async () => {
@@ -256,7 +179,7 @@ describe('File Module Tests', () => {
       });
     });
     describe('unhappy path', () => {
-      it('throws an exception when an error occurs', async () => {
+      it('should throw an exception when an error occurs', async () => {
         try {
           const path = '/error';
           await fileModule.getFirstFileFromFolder(path);

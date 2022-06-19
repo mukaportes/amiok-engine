@@ -2,6 +2,7 @@ const fs = require('fs/promises');
 const Chance = require('chance');
 const statsModule = require('../../src/modules/stats');
 
+// Mocking: fs/promises module
 jest.mock('fs/promises', () => ({
   access: jest.fn().mockResolvedValue(true),
   appendFile: jest.fn().mockResolvedValue(),
@@ -11,6 +12,28 @@ jest.mock('fs/promises', () => ({
     } else {
       resolve(true);
     }
+  })),
+}));
+
+// Mocking: fs module
+jest.mock('fs', () => ({
+  createReadStream: jest.fn((filePath) => {
+    if (filePath === '/path/error.js') throw 'Error creating file read stream';
+    else return true;
+  }),
+}));
+
+// Mocking: stream module constructor
+jest.mock('stream', () => jest.fn().mockImplementation(() => ({})));
+
+// Mocking: readline module
+jest.mock('readline', () => ({
+  createInterface: jest.fn(() => ({
+    on: jest.fn((_, callback) => {
+      callback(
+        `1|1|1|1|1|1|1|1`,
+      );
+    }),
   })),
 }));
 
@@ -147,7 +170,15 @@ describe('Stats Module Tests', () => {
         const memoryArrayBuffers = randomData.integer({ min: 1, max: 100 });
         const numActiveHandles = randomData.integer({ min: 1, max: 100 });
 
-        const line = `${cpu}|${memoryRss}|${memoryHeapTotal}|${memoryHeapUsed}|${memoryExternal}|${memoryArrayBuffers}|${numActiveHandles}`;
+        const line = [
+          cpu,
+          memoryRss,
+          memoryHeapTotal,
+          memoryHeapUsed,
+          memoryExternal,
+          memoryArrayBuffers,
+          numActiveHandles,
+        ];
 
         const processedResults = statsModule.processStatsRow(results, line);
 
@@ -191,6 +222,85 @@ describe('Stats Module Tests', () => {
         expect(creationRes).toBe(false);
         expect(fs.access).toHaveBeenCalled();
         expect(fs.writeFile).toHaveBeenCalled();
+      });
+    });
+  });
+  describe('readReportFileLines()', () => {
+    describe('happy path', () => {
+      it('should return results from the processed file lines', async () => {
+        try {
+          const filePath = randomData.string();
+          const startTime = randomData.integer({ min: 1, max: 50 });
+          const endTime = randomData.integer({ min: 100, max: 200 });
+
+          const results = await statsModule.readReportFileLines({
+            filePath,
+            startTime,
+            endTime,
+          });
+
+          expect(results).toHaveProperty('start');
+          expect(results).toHaveProperty('tests');
+          expect(results).toHaveProperty('end');
+
+          const itemCountList = [
+            results.start.itemCount,
+            results.tests.itemCount,
+            results.end.itemCount,
+          ];
+
+          expect(itemCountList.includes(1)).toBe(true);
+        } catch (error) {
+          throw new Error(error);
+        }
+      });
+    });
+    describe('unhappy path', () => {
+      it('should throw an error when an exception occurs', async () => {
+        try {
+          const filePath = '/path/error.js';
+          const startTime = randomData.integer({ min: 1, max: 50 });
+          const endTime = randomData.integer({ min: 100, max: 200 });
+
+          await statsModule.readReportFileLines({
+            filePath,
+            startTime,
+            endTime,
+          });
+        } catch (error) {
+          expect(error).toEqual(new Error('Error creating file read stream'));
+        }
+      });
+    });
+  });
+  describe('getTimeLabel()', () => {
+    describe('happy path', () => {
+      it('should return "start" when input date is smaller than startTime', () => {
+        const startTime = randomData.integer({ min: 50, max: 99 });
+        const endTime = randomData.integer({ min: 100, max: 200 });
+        const time = randomData.integer({ min: 1, max: 30 });
+
+        const label = statsModule.getTimeLabel({ startTime, endTime, time });
+
+        expect(label).toBe('start');
+      });
+      it('should return "tests" when input date is greater than startTime and smaller than endTime', () => {
+        const startTime = randomData.integer({ min: 1, max: 40 });
+        const endTime = randomData.integer({ min: 100, max: 200 });
+        const time = randomData.integer({ min: 50, max: 60 });
+
+        const label = statsModule.getTimeLabel({ startTime, endTime, time });
+
+        expect(label).toBe('tests');
+      });
+      it('should return "end" when input date is greater than both startTime and endTime', () => {
+        const startTime = randomData.integer({ min: 1, max: 99 });
+        const endTime = randomData.integer({ min: 100, max: 200 });
+        const time = randomData.integer({ min: 500, max: 600 });
+
+        const label = statsModule.getTimeLabel({ startTime, endTime, time });
+
+        expect(label).toBe('end');
       });
     });
   });

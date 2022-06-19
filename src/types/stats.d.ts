@@ -38,3 +38,21 @@ interface ReportFilePathData {
   fileName: string;
   path: string;
 }
+
+interface TimeLabel {
+  time: number;
+  startTime: number;
+  endTime: number;
+}
+
+interface ReadReportLines {
+  filePath: string;
+  startTime: number;
+  endTime: number;
+}
+
+interface ReadReportLinesResponse {
+  start: StatsTemplate;
+  tests: StatsTemplate;
+  end: StatsTemplate;
+}
