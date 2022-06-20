@@ -55,7 +55,7 @@ describe('Storage Store Test Process Tests', () => {
       try {
         await storeTest();
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing TEST_SETUP context data'));
+        expect(error).toEqual(new Error('Missing TEST_SETUP context data'));
       }
     });
     it('should throw an error when TEST_SETUP test is invalid', async () => {
@@ -67,7 +67,7 @@ describe('Storage Store Test Process Tests', () => {
         };
         await storeTest(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing storage test data'));
+        expect(error).toEqual(new Error('Missing storage test data'));
       }
     });
     it('should throw an error when SETTINGS_PREPARE context data is invalid', async () => {
@@ -81,7 +81,7 @@ describe('Storage Store Test Process Tests', () => {
         };
         await storeTest(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
+        expect(error).toEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }
     });
     it('should throw an error when SETTINGS_PREPARE config is invalid', async () => {
@@ -98,7 +98,7 @@ describe('Storage Store Test Process Tests', () => {
         };
         await storeTest(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing settings config'));
+        expect(error).toEqual(new Error('Missing settings config'));
       }
     });
     it('should throw an error when SCRIPT_EXECUTE context data is invalid', async () => {
@@ -120,7 +120,7 @@ describe('Storage Store Test Process Tests', () => {
         };
         await storeTest(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing SCRIPT_EXECUTE context data'));
+        expect(error).toEqual(new Error('Missing SCRIPT_EXECUTE context data'));
       }
     });
     it('should throw an error when STORAGE_PREPARE context data is invalid', async () => {
@@ -146,7 +146,7 @@ describe('Storage Store Test Process Tests', () => {
         };
         await storeTest(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE context data'));
+        expect(error).toEqual(new Error('Missing STORAGE_PREPARE context data'));
       }
     });
     it('should throw an error when STORAGE_PREPARE storage module is invalid', async () => {
@@ -175,7 +175,7 @@ describe('Storage Store Test Process Tests', () => {
         };
         await storeTest(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE storage module'));
+        expect(error).toEqual(new Error('Missing STORAGE_PREPARE storage module'));
       }
     });
     it('should throw an error when STORAGE_PREPARE storage module storeTest() is invalid', async () => {
@@ -206,7 +206,7 @@ describe('Storage Store Test Process Tests', () => {
         };
         await storeTest(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(
+        expect(error).toEqual(
           new Error('Missing STORAGE_PREPARE storage module storeTest()')
         );
       }

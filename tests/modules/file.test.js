@@ -69,7 +69,7 @@ describe('File Module Tests', () => {
           const path = '/path/error.js';
           await fileModule.getFileContent(path);
         } catch (error) {
-          expect(error.message).toBe('Error reading file');
+          expect(error).toEqual(new Error('Error reading file'));
         }
       });
     });
@@ -93,7 +93,7 @@ describe('File Module Tests', () => {
           const path = '/path/error';
           await fileModule.removeFolder(path);
         } catch (error) {
-          expect(error.message).toBe('Error removing folder');
+          expect(error).toEqual(new Error('Error removing folder'));
         }
       });
     });
@@ -160,7 +160,7 @@ describe('File Module Tests', () => {
           const filePath = 'error-write.js';
           await fileModule.createFile(folderPath, filePath);
         } catch (error) {
-          expect(error.message).toBe('Error creating file');
+          expect(error).toEqual(new Error('Error creating file'));
         }
       });
     });
@@ -184,7 +184,7 @@ describe('File Module Tests', () => {
           const path = '/error';
           await fileModule.getFirstFileFromFolder(path);
         } catch (error) {
-          expect(error.message).toBe('Error reading folder files');
+          expect(error).toEqual(new Error('Error reading folder files'));
         }
       });
     });

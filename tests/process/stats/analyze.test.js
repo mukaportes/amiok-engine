@@ -94,7 +94,7 @@ describe('Stats Analyze Process Tests', () => {
       try {
         await statsAnalyze();
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing SCRIPT_EXECUTE context data'));
+        expect(error).toEqual(new Error('Missing SCRIPT_EXECUTE context data'));
       }
     })
     it('should throw an error when SETUP_TEST context data is invalid', async () => {
@@ -106,7 +106,7 @@ describe('Stats Analyze Process Tests', () => {
         };
         await statsAnalyze(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing SETUP_TEST context data'));
+        expect(error).toEqual(new Error('Missing SETUP_TEST context data'));
       }
     })
     it('should throw an error when SETUP_TEST test data is invalid', async () => {
@@ -122,7 +122,7 @@ describe('Stats Analyze Process Tests', () => {
 
         await statsAnalyze(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing SETUP_TEST test data'));
+        expect(error).toEqual(new Error('Missing SETUP_TEST test data'));
       }
     })
     it('should throw an error when STORAGE_PREPARE context data is invalid', async () => {
@@ -141,7 +141,7 @@ describe('Stats Analyze Process Tests', () => {
 
         await statsAnalyze(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE context data'));
+        expect(error).toEqual(new Error('Missing STORAGE_PREPARE context data'));
       }
     })
     it('should throw an error when STORAGE_PREPARE storage module is invalid', async () => {
@@ -163,7 +163,7 @@ describe('Stats Analyze Process Tests', () => {
 
         await statsAnalyze(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE storage module'));
+        expect(error).toEqual(new Error('Missing STORAGE_PREPARE storage module'));
       }
     })
     it('should throw an error when STORAGE_PREPARE storage module storeResourceStats() is invalid', async () => {
@@ -187,7 +187,7 @@ describe('Stats Analyze Process Tests', () => {
 
         await statsAnalyze(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE storage module storeResourceStats()'));
+        expect(error).toEqual(new Error('Missing STORAGE_PREPARE storage module storeResourceStats()'));
       }
     })
   });
