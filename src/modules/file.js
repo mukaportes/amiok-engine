@@ -46,8 +46,8 @@ const pathExists = async (path) => {
 
 /**
  *
- * @param {string} fileFolder 
- * @param {string} fileName 
+ * @param {string} fileFolder
+ * @param {string} fileName
  */
 const createFile = async (fileFolder, fileName) => {
   try {
@@ -63,8 +63,8 @@ const createFile = async (fileFolder, fileName) => {
 };
 
 /**
- * 
- * @param {string} folderPath 
+ *
+ * @param {string} folderPath
  * @returns {string}
  */
 const getFirstFileFromFolder = async (folderPath) => {
