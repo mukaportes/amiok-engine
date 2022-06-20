@@ -2,6 +2,7 @@ const { waitFor } = require('../../modules/utils');
 const { runSequence } = require('../../modules/http');
 const PROCESS_ENUM = require('../../enums/process');
 const { isObject, isFunction } = require('../../modules/validate');
+const logger = require('../../modules/logger');
 
 const validate = (context) => {
   if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE]))
@@ -26,7 +27,7 @@ const validate = (context) => {
  * @returns {TestScriptsExecuteContext}
  */
 module.exports = async (_, context = {}) => {
-  console.info(`Executing process ${PROCESS_ENUM.SCRIPT_EXECUTE}`);
+  logger.info(`Executing process ${PROCESS_ENUM.SCRIPT_EXECUTE}`);
   const startTime = new Date().getTime();
   try {
     validate(context);
@@ -64,7 +65,7 @@ module.exports = async (_, context = {}) => {
         context[PROCESS_ENUM.SETUP_TEST].test.id,
         roundResults
       );
-      console.info(`Executed round ${round} of ${rounds}`);
+      logger.info(`Executed round ${round} of ${rounds}`);
     }
 
     const endTime = new Date().getTime();
@@ -72,7 +73,7 @@ module.exports = async (_, context = {}) => {
 
     return { key: PROCESS_ENUM.SCRIPT_EXECUTE, startTime, endTime };
   } catch (error) {
-    console.error(`Error executing ${PROCESS_ENUM.SCRIPT_EXECUTE} process`, error);
+    logger.error(`Error executing ${PROCESS_ENUM.SCRIPT_EXECUTE} process`, error);
 
     throw error;
   }

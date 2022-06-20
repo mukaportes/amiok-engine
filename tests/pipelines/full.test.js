@@ -78,12 +78,10 @@ describe('Full Pipeline Tests', () => {
   });
   describe('unhappy path', () => {
     it('prints error and kills process when an error occurs executing a step', async () => {
-      const stubConsole = jest.spyOn(global.console, 'error');
       const stubProcess = jest.spyOn(global.process, 'kill').mockImplementation(() => { });
       try {
         await fullPipeline({ errorSteps: true });
       } catch (error) {
-        expect(stubConsole).toHaveBeenCalled();
         expect(stubProcess).toHaveBeenCalledWith(process.pid, 1);
       }
     });

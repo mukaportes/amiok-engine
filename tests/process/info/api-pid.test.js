@@ -31,7 +31,6 @@ describe('Info API PID Process Tests', () => {
   });
   describe('unhappy path', () => {
     it('throws new error when no API PID is returned', async () => {
-      const stubConsoleError = jest.spyOn(global.console, 'error');
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: { config: { port: 404 } },
@@ -39,7 +38,6 @@ describe('Info API PID Process Tests', () => {
         await infoApiPid(undefined, context);
       } catch (error) {
         expect(error).toEqual(new Error('No process running in the port given'));
-        expect(stubConsoleError).toHaveBeenCalled();
       }
     });
     it('throws new error when SETTINGS_PREPARE context data is invalid', async () => {

@@ -1,6 +1,7 @@
 const PROCESS_ENUM = require('../../enums/process');
 const { getFirstFileFromFolder } = require('../../modules/file');
 const { setCurrentTestId } = require('../../modules/stats');
+const logger = require('../../modules/logger');
 
 /**
  *
@@ -8,7 +9,7 @@ const { setCurrentTestId } = require('../../modules/stats');
  */
 module.exports = async () => {
   try {
-    console.info(`Executing process ${PROCESS_ENUM.SETUP_TEST}`);
+    logger.info(`Executing process ${PROCESS_ENUM.SETUP_TEST}`);
 
     // get file from _amiok folder
     const fileName = await getFirstFileFromFolder(`${process.cwd()}/_amiokstats`);
@@ -19,7 +20,7 @@ module.exports = async () => {
 
     return { key: PROCESS_ENUM.SETUP_TEST, test };
   } catch (error) {
-    console.error(`Error executing ${PROCESS_ENUM.SETUP_TEST} process`, error);
+    logger.error(`Error executing ${PROCESS_ENUM.SETUP_TEST} process`, error);
 
     throw error;
   }

@@ -1,5 +1,6 @@
 const PROCESS_ENUM = require('../../enums/process');
 const { isObject, isFunction } = require('../../modules/validate');
+const logger = require('../../modules/logger');
 
 const validate = (context) => {
   if (!isObject(context[PROCESS_ENUM.SETUP_TEST]))
@@ -27,7 +28,7 @@ const validate = (context) => {
  * @returns {NewContextData}
  */
 module.exports = async (_, context = {}) => {
-  console.info(`Executing process ${PROCESS_ENUM.STORAGE_TEST_RESULT}`);
+  logger.info(`Executing process ${PROCESS_ENUM.STORAGE_TEST_RESULT}`);
   try {
     validate(context);
 
@@ -45,7 +46,7 @@ module.exports = async (_, context = {}) => {
 
     return { key: PROCESS_ENUM.STORAGE_TEST_RESULT };
   } catch (error) {
-    console.error(`Error executing ${PROCESS_ENUM.STORAGE_TEST_RESULT} process`, error);
+    logger.error(`Error executing ${PROCESS_ENUM.STORAGE_TEST_RESULT} process`, error);
 
     throw error;
   }

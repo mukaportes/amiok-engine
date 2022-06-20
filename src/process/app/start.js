@@ -1,6 +1,7 @@
 const { spawn } = require('child_process');
 const PROCESS_ENUM = require('../../enums/process');
 const { waitFor } = require('../../modules/utils');
+const logger = require('../../modules/logger');
 const { isObject, isString } = require('../../modules/validate');
 
 const validate = (context) => {
@@ -19,7 +20,7 @@ const validate = (context) => {
  * @returns {NewContextData}
  */
 module.exports = async (_, context = {}) => {
-  console.info(`Executing process ${PROCESS_ENUM.APP_START}`);
+  logger.info(`Executing process ${PROCESS_ENUM.APP_START}`);
   try {
     validate(context);
 
@@ -32,7 +33,7 @@ module.exports = async (_, context = {}) => {
 
     return { key: PROCESS_ENUM.APP_START };
   } catch (error) {
-    console.error(`Error executing ${PROCESS_ENUM.APP_START} process`, error);
+    logger.error(`Error executing ${PROCESS_ENUM.APP_START} process`, error);
 
     throw error;
   }

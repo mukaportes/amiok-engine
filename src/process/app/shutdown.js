@@ -1,5 +1,6 @@
 const PROCESS_ENUM = require('../../enums/process');
 const { waitFor } = require('../../modules/utils');
+const logger = require('../../modules/logger');
 const { isObject, isNumber } = require('../../modules/validate');
 
 const validate = (context) => {
@@ -15,7 +16,7 @@ const validate = (context) => {
  * @returns {NewContextData}
  */
 module.exports = async (_, context = {}) => {
-  console.info(`Executing process ${PROCESS_ENUM.APP_SHUTDOWN}`);
+  logger.info(`Executing process ${PROCESS_ENUM.APP_SHUTDOWN}`);
   try {
     validate(context);
     const { apiPid } = context[PROCESS_ENUM.INFO_API_PID];
@@ -26,7 +27,7 @@ module.exports = async (_, context = {}) => {
 
     return { key: PROCESS_ENUM.APP_SHUTDOWN };
   } catch (error) {
-    console.error(`Error executing ${PROCESS_ENUM.APP_SHUTDOWN} process`, error);
+    logger.error(`Error executing ${PROCESS_ENUM.APP_SHUTDOWN} process`, error);
 
     throw error;
   }

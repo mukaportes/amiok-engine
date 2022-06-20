@@ -2,6 +2,7 @@ const PROCESS_ENUM = require('../../enums/process');
 const { removeFolder, getFileContent } = require('../../modules/file');
 const { getReportFilePath } = require('../../modules/stats');
 const { isObject, isBoolean, isFunction } = require('../../modules/validate');
+const logger = require('../../modules/logger');
 
 const validate = (context) => {
   if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE]))
@@ -30,7 +31,7 @@ const validate = (context) => {
  * @returns {NewContextData}
  */
 module.exports = async (_, context = {}) => {
-  console.info(`Executing process ${PROCESS_ENUM.PROGRAM_SHUTDOWN}`);
+  logger.info(`Executing process ${PROCESS_ENUM.PROGRAM_SHUTDOWN}`);
   try {
     validate(context);
     const { config } = context[PROCESS_ENUM.SETTINGS_PREPARE];
@@ -47,7 +48,7 @@ module.exports = async (_, context = {}) => {
 
     return { key: PROCESS_ENUM.PROGRAM_SHUTDOWN };
   } catch (error) {
-    console.error(`Error executing ${PROCESS_ENUM.PROGRAM_SHUTDOWN} process`, error);
+    logger.error(`Error executing ${PROCESS_ENUM.PROGRAM_SHUTDOWN} process`, error);
 
     throw error;
   }

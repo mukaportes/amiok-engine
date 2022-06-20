@@ -1,58 +1,51 @@
 const storeModule = require('../../src/modules/store');
+const logger = require('../../src/modules/logger');
+
+jest.mock('../../src/modules/logger', () => ({
+  info: jest.fn(),
+}));
 
 describe('Store Module Tests', () => {
   describe('storeTest()', () => {
     it('prints args', () => {
-      const stubConsole = jest.spyOn(global.console, 'log');
       const test = 'someData';
 
       storeModule.storeTest(test);
 
-      expect(stubConsole).toHaveBeenCalledWith('Called storeTest()', { test });
-
-      stubConsole.mockClear();
+      expect(logger.info).toHaveBeenCalledWith('Called storeTest()', { test });
     });
   });
   describe('storeTestResults()', () => {
     it('prints args', () => {
-      const stubConsole = jest.spyOn(global.console, 'log');
       const id = 'someData';
       const results = ['someData'];
 
       storeModule.storeTestResults(id, results);
 
-      expect(stubConsole).toHaveBeenCalledWith('Called storeTestResults()', { id, results });
-
-      stubConsole.mockClear();
+      expect(logger.info).toHaveBeenCalledWith('Called storeTestResults()', { id, results });
     });
   });
   describe('storeResourceStats()', () => {
     it('prints args', () => {
-      const stubConsole = jest.spyOn(global.console, 'log');
       const id = 'someData';
       const resourceStats = ['someData'];
 
       storeModule.storeResourceStats(id, resourceStats);
 
-      expect(stubConsole).toHaveBeenCalledWith('Called storeResourceStats()', {
+      expect(logger.info).toHaveBeenCalledWith('Called storeResourceStats()', {
         id,
         resourceStats,
       });
-
-      stubConsole.mockClear();
     });
   });
   describe('storeReportFile()', () => {
     it('prints args', () => {
-      const stubConsole = jest.spyOn(global.console, 'log');
       const id = 'someData';
       const reportFile = ['someData'];
 
       storeModule.storeReportFile(id, reportFile);
 
-      expect(stubConsole).toHaveBeenCalledWith('Called storeReportFile()', { id, reportFile });
-
-      stubConsole.mockClear();
+      expect(logger.info).toHaveBeenCalledWith('Called storeReportFile()', { id, reportFile });
     });
   });
 });

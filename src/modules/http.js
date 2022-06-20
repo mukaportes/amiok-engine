@@ -1,6 +1,7 @@
 const assert = require('assert');
 const axios = require('axios');
 const { getRoundStatsTemplate } = require('./stats');
+const logger = require('./logger');
 
 /**
  *
@@ -80,7 +81,7 @@ const runSequence = async (globalConfig, testScripts = []) => {
         endTime: new Date().getTime(),
       });
     } catch (error) {
-      console.error(`Error executing ${testScripts[i].method} request`, error);
+      logger.error(`Error executing ${testScripts[i].method} request`, error);
 
       if (error.response) {
         sequenceStats = setSequenceResponseStatus(sequenceStats, error.response.status);
