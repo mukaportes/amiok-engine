@@ -1,13 +1,14 @@
 const { spawn } = require('child_process');
 const PROCESS_ENUM = require('../../enums/process');
 const { waitFor } = require('../../modules/utils');
+const { isObject, isString } = require('../../modules/validate');
 
 const validate = (context) => {
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE])
+  if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE]))
     throw new Error('Missing SETTINGS_PREPARE context data');
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config)
+  if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE].config))
     throw new Error('Missing SETTINGS_PREPARE config');
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config.initApp)
+  if (!isString(context[PROCESS_ENUM.SETTINGS_PREPARE].config.initApp))
     throw new Error('Missing SETTINGS_PREPARE config init app');
 };
 

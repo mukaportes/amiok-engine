@@ -1,3 +1,4 @@
+const Chance = require('chance');
 const PROCESS_ENUM = require('../../../src/enums/process');
 const infoApiPid = require('../../../src/process/info/api-pid');
 
@@ -12,6 +13,8 @@ jest.mock('../../../src/modules/cmd', () => ({
 }));
 
 describe('Info API PID Process Tests', () => {
+  const randomData = new Chance();
+
   describe('happy path', () => {
     it('should return new context data containing the API PID', async () => {
       try {
@@ -27,7 +30,7 @@ describe('Info API PID Process Tests', () => {
     });
   });
   describe('unhappy path', () => {
-    it('should throw new error when no API PID is returned', async () => {
+    it('throws new error when no API PID is returned', async () => {
       const stubConsoleError = jest.spyOn(global.console, 'error');
       try {
         const context = {
@@ -39,28 +42,32 @@ describe('Info API PID Process Tests', () => {
         expect(stubConsoleError).toHaveBeenCalled();
       }
     });
-    it('should throw new error when SETTINGS_PREPARE context data is missing', async () => {
+    it('throws new error when SETTINGS_PREPARE context data is invalid', async () => {
       try {
         await infoApiPid();
       } catch (error) {
         expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }
     });
-    it('should throw new error when SETTINGS_PREPARE config is missing', async () => {
+    it('throws new error when SETTINGS_PREPARE config is invalid', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.SETTINGS_PREPARE]: {},
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {},
+          },
         };
         await infoApiPid(undefined, context);
       } catch (error) {
         expect(error).toStrictEqual(new Error('Missing settings config'));
       }
     });
-    it('should throw new error when SETTINGS_PREPARE port is missing', async () => {
+    it('throws new error when SETTINGS_PREPARE port is invalid', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
-            config: {},
+            config: {
+              port: randomData.string(),
+            },
           },
         };
         await infoApiPid(undefined, context);

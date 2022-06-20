@@ -4,16 +4,20 @@ const {
   getReportFilePath,
   readReportFileLines,
 } = require('../../modules/stats');
+const { isObject, isFunction } = require('../../modules/validate');
 
 const validate = (context) => {
-  if (!context[PROCESS_ENUM.SCRIPT_EXECUTE]) throw new Error('Missing SCRIPT_EXECUTE context data');
-  if (!context[PROCESS_ENUM.SETUP_TEST]) throw new Error('Missing SETUP_TEST context data');
-  if (!context[PROCESS_ENUM.SETUP_TEST].test) throw new Error('Missing SETUP_TEST test data');
-  if (!context[PROCESS_ENUM.STORAGE_PREPARE])
+  if (!isObject(context[PROCESS_ENUM.SCRIPT_EXECUTE]))
+    throw new Error('Missing SCRIPT_EXECUTE context data');
+  if (!isObject(context[PROCESS_ENUM.SETUP_TEST]))
+    throw new Error('Missing SETUP_TEST context data');
+  if (!isObject(context[PROCESS_ENUM.SETUP_TEST].test))
+    throw new Error('Missing SETUP_TEST test data');
+  if (!isObject(context[PROCESS_ENUM.STORAGE_PREPARE]))
     throw new Error('Missing STORAGE_PREPARE context data');
-  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage)
+  if (!isObject(context[PROCESS_ENUM.STORAGE_PREPARE].storage))
     throw new Error('Missing STORAGE_PREPARE storage module');
-  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeResourceStats)
+  if (!isFunction(context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeResourceStats))
     throw new Error('Missing STORAGE_PREPARE storage module storeResourceStats()');
 };
 

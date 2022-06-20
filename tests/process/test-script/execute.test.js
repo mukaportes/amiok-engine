@@ -86,7 +86,9 @@ describe('Test Script Execute Process Tests', () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
-            config: {},
+            config: {
+              basePath: undefined,
+            },
           },
           [PROCESS_ENUM.STORAGE_PREPARE]: {
             storage: {
@@ -168,56 +170,69 @@ describe('Test Script Execute Process Tests', () => {
         );
       }
     });
-    it('should throw error when SETTINGS_PREPARE context data is missing', async () => {
+    it('should throw error when SETTINGS_PREPARE context data is invalid', async () => {
       try {
         await testScriptExecute();
       } catch (error) {
         expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }
     });
-    it('should throw error when SETTINGS_PREPARE config is missing', async () => {
+    it('should throw error when SETTINGS_PREPARE config is invalid', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.SETTINGS_PREPARE]: {},
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {},
+          },
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
         expect(error).toStrictEqual(new Error('Missing settings config'));
       }
     });
-    it('should throw error when STORAGE_PREPARE context data is missing', async () => {
+    it('should throw error when STORAGE_PREPARE context data is invalid', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
-            config: {},
+            config: {
+              basePath: mockData.string(),
+            },
           },
+          [PROCESS_ENUM.STORAGE_PREPARE]: {},
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
         expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE context data'));
       }
     });
-    it('should throw error when STORAGE_PREPARE storage module is missing', async () => {
+    it('should throw error when STORAGE_PREPARE storage module is invalid', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
-            config: {},
+            config: {
+              basePath: mockData.string(),
+            },
           },
-          [PROCESS_ENUM.STORAGE_PREPARE]: {},
+          [PROCESS_ENUM.STORAGE_PREPARE]: {
+            storage: {},
+          },
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
         expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE storage module'));
       }
     });
-    it('should throw error when STORAGE_PREPARE storage module storeTestResults() is missing', async () => {
+    it('should throw error when STORAGE_PREPARE storage module storeTestResults() is invalid', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
-            config: {},
+            config: {
+              basePath: mockData.string(),
+            },
           },
           [PROCESS_ENUM.STORAGE_PREPARE]: {
-            storage: {},
+            storage: {
+              storeTestResults: mockData.string(),
+            },
           },
         };
         await testScriptExecute(undefined, context);
@@ -227,11 +242,13 @@ describe('Test Script Execute Process Tests', () => {
         );
       }
     });
-    it('should throw error when TEST_SETUP context data is missing', async () => {
+    it('should throw error when TEST_SETUP context data is invalid', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
-            config: {},
+            config: {
+              basePath: mockData.string(),
+            },
           },
           [PROCESS_ENUM.STORAGE_PREPARE]: {
             storage: {
@@ -244,18 +261,22 @@ describe('Test Script Execute Process Tests', () => {
         expect(error).toStrictEqual(new Error('Missing TEST_SETUP context data'));
       }
     });
-    it('should throw error when TEST_SETUP test is missing', async () => {
+    it('should throw error when TEST_SETUP test is invalid', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
-            config: {},
+            config: {
+              basePath: mockData.string(),
+            },
           },
           [PROCESS_ENUM.STORAGE_PREPARE]: {
             storage: {
               storeTestResults: () => { },
             },
           },
-          [PROCESS_ENUM.SETUP_TEST]: {},
+          [PROCESS_ENUM.SETUP_TEST]: {
+            test: {},
+          },
         };
         await testScriptExecute(undefined, context);
       } catch (error) {

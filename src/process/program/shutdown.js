@@ -1,21 +1,24 @@
 const PROCESS_ENUM = require('../../enums/process');
 const { removeFolder, getFileContent } = require('../../modules/file');
 const { getReportFilePath } = require('../../modules/stats');
+const { isObject, isBoolean, isFunction } = require('../../modules/validate');
 
 const validate = (context) => {
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE])
+  if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE]))
     throw new Error('Missing SETTINGS_PREPARE context data');
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config)
+  if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE].config))
     throw new Error('Missing SETTINGS_PREPARE config');
 
-  if (context[PROCESS_ENUM.SETTINGS_PREPARE].config.persistReports) {
-    if (!context[PROCESS_ENUM.SETUP_TEST]) throw new Error('Missing SETUP_TEST context data');
-    if (!context[PROCESS_ENUM.SETUP_TEST].test) throw new Error('Missing SETUP_TEST test data');
-    if (!context[PROCESS_ENUM.STORAGE_PREPARE])
+  if (isBoolean(context[PROCESS_ENUM.SETTINGS_PREPARE].config.persistReports)) {
+    if (!isObject(context[PROCESS_ENUM.SETUP_TEST]))
+      throw new Error('Missing SETUP_TEST context data');
+    if (!isObject(context[PROCESS_ENUM.SETUP_TEST].test))
+      throw new Error('Missing SETUP_TEST test data');
+    if (!isObject(context[PROCESS_ENUM.STORAGE_PREPARE]))
       throw new Error('Missing STORAGE_PREPARE context data');
-    if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage)
+    if (!isObject(context[PROCESS_ENUM.STORAGE_PREPARE].storage))
       throw new Error('Missing STORAGE_PREPARE storage module');
-    if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeReportFile)
+    if (!isFunction(context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeReportFile))
       throw new Error('Missing STORAGE_PREPARE storage module store reports file method');
   }
 };

@@ -20,7 +20,7 @@ describe('Program Shutdown Process Tests', () => {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
             config: {
-              persistReports: false,
+              persistReports: null,
             },
           },
           [PROCESS_ENUM.SETUP_TEST]: {
@@ -81,17 +81,19 @@ describe('Program Shutdown Process Tests', () => {
     });
   });
   describe('unhappy path', () => {
-    it('should throw an error when SETTINGS_PREPARE context data is not found', async () => {
+    it('should throw an error when SETTINGS_PREPARE context data is invalid', async () => {
       try {
         await programShutdownProcess();
       } catch (error) {
         expect(error.message).toBe('Missing SETTINGS_PREPARE context data');
       }
     });
-    it('should throw an error when SETTINGS_PREPARE config is not found', async () => {
+    it('should throw an error when SETTINGS_PREPARE config is invalid', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.SETTINGS_PREPARE]: {},
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {},
+          },
         };
 
         await programShutdownProcess(undefined, context);
@@ -99,7 +101,7 @@ describe('Program Shutdown Process Tests', () => {
         expect(error.message).toBe('Missing SETTINGS_PREPARE config');
       }
     });
-    it('should throw an error when STORAGE_PREPARE context data is not found', async () => {
+    it('should throw an error when STORAGE_PREPARE context data is invalid', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
@@ -108,7 +110,7 @@ describe('Program Shutdown Process Tests', () => {
             },
           },
           [PROCESS_ENUM.SETUP_TEST]: {
-            test: {}
+            test: { id: randomData.integer() }
           },
         };
 
@@ -117,7 +119,7 @@ describe('Program Shutdown Process Tests', () => {
         expect(error.message).toBe('Missing STORAGE_PREPARE context data');
       }
     });
-    it('should throw an error when STORAGE_PREPARE storage module is not found', async () => {
+    it('should throw an error when STORAGE_PREPARE storage module is invalid', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
@@ -126,26 +128,7 @@ describe('Program Shutdown Process Tests', () => {
             },
           },
           [PROCESS_ENUM.SETUP_TEST]: {
-            test: {}
-          },
-          [PROCESS_ENUM.STORAGE_PREPARE]: {},
-        };
-
-        await programShutdownProcess(undefined, context);
-      } catch (error) {
-        expect(error.message).toBe('Missing STORAGE_PREPARE storage module');
-      }
-    });
-    it('should throw an error when SETTINGS_PREPARE storage module store reports file method is not found', async () => {
-      try {
-        const context = {
-          [PROCESS_ENUM.SETTINGS_PREPARE]: {
-            config: {
-              persistReports: true,
-            },
-          },
-          [PROCESS_ENUM.SETUP_TEST]: {
-            test: {}
+            test: { id: randomData.integer() }
           },
           [PROCESS_ENUM.STORAGE_PREPARE]: {
             storage: {},
@@ -154,10 +137,33 @@ describe('Program Shutdown Process Tests', () => {
 
         await programShutdownProcess(undefined, context);
       } catch (error) {
+        expect(error.message).toBe('Missing STORAGE_PREPARE storage module');
+      }
+    });
+    it('should throw an error when SETTINGS_PREPARE storage module store reports file method is invalid', async () => {
+      try {
+        const context = {
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {
+              persistReports: true,
+            },
+          },
+          [PROCESS_ENUM.SETUP_TEST]: {
+            test: { id: randomData.integer() }
+          },
+          [PROCESS_ENUM.STORAGE_PREPARE]: {
+            storage: {
+              storeReportFile: randomData.integer(),
+            },
+          },
+        };
+
+        await programShutdownProcess(undefined, context);
+      } catch (error) {
         expect(error.message).toBe('Missing STORAGE_PREPARE storage module store reports file method');
       }
     });
-    it('should throw an error when SETUP_TEST context data is not found', async () => {
+    it('should throw an error when SETUP_TEST context data is invalid', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
@@ -172,7 +178,7 @@ describe('Program Shutdown Process Tests', () => {
         expect(error.message).toBe('Missing SETUP_TEST context data');
       }
     });
-    it('should throw an error when SETUP_TEST test data is not found', async () => {
+    it('should throw an error when SETUP_TEST test data is invalid', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
@@ -180,7 +186,9 @@ describe('Program Shutdown Process Tests', () => {
               persistReports: true,
             },
           },
-          [PROCESS_ENUM.SETUP_TEST]: {},
+          [PROCESS_ENUM.SETUP_TEST]: {
+            test: {},
+          },
         };
 
         await programShutdownProcess(undefined, context);

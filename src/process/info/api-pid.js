@@ -1,11 +1,13 @@
 const PROCESS_ENUM = require('../../enums/process');
 const { netstatByPort } = require('../../modules/cmd');
+const { isObject, isNumber } = require('../../modules/validate');
 
 const validate = (context) => {
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE])
+  if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE]))
     throw new Error('Missing SETTINGS_PREPARE context data');
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config) throw new Error('Missing settings config');
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config.port)
+  if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE].config))
+    throw new Error('Missing settings config');
+  if (!isNumber(context[PROCESS_ENUM.SETTINGS_PREPARE].config.port))
     throw new Error('Missing settings config port');
 };
 

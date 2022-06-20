@@ -34,17 +34,19 @@ describe('App Start Process', () => {
     });
   });
   describe('unhappy path', () => {
-    it('should throw an exception when no SETTINGS_PREPARE context data is found', async () => {
+    it('should throw an exception when SETTINGS_PREPARE context data is invalid', async () => {
       try {
         await appStartProcess();
       } catch (error) {
         expect(error.message).toBe('Missing SETTINGS_PREPARE context data');
       }
     });
-    it('should throw an exception when no settings config is found', async () => {
+    it('should throw an exception when settings config is invalid', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.SETTINGS_PREPARE]: {}
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {},
+          },
         };
 
         await appStartProcess(undefined, context);
@@ -52,11 +54,13 @@ describe('App Start Process', () => {
         expect(error.message).toBe('Missing SETTINGS_PREPARE config');
       }
     });
-    it('should throw an exception when no init app is found on the settings config', async () => {
+    it('should throw an exception when init app is is invalid', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
-            config: {}
+            config: {
+              initApp: randomData.integer(),
+            }
           },
         };
         await appStartProcess(undefined, context);
