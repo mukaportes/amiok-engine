@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint:fix": "eslint --ignore-path .eslintignore --ext .js ./src --fix",
+    "lint": "eslint --ignore-path .eslintignore --ext .js ./src",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|json)\"",
     "test": "jest --config jest.config.json --collectCoverage --detectOpenHandles --forceExit"
   },
