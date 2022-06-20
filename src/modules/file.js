@@ -1,46 +1,87 @@
-const fs = require('fs');
-const path = require('path');
-const rimraf = require('rimraf');
+const fs = require('fs/promises');
+const logger = require('./logger');
 
-const getFileContent = (filePath) => new Promise((resolve, reject) => {
-  fs.readFile(filePath, 'utf8', function (err, content) {
-    if (err) reject(err);
-
-    resolve({
-      type: typeof content,
-      content,
-    });
-  });
-});
-
-const removeFolder = (folderPath) => new Promise((resolve, reject) => {
+/**
+ *
+ * @param {string} filePath
+ * @returns {object} { type: string, content: string }
+ */
+const getFileContent = async (filePath) => {
   try {
-    rimraf(folderPath, (err) => {
-      if (err) throw err;
+    const content = await fs.readFile(filePath, 'utf8');
 
-      console.log(`Removed all content from folder at ${folderPath}`);
-
-      resolve();
-    });
+    return { type: typeof content, content };
   } catch (error) {
-    console.error('removeFolder() error', error);
-
-    reject(error);
+    logger.error('Error while reading file', error);
+    throw new Error(error);
   }
-});
+};
 
-const fileExists = (path) => new Promise((resolve) => {
-  fs.access(path, fs.F_OK, (err) => {
-    if (err) resolve(false);
+/**
+ *
+ * @param {string} folderPath
+ */
+const removeFolder = async (folderPath) => {
+  try {
+    await fs.rm(folderPath, { recursive: true, force: true });
+  } catch (error) {
+    logger.error('Error while removing folder', error);
+    throw new Error(error);
+  }
+};
 
-    resolve(true);
-  });
-});
+/**
+ *
+ * @param {string} path
+ * @returns {boolean}
+ */
+const pathExists = async (path) => {
+  try {
+    await fs.access(path, fs.F_OK);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 
-// const getFilesFromFolder = ();
+/**
+ *
+ * @param {string} fileFolder
+ * @param {string} fileName
+ */
+const createFile = async (fileFolder, fileName) => {
+  try {
+    const folderExists = await pathExists(fileFolder);
+    if (!folderExists) {
+      await fs.mkdir(fileFolder);
+    }
+
+    await fs.writeFile(`${fileFolder}/${fileName}`, '');
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ *
+ * @param {string} folderPath
+ * @returns {string}
+ */
+const getFirstFileFromFolder = async (folderPath) => {
+  try {
+    const files = await fs.readdir(folderPath);
+
+    return files[0];
+  } catch (error) {
+    logger.error('Error getting first file from folder', error);
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   getFileContent,
   removeFolder,
-  fileExists,
+  pathExists,
+  createFile,
+  getFirstFileFromFolder,
 };

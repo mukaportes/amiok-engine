@@ -1,44 +1,77 @@
-const setItemResults = (results, resultItem) => {
-  results.delay += resultItem.delay;
-  results.cpu += resultItem.cpu;
-  results.memory.rss += resultItem.memory.rss;
-  results.memory.heapTotal += resultItem.memory.heapTotal;
-  results.memory.heapUsed += resultItem.memory.heapUsed;
-  results.memory.external += resultItem.memory.external;
-  results.memory.arrayBuffers += resultItem.memory.arrayBuffers;
-  results.handles += resultItem.handles;
-  results.itemCount += 1;
+const fs = require('fs/promises');
+const { createReadStream } = require('fs');
+const readline = require('readline');
+const Stream = require('stream');
+const { createFile } = require('./file');
+const logger = require('./logger');
+
+/**
+ *
+ * @param {StatsTemplate} results
+ * @param {StatsTemplate} resultItem
+ * @returns {StatsTemplate}
+ */
+const mergeItemToResults = (results, resultItem) => {
+  const formattedResults = { ...results };
+
+  formattedResults.cpu += resultItem.cpu;
+  formattedResults.memory.rss += resultItem.memory.rss;
+  formattedResults.memory.heapTotal += resultItem.memory.heapTotal;
+  formattedResults.memory.heapUsed += resultItem.memory.heapUsed;
+  formattedResults.memory.external += resultItem.memory.external;
+  formattedResults.memory.arrayBuffers += resultItem.memory.arrayBuffers;
+  formattedResults.handles += resultItem.handles;
+  formattedResults.itemCount += 1;
+
+  return formattedResults;
 };
 
+/**
+ *
+ * @param {string | number} value
+ * @returns {number}
+ */
 const toMB = (value) => Number(value) / 1024 / 1024;
 
+/**
+ *
+ * @param {StatsTemplate} results
+ * @param {string} rangeType
+ * @returns {StatsTemplateDb}
+ */
 const formatAverageResults = (results, rangeType) => ({
-  delay: (results.delay / results.itemCount),
-  cpu: (results.cpu / results.itemCount),
-  memoryRss: (toMB(results.memory.rss / results.itemCount)),
-  memoryHeapTotal: (toMB(results.memory.heapTotal / results.itemCount)),
-  memoryHeapUsed: (toMB(results.memory.heapUsed / results.itemCount)),
-  memoryExternal: (toMB(results.memory.external / results.itemCount)),
-  memoryArrayBuffers: (toMB(results.memory.arrayBuffers / results.itemCount)),
-  handles: (results.handles / results.itemCount),
+  cpu: results.cpu / results.itemCount,
+  memoryRss: results.memory.rss / results.itemCount,
+  memoryHeapTotal: results.memory.heapTotal / results.itemCount,
+  memoryHeapUsed: results.memory.heapUsed / results.itemCount,
+  memoryExternal: results.memory.external / results.itemCount,
+  memoryArrayBuffers: results.memory.arrayBuffers / results.itemCount,
+  handles: results.handles / results.itemCount,
   itemCount: results.itemCount,
   rangeType,
 });
 
+/**
+ *
+ * @returns {StatsTemplate}
+ */
 const getStatsTemplate = () => ({
-  delay: 0,
   cpu: 0,
   memory: {
     rss: 0,
     heapTotal: 0,
     heapUsed: 0,
     external: 0,
-    arrayBuffers: 0
+    arrayBuffers: 0,
   },
   handles: 0,
   itemCount: 0,
 });
 
+/**
+ *
+ * @returns {SequenceStats}
+ */
 const getRoundStatsTemplate = () => ({
   responseStatus: {},
   logs: [],
@@ -48,27 +81,154 @@ const getRoundStatsTemplate = () => ({
   },
 });
 
-const updateRoundStats = (stats, roundResults) => {
-  roundResults.forEach(({
-    responseStatus, assert, logs = [],
-  }) => {
-    Object.keys(responseStatus).forEach(status => {
-      stats.responseStatus[status] += responseStatus[status];
-    });
+// GLOBAL STORE OF TEST UID
 
-    stats.assert.pass += assert.pass;
-    stats.assert.fail += assert.fail;
+/**
+ *
+ * @param {string} testId
+ */
+const setCurrentTestId = (testId) => {
+  global.amiokCurrentTestId = testId;
+};
 
-    stats.logs.push(...logs);
+/**
+ *
+ * @returns {ReportFilePathData}
+ */
+const getReportFilePath = () => {
+  const fileFolder = `${process.cwd()}/_amiokstats`;
+  const fileName = `${global.amiokCurrentTestId}.stat`;
+
+  return {
+    fileFolder,
+    fileName,
+    path: `${fileFolder}/${fileName}`,
+  };
+};
+
+/**
+ *
+ * @param {StatsTemplate} stats
+ * @param {string} line
+ */
+const processStatsRow = (stats, line) => {
+  const [
+    cpu,
+    memoryRss,
+    memoryHeapTotal,
+    memoryHeapUsed,
+    memoryExternal,
+    memoryArrayBuffers,
+    numActiveHandles,
+  ] = line;
+
+  return mergeItemToResults(stats, {
+    cpu: Number(cpu),
+    memory: {
+      rss: toMB(Number(memoryRss)),
+      heapTotal: toMB(Number(memoryHeapTotal)),
+      heapUsed: toMB(Number(memoryHeapUsed)),
+      external: toMB(Number(memoryExternal)),
+      arrayBuffers: toMB(Number(memoryArrayBuffers)),
+    },
+    handles: Number(numActiveHandles),
   });
 };
 
+/**
+ *
+ * @param {string} newLine
+ * @returns {Promise}
+ */
+const addStatsToFile = async (newLine) => {
+  const { path } = getReportFilePath();
+  await fs.appendFile(path, `${newLine}\n`);
+};
+
+/**
+ *
+ * @param {string} testId
+ * @returns {boolean}
+ */
+const createStatsFile = async () => {
+  try {
+    const { fileFolder, fileName } = getReportFilePath();
+    await createFile(fileFolder, fileName);
+
+    return true;
+  } catch (error) {
+    logger.error('Error creating stats file', error);
+    return false;
+  }
+};
+
+/**
+ *
+ * @param {TimeLabel}
+ * @returns {string}
+ */
+const getTimeLabel = ({ time, startTime, endTime }) => {
+  let label = 'end';
+
+  if (time < startTime) {
+    label = 'start';
+  } else if (time <= endTime) {
+    label = 'tests';
+  }
+
+  return label;
+};
+
+/**
+ *
+ * @param {ReadReportLines}
+ * @returns {ReadReportLinesResponse}
+ */
+const readReportFileLines = ({ filePath, startTime, endTime }) =>
+  new Promise((resolve, reject) => {
+    try {
+      const results = {
+        start: getStatsTemplate(),
+        tests: getStatsTemplate(),
+        end: getStatsTemplate(),
+      };
+
+      const inputStream = createReadStream(filePath);
+      const outputStream = new Stream();
+      const rlInterface = readline.createInterface(inputStream, outputStream);
+
+      rlInterface.on('line', (newLine) => {
+        const splitLine = newLine.split('|');
+        const dateStr = splitLine.pop();
+        const date = new Date(dateStr);
+        const resultsKey = getTimeLabel({
+          startTime,
+          endTime,
+          time: date.getTime(),
+        });
+
+        results[resultsKey] = processStatsRow(results[resultsKey], splitLine);
+      });
+
+      rlInterface.on('close', () => resolve(results));
+    } catch (error) {
+      logger.error('Error while reading report file', error);
+
+      reject(new Error(error));
+    }
+  });
 
 module.exports = {
-  updateRoundStats,
-  setItemResults,
+  mergeItemToResults,
   toMB,
   formatAverageResults,
   getStatsTemplate,
   getRoundStatsTemplate,
+  createStatsFile,
+  processStatsRow,
+  addStatsToFile,
+  setCurrentTestId,
+  getReportFilePath,
+  readReportFileLines,
+  getTimeLabel,
 };

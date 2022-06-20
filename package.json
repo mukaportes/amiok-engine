@@ -4,7 +4,13 @@
   "description": "AMIOK tester and profiler engine",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint:fix": "eslint --ignore-path .eslintignore --ext .js ./src --fix",
+    "lint": "eslint --ignore-path .eslintignore --ext .js ./src",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|json)\"",
+    "test": "jest --config jest.config.json --collectCoverage --detectOpenHandles --forceExit"
+  },
+  "engines": {
+    "node": ">=8.3.0"
   },
   "repository": {
     "type": "git",
@@ -17,22 +23,21 @@
   },
   "homepage": "https://github.com/mukaportes/amiok-engine#readme",
   "dependencies": {
-    "@nearform/doctor": "^8.0.0",
-    "axios": "^0.21.1",
-    "node-netstat": "^1.8.0",
-    "rimraf": "^3.0.2"
+    "axios": "^0.21.4",
+    "node-netstat": "^1.8.0"
   },
   "devDependencies": {
-    "eslint": "^8.15.0",
-    "eslint-config-airbnb": "^19.0.4",
+    "chance": "^1.1.8",
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-node": "^4.1.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-jest": "^26.1.5",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "^4.5.0",
+    "jest": "^28.1.0",
+    "nock": "^13.2.4",
     "prettier": "^2.6.2"
   }
 }

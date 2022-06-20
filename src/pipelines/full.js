@@ -1,13 +1,13 @@
-const PROCESS_ENUM = require('../enums/process');
-const startDoctor = require('../process/clinic-doctor/start');
+const logger = require('../modules/logger');
+const appStart = require('../process/app/start');
+const appShutdown = require('../process/app/shutdown');
+const programShutdown = require('../process/program/shutdown');
 const prepareSettings = require('../process/settings/prepare');
 const executeTestScripts = require('../process/test-script/execute');
 const analyzeStats = require('../process/stats/analyze');
-const clearDoctor = require('../process/clinic-doctor/clear');
-const shutdownDoctor = require('../process/clinic-doctor/shutdown');
 const getInfoApiPid = require('../process/info/api-pid');
 const prepareStorage = require('../process/storage/prepare');
-const setupTest = require('../process/storage/setup-test');
+const setupTest = require('../process/setup/test');
 const storeTest = require('../process/storage/store-test');
 
 module.exports = async (params) => {
@@ -15,37 +15,26 @@ module.exports = async (params) => {
   const steps = [
     prepareSettings,
     prepareStorage,
-    startDoctor,
-    getInfoApiPid,
+    appStart,
     setupTest,
+    getInfoApiPid,
     executeTestScripts,
+    appShutdown,
+    analyzeStats,
     storeTest,
-    shutdownDoctor,
+    programShutdown,
   ];
-
-  params.collectCallback = (filePath) => {
-    const updatedParams = { ...params, filePath };
-    const { storage: { storeResourceStats } } = context[PROCESS_ENUM.STORAGE_PREPARE];
-
-    analyzeStats(updatedParams, context)
-      .then(({ results }) => storeResourceStats(context[PROCESS_ENUM.STORAGE_TEST_SETUP].test.id, results))
-      .then(() => clearDoctor(updatedParams, context))
-      .catch((error) => {
-        console.error('Error at collectCallback()', error);
-
-        throw error;
-      });
-  };
 
   try {
     for (let i = 0; i < steps.length; i += 1) {
+      // eslint-disable-next-line no-await-in-loop
       const { key, ...values } = await steps[i](params, context);
 
       context[key] = values;
     }
   } catch (error) {
-    console.error('Error execting MAIN pipeline', error);
-    
+    logger.error('Error executing MAIN pipeline', error);
+
     process.kill(process.pid, 1);
   }
 };
