@@ -40,7 +40,6 @@ const pathExists = async (path) => {
     await fs.access(path, fs.F_OK);
     return true;
   } catch (error) {
-    logger.error('Error while verifying if file exists', error);
     return false;
   }
 };
