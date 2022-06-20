@@ -5,6 +5,7 @@ const {
   readReportFileLines,
 } = require('../../modules/stats');
 const { isObject, isFunction } = require('../../modules/validate');
+const logger = require('../../modules/logger');
 
 const validate = (context) => {
   if (!isObject(context[PROCESS_ENUM.SCRIPT_EXECUTE]))
@@ -28,7 +29,7 @@ const validate = (context) => {
  * @returns {StatsAnalyzeContext}
  */
 module.exports = async (_, context = {}) => {
-  console.info(`Executing process ${PROCESS_ENUM.STATS_ANALYZE}`);
+  logger.info(`Executing process ${PROCESS_ENUM.STATS_ANALYZE}`);
 
   try {
     validate(context);
@@ -50,7 +51,7 @@ module.exports = async (_, context = {}) => {
 
     return { key: PROCESS_ENUM.STATS_ANALYZE };
   } catch (error) {
-    console.error(`Error executing ${PROCESS_ENUM.STATS_ANALYZE} process`, error);
+    logger.error(`Error executing ${PROCESS_ENUM.STATS_ANALYZE} process`, error);
 
     throw error;
   }

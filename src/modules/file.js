@@ -1,4 +1,5 @@
 const fs = require('fs/promises');
+const logger = require('./logger');
 
 /**
  *
@@ -11,7 +12,7 @@ const getFileContent = async (filePath) => {
 
     return { type: typeof content, content };
   } catch (error) {
-    console.error('Error while reading file', error);
+    logger.error('Error while reading file', error);
     throw new Error(error);
   }
 };
@@ -24,7 +25,7 @@ const removeFolder = async (folderPath) => {
   try {
     await fs.rm(folderPath, { recursive: true, force: true });
   } catch (error) {
-    console.error('Error while removing folder', error);
+    logger.error('Error while removing folder', error);
     throw new Error(error);
   }
 };
@@ -39,7 +40,7 @@ const pathExists = async (path) => {
     await fs.access(path, fs.F_OK);
     return true;
   } catch (error) {
-    console.error('Error while verifying if file exists', error);
+    logger.error('Error while verifying if file exists', error);
     return false;
   }
 };
@@ -73,7 +74,7 @@ const getFirstFileFromFolder = async (folderPath) => {
 
     return files[0];
   } catch (error) {
-    console.error('Error getting first file from folder', error);
+    logger.error('Error getting first file from folder', error);
     throw new Error(error);
   }
 };

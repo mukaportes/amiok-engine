@@ -3,6 +3,7 @@ const { createReadStream } = require('fs');
 const readline = require('readline');
 const Stream = require('stream');
 const { createFile } = require('./file');
+const logger = require('./logger');
 
 /**
  *
@@ -156,7 +157,7 @@ const createStatsFile = async () => {
 
     return true;
   } catch (error) {
-    console.error('Error creating stats file', error);
+    logger.error('Error creating stats file', error);
     return false;
   }
 };
@@ -211,7 +212,7 @@ const readReportFileLines = ({ filePath, startTime, endTime }) =>
 
       rlInterface.on('close', () => resolve(results));
     } catch (error) {
-      console.error('Error while reading report file', error);
+      logger.error('Error while reading report file', error);
 
       reject(new Error(error));
     }

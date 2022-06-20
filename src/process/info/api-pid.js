@@ -1,6 +1,7 @@
 const PROCESS_ENUM = require('../../enums/process');
 const { netstatByPort } = require('../../modules/cmd');
 const { isObject, isNumber } = require('../../modules/validate');
+const logger = require('../../modules/logger');
 
 const validate = (context) => {
   if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE]))
@@ -18,7 +19,7 @@ const validate = (context) => {
  * @returns {InfoApiPidContext}
  */
 module.exports = async (_, context = {}) => {
-  console.info(`Executing process ${PROCESS_ENUM.INFO_API_PID}`);
+  logger.info(`Executing process ${PROCESS_ENUM.INFO_API_PID}`);
   try {
     validate(context);
 
@@ -29,7 +30,7 @@ module.exports = async (_, context = {}) => {
 
     return { key: PROCESS_ENUM.INFO_API_PID, apiPid: subProcess.pid };
   } catch (error) {
-    console.error(`Error executing ${PROCESS_ENUM.INFO_API_PID} process`, error);
+    logger.error(`Error executing ${PROCESS_ENUM.INFO_API_PID} process`, error);
 
     throw error;
   }

@@ -3,6 +3,7 @@ const { pathExists } = require('../../modules/file');
 const storage = require('../../modules/store');
 const PROCESS_ENUM = require('../../enums/process');
 const { isObject } = require('../../modules/validate');
+const logger = require('../../modules/logger');
 
 const validate = (context) => {
   if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE]))
@@ -18,7 +19,7 @@ const validate = (context) => {
  * @returns {StoragePrepareContext}
  */
 module.exports = async (_, context = {}) => {
-  console.info(`Executing process ${PROCESS_ENUM.STORAGE_PREPARE}`);
+  logger.info(`Executing process ${PROCESS_ENUM.STORAGE_PREPARE}`);
   try {
     validate(context);
 
@@ -44,7 +45,7 @@ module.exports = async (_, context = {}) => {
 
     return { key: PROCESS_ENUM.STORAGE_PREPARE, storage: configFile };
   } catch (error) {
-    console.error(`Error executing ${PROCESS_ENUM.STORAGE_PREPARE} process`, error);
+    logger.error(`Error executing ${PROCESS_ENUM.STORAGE_PREPARE} process`, error);
 
     throw error;
   }

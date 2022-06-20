@@ -1,10 +1,12 @@
+const logger = require('./logger');
+
 module.exports = {
   /**
    * 
    * @param {TestDB} test 
    */
   storeTest: (test) => {
-    console.log('Called storeTest()', { test });
+    logger.info('Called storeTest()', { test });
   },
   /**
    * 
@@ -12,7 +14,7 @@ module.exports = {
    * @param {Array<SequenceStats>} results 
    */
   storeTestResults: (id, results) => {
-    console.log('Called storeTestResults()', { id, results });
+    logger.info('Called storeTestResults()', { id, results });
   },
   /**
    * 
@@ -20,7 +22,7 @@ module.exports = {
    * @param {Array<StatsTemplateDb>} resourceStats 
    */
   storeResourceStats: (id, resourceStats) => {
-    console.log('Called storeResourceStats()', { id, resourceStats });
+    logger.info('Called storeResourceStats()', { id, resourceStats });
   },
   /**
    * 
@@ -28,6 +30,6 @@ module.exports = {
    * @param {string} reportFile 
    */
   storeReportFile: (id, reportFile) => {
-    console.log('Called storeReportFile()', { id, reportFile });
+    logger.info('Called storeReportFile()', { id, reportFile });
   },
 };

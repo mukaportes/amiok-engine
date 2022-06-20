@@ -1,3 +1,4 @@
+const logger = require('../modules/logger');
 const appStart = require('../process/app/start');
 const appShutdown = require('../process/app/shutdown');
 const programShutdown = require('../process/program/shutdown');
@@ -32,7 +33,7 @@ module.exports = async (params) => {
       context[key] = values;
     }
   } catch (error) {
-    console.error('Error executing MAIN pipeline', error);
+    logger.error('Error executing MAIN pipeline', error);
 
     process.kill(process.pid, 1);
   }
