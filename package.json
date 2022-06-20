@@ -28,10 +28,11 @@
   },
   "devDependencies": {
     "chance": "^1.1.8",
-    "eslint": "^8.15.0",
-    "eslint-config-airbnb": "^19.0.4",
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-node": "^4.1.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^26.1.5",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
