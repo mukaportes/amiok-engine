@@ -84,7 +84,7 @@ describe('Storage Prepare Process Tests', () => {
       try {
         await storagePrepare();
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
+        expect(error).toEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }
     });
     it('should throw an error when SETTINGS_PREPARE config is invalid', async () => {
@@ -96,7 +96,7 @@ describe('Storage Prepare Process Tests', () => {
         };
         await storagePrepare(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing settings config'));
+        expect(error).toEqual(new Error('Missing settings config'));
       }
     });
   });

@@ -36,7 +36,7 @@ describe('Setup Test Process Tests', () => {
         expect(fs.readdir).toHaveBeenCalledWith(`${process.cwd()}/_amiokstats`);
       } catch (error) {
         expect(stubProcess).toHaveBeenCalled();
-        expect(error).toStrictEqual(new Error('Force error readdir'));
+        expect(error).toEqual(new Error('Force error readdir'));
       }
     });
   });

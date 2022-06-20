@@ -174,7 +174,7 @@ describe('Test Script Execute Process Tests', () => {
       try {
         await testScriptExecute();
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
+        expect(error).toEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }
     });
     it('should throw error when SETTINGS_PREPARE config is invalid', async () => {
@@ -186,7 +186,7 @@ describe('Test Script Execute Process Tests', () => {
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing settings config'));
+        expect(error).toEqual(new Error('Missing settings config'));
       }
     });
     it('should throw error when STORAGE_PREPARE context data is invalid', async () => {
@@ -201,7 +201,7 @@ describe('Test Script Execute Process Tests', () => {
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE context data'));
+        expect(error).toEqual(new Error('Missing STORAGE_PREPARE context data'));
       }
     });
     it('should throw error when STORAGE_PREPARE storage module is invalid', async () => {
@@ -218,7 +218,7 @@ describe('Test Script Execute Process Tests', () => {
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing STORAGE_PREPARE storage module'));
+        expect(error).toEqual(new Error('Missing STORAGE_PREPARE storage module'));
       }
     });
     it('should throw error when STORAGE_PREPARE storage module storeTestResults() is invalid', async () => {
@@ -237,7 +237,7 @@ describe('Test Script Execute Process Tests', () => {
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(
+        expect(error).toEqual(
           new Error('Missing STORAGE_PREPARE storage module storeTestResults()')
         );
       }
@@ -258,7 +258,7 @@ describe('Test Script Execute Process Tests', () => {
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing TEST_SETUP context data'));
+        expect(error).toEqual(new Error('Missing TEST_SETUP context data'));
       }
     });
     it('should throw error when TEST_SETUP test is invalid', async () => {
@@ -280,7 +280,7 @@ describe('Test Script Execute Process Tests', () => {
         };
         await testScriptExecute(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing TEST_SETUP test'));
+        expect(error).toEqual(new Error('Missing TEST_SETUP test'));
       }
     });
   });

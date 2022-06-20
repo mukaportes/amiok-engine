@@ -38,7 +38,7 @@ describe('App Start Process', () => {
       try {
         await appStartProcess();
       } catch (error) {
-        expect(error.message).toBe('Missing SETTINGS_PREPARE context data');
+        expect(error).toEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }
     });
     it('should throw an exception when settings config is invalid', async () => {
@@ -51,7 +51,7 @@ describe('App Start Process', () => {
 
         await appStartProcess(undefined, context);
       } catch (error) {
-        expect(error.message).toBe('Missing SETTINGS_PREPARE config');
+        expect(error).toEqual(new Error('Missing SETTINGS_PREPARE config'));
       }
     });
     it('should throw an exception when init app is is invalid', async () => {
@@ -65,7 +65,7 @@ describe('App Start Process', () => {
         };
         await appStartProcess(undefined, context);
       } catch (error) {
-        expect(error.message).toBe('Missing SETTINGS_PREPARE config init app');
+        expect(error).toEqual(new Error('Missing SETTINGS_PREPARE config init app'));
       }
     });
   });

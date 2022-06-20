@@ -27,7 +27,7 @@ describe('Cmd Module Tests', () => {
         try {
           await cmdModule.netstatByPort();
         } catch (error) {
-          expect(error).toStrictEqual(new Error('A port must be provided.'));
+          expect(error).toEqual(new Error('A port must be provided.'));
         }
       });
       it('returns rejected promise when an error occurs with netstat', async () => {

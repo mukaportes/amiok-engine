@@ -30,7 +30,7 @@ describe('App Shutdown Process', () => {
       try {
         await appShutdownProcess();
       } catch (error) {
-        expect(error.message).toBe('Missing INFO_API_PID context data');
+        expect(error).toEqual(new Error('Missing INFO_API_PID context data'));
       }
     });
     it('should throw an exception when settings api pid is invalid', async () => {
@@ -43,7 +43,7 @@ describe('App Shutdown Process', () => {
 
         await appShutdownProcess(undefined, context);
       } catch (error) {
-        expect(error.message).toBe('Missing API PID');
+        expect(error).toEqual(new Error('Missing API PID'));
       }
     });
   });

@@ -44,7 +44,7 @@ describe('Info API PID Process Tests', () => {
       try {
         await infoApiPid();
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
+        expect(error).toEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }
     });
     it('throws new error when SETTINGS_PREPARE config is invalid', async () => {
@@ -56,7 +56,7 @@ describe('Info API PID Process Tests', () => {
         };
         await infoApiPid(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing settings config'));
+        expect(error).toEqual(new Error('Missing settings config'));
       }
     });
     it('throws new error when SETTINGS_PREPARE port is invalid', async () => {
@@ -70,7 +70,7 @@ describe('Info API PID Process Tests', () => {
         };
         await infoApiPid(undefined, context);
       } catch (error) {
-        expect(error).toStrictEqual(new Error('Missing settings config port'));
+        expect(error).toEqual(new Error('Missing settings config port'));
       }
     });
   });

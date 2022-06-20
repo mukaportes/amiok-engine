@@ -85,7 +85,7 @@ describe('Program Shutdown Process Tests', () => {
       try {
         await programShutdownProcess();
       } catch (error) {
-        expect(error.message).toBe('Missing SETTINGS_PREPARE context data');
+        expect(error).toEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }
     });
     it('should throw an error when SETTINGS_PREPARE config is invalid', async () => {
@@ -98,7 +98,7 @@ describe('Program Shutdown Process Tests', () => {
 
         await programShutdownProcess(undefined, context);
       } catch (error) {
-        expect(error.message).toBe('Missing SETTINGS_PREPARE config');
+        expect(error).toEqual(new Error('Missing SETTINGS_PREPARE config'));
       }
     });
     it('should throw an error when STORAGE_PREPARE context data is invalid', async () => {
@@ -116,7 +116,7 @@ describe('Program Shutdown Process Tests', () => {
 
         await programShutdownProcess(undefined, context);
       } catch (error) {
-        expect(error.message).toBe('Missing STORAGE_PREPARE context data');
+        expect(error).toEqual(new Error('Missing STORAGE_PREPARE context data'));
       }
     });
     it('should throw an error when STORAGE_PREPARE storage module is invalid', async () => {
@@ -137,7 +137,7 @@ describe('Program Shutdown Process Tests', () => {
 
         await programShutdownProcess(undefined, context);
       } catch (error) {
-        expect(error.message).toBe('Missing STORAGE_PREPARE storage module');
+        expect(error).toEqual(new Error('Missing STORAGE_PREPARE storage module'));
       }
     });
     it('should throw an error when SETTINGS_PREPARE storage module store reports file method is invalid', async () => {
@@ -160,7 +160,7 @@ describe('Program Shutdown Process Tests', () => {
 
         await programShutdownProcess(undefined, context);
       } catch (error) {
-        expect(error.message).toBe('Missing STORAGE_PREPARE storage module store reports file method');
+        expect(error).toEqual(new Error('Missing STORAGE_PREPARE storage module store reports file method'));
       }
     });
     it('should throw an error when SETUP_TEST context data is invalid', async () => {
@@ -175,7 +175,7 @@ describe('Program Shutdown Process Tests', () => {
 
         await programShutdownProcess(undefined, context);
       } catch (error) {
-        expect(error.message).toBe('Missing SETUP_TEST context data');
+        expect(error).toEqual(new Error('Missing SETUP_TEST context data'));
       }
     });
     it('should throw an error when SETUP_TEST test data is invalid', async () => {
@@ -193,7 +193,7 @@ describe('Program Shutdown Process Tests', () => {
 
         await programShutdownProcess(undefined, context);
       } catch (error) {
-        expect(error.message).toBe('Missing SETUP_TEST test data');
+        expect(error).toEqual(new Error('Missing SETUP_TEST test data'));
       }
     });
   });
