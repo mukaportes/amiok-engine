@@ -2,11 +2,13 @@ const path = require('path');
 const { pathExists } = require('../../modules/file');
 const storage = require('../../modules/store');
 const PROCESS_ENUM = require('../../enums/process');
+const { isObject } = require('../../modules/validate');
 
 const validate = (context) => {
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE])
+  if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE]))
     throw new Error('Missing SETTINGS_PREPARE context data');
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config) throw new Error('Missing settings config');
+  if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE].config))
+    throw new Error('Missing settings config');
 };
 
 /**

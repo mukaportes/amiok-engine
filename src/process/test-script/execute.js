@@ -1,19 +1,22 @@
 const { waitFor } = require('../../modules/utils');
 const { runSequence } = require('../../modules/http');
 const PROCESS_ENUM = require('../../enums/process');
+const { isObject, isFunction } = require('../../modules/validate');
 
 const validate = (context) => {
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE])
+  if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE]))
     throw new Error('Missing SETTINGS_PREPARE context data');
-  if (!context[PROCESS_ENUM.SETTINGS_PREPARE].config) throw new Error('Missing settings config');
-  if (!context[PROCESS_ENUM.STORAGE_PREPARE])
+  if (!isObject(context[PROCESS_ENUM.SETTINGS_PREPARE].config))
+    throw new Error('Missing settings config');
+  if (!isObject(context[PROCESS_ENUM.STORAGE_PREPARE]))
     throw new Error('Missing STORAGE_PREPARE context data');
-  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage)
+  if (!isObject(context[PROCESS_ENUM.STORAGE_PREPARE].storage))
     throw new Error('Missing STORAGE_PREPARE storage module');
-  if (!context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeTestResults)
+  if (!isFunction(context[PROCESS_ENUM.STORAGE_PREPARE].storage.storeTestResults))
     throw new Error('Missing STORAGE_PREPARE storage module storeTestResults()');
-  if (!context[PROCESS_ENUM.SETUP_TEST]) throw new Error('Missing TEST_SETUP context data');
-  if (!context[PROCESS_ENUM.SETUP_TEST].test) throw new Error('Missing TEST_SETUP test');
+  if (!isObject(context[PROCESS_ENUM.SETUP_TEST]))
+    throw new Error('Missing TEST_SETUP context data');
+  if (!isObject(context[PROCESS_ENUM.SETUP_TEST].test)) throw new Error('Missing TEST_SETUP test');
 };
 
 /**

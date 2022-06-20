@@ -1,9 +1,11 @@
 const PROCESS_ENUM = require('../../enums/process');
 const { waitFor } = require('../../modules/utils');
+const { isObject, isNumber } = require('../../modules/validate');
 
 const validate = (context) => {
-  if (!context[PROCESS_ENUM.INFO_API_PID]) throw new Error('Missing INFO_API_PID context data');
-  if (!context[PROCESS_ENUM.INFO_API_PID].apiPid) throw new Error('Missing API PID');
+  if (!isObject(context[PROCESS_ENUM.INFO_API_PID]))
+    throw new Error('Missing INFO_API_PID context data');
+  if (!isNumber(context[PROCESS_ENUM.INFO_API_PID].apiPid)) throw new Error('Missing API PID');
 };
 
 /**

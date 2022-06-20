@@ -36,13 +36,15 @@ describe('Storage Prepare Process Tests', () => {
           key: PROCESS_ENUM.STORAGE_PREPARE,
           storage: customStorageModule,
         });
-      } catch (error) {}
+      } catch (error) { }
     });
     it('should return new context data with custom storage config when no storageModule path is defined', async () => {
       try {
         const context = {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
-            config: {},
+            config: {
+              storageModule: undefined,
+            },
           },
         };
         const newCtxData = await storagePrepare(undefined, context);
@@ -78,17 +80,19 @@ describe('Storage Prepare Process Tests', () => {
     });
   });
   describe('unhappy path', () => {
-    it('should throw an error when SETTINGS_PREPARE context data is missing', async () => {
+    it('should throw an error when SETTINGS_PREPARE context data is invalid', async () => {
       try {
         await storagePrepare();
       } catch (error) {
         expect(error).toStrictEqual(new Error('Missing SETTINGS_PREPARE context data'));
       }
     });
-    it('should throw an error when SETTINGS_PREPARE config is missing', async () => {
+    it('should throw an error when SETTINGS_PREPARE config is invalid', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.SETTINGS_PREPARE]: {},
+          [PROCESS_ENUM.SETTINGS_PREPARE]: {
+            config: {},
+          },
         };
         await storagePrepare(undefined, context);
       } catch (error) {

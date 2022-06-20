@@ -26,17 +26,19 @@ describe('App Shutdown Process', () => {
     });
   });
   describe('unhappy path', () => {
-    it('should throw an exception when no INFO_API_PID context data is found', async () => {
+    it('should throw an exception when INFO_API_PID context data is invalid', async () => {
       try {
         await appShutdownProcess();
       } catch (error) {
         expect(error.message).toBe('Missing INFO_API_PID context data');
       }
     });
-    it('should throw an exception when no settings api pid is found', async () => {
+    it('should throw an exception when settings api pid is invalid', async () => {
       try {
         const context = {
-          [PROCESS_ENUM.INFO_API_PID]: {}
+          [PROCESS_ENUM.INFO_API_PID]: {
+            apiPid: randomData.string(),
+          }
         };
 
         await appShutdownProcess(undefined, context);
