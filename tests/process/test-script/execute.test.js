@@ -252,7 +252,7 @@ describe('Test Script Execute Process Tests', () => {
           },
           [PROCESS_ENUM.STORAGE_PREPARE]: {
             storage: {
-              storeTestResults: () => { },
+              storeTestResults: () => {},
             },
           },
         };
@@ -271,7 +271,7 @@ describe('Test Script Execute Process Tests', () => {
           },
           [PROCESS_ENUM.STORAGE_PREPARE]: {
             storage: {
-              storeTestResults: () => { },
+              storeTestResults: () => {},
             },
           },
           [PROCESS_ENUM.SETUP_TEST]: {

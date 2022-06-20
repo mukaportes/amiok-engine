@@ -21,7 +21,7 @@ const statsTemplate = {
 };
 
 jest.mock('../../../src/modules/stats', () => ({
-  formatAverageResults: jest.fn(input => input),
+  formatAverageResults: jest.fn((input) => input),
   getReportFilePath: jest.fn(() => ({
     path: '/path/file.js',
   })),
@@ -68,10 +68,11 @@ describe('Stats Analyze Process Tests', () => {
         const newCtxData = await statsAnalyze(undefined, context);
 
         expect(newCtxData.key).toBe(PROCESS_ENUM.STATS_ANALYZE);
-        expect(storeResourceStats).toHaveBeenCalledWith(
-          testId,
-          [statsTemplate, statsTemplate, statsTemplate],
-        );
+        expect(storeResourceStats).toHaveBeenCalledWith(testId, [
+          statsTemplate,
+          statsTemplate,
+          statsTemplate,
+        ]);
         console.log('formatAverageResults.mock.calls', formatAverageResults.mock.calls);
         expect(formatAverageResults.mock.calls).toEqual([
           [statsTemplate, 'start'],
@@ -96,7 +97,7 @@ describe('Stats Analyze Process Tests', () => {
       } catch (error) {
         expect(error).toEqual(new Error('Missing SCRIPT_EXECUTE context data'));
       }
-    })
+    });
     it('should throw an error when SETUP_TEST context data is invalid', async () => {
       try {
         const context = {
@@ -108,7 +109,7 @@ describe('Stats Analyze Process Tests', () => {
       } catch (error) {
         expect(error).toEqual(new Error('Missing SETUP_TEST context data'));
       }
-    })
+    });
     it('should throw an error when SETUP_TEST test data is invalid', async () => {
       try {
         const context = {
@@ -116,7 +117,7 @@ describe('Stats Analyze Process Tests', () => {
             startTime: randomData.integer(),
           },
           [PROCESS_ENUM.SETUP_TEST]: {
-            test: {}
+            test: {},
           },
         };
 
@@ -124,7 +125,7 @@ describe('Stats Analyze Process Tests', () => {
       } catch (error) {
         expect(error).toEqual(new Error('Missing SETUP_TEST test data'));
       }
-    })
+    });
     it('should throw an error when STORAGE_PREPARE context data is invalid', async () => {
       try {
         const testId = randomData.string();
@@ -143,7 +144,7 @@ describe('Stats Analyze Process Tests', () => {
       } catch (error) {
         expect(error).toEqual(new Error('Missing STORAGE_PREPARE context data'));
       }
-    })
+    });
     it('should throw an error when STORAGE_PREPARE storage module is invalid', async () => {
       try {
         const testId = randomData.string();
@@ -165,7 +166,7 @@ describe('Stats Analyze Process Tests', () => {
       } catch (error) {
         expect(error).toEqual(new Error('Missing STORAGE_PREPARE storage module'));
       }
-    })
+    });
     it('should throw an error when STORAGE_PREPARE storage module storeResourceStats() is invalid', async () => {
       try {
         const testId = randomData.string();
@@ -187,8 +188,10 @@ describe('Stats Analyze Process Tests', () => {
 
         await statsAnalyze(undefined, context);
       } catch (error) {
-        expect(error).toEqual(new Error('Missing STORAGE_PREPARE storage module storeResourceStats()'));
+        expect(error).toEqual(
+          new Error('Missing STORAGE_PREPARE storage module storeResourceStats()')
+        );
       }
-    })
+    });
   });
 });

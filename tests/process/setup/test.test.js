@@ -3,10 +3,13 @@ const PROCESS_ENUM = require('../../../src/enums/process');
 const setupTest = require('../../../src/process/setup/test');
 
 jest.mock('fs/promises', () => ({
-  readdir: jest.fn((folderPath) => new Promise((resolve, reject) => {
-    if (folderPath.includes('error')) reject('Force error readdir');
-    else resolve(['myfile.stat']);
-  })),
+  readdir: jest.fn(
+    (folderPath) =>
+      new Promise((resolve, reject) => {
+        if (folderPath.includes('error')) reject('Force error readdir');
+        else resolve(['myfile.stat']);
+      })
+  ),
 }));
 
 describe('Setup Test Process Tests', () => {

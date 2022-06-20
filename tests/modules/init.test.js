@@ -12,7 +12,7 @@ jest.mock('os', () => ({
         time3: 10,
         time4: 10,
         idle: 10,
-      }
+      },
     },
     {
       times: {
@@ -21,11 +21,10 @@ jest.mock('os', () => ({
         time3: 10,
         time4: 10,
         idle: 10,
-      }
+      },
     },
-  ])
+  ]),
 }));
-
 
 jest.mock('../../src/modules/file', () => ({
   createFile: jest.fn().mockResolvedValue(),

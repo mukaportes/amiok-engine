@@ -206,9 +206,7 @@ describe('Storage Store Test Process Tests', () => {
         };
         await storeTest(undefined, context);
       } catch (error) {
-        expect(error).toEqual(
-          new Error('Missing STORAGE_PREPARE storage module storeTest()')
-        );
+        expect(error).toEqual(new Error('Missing STORAGE_PREPARE storage module storeTest()'));
       }
     });
   });

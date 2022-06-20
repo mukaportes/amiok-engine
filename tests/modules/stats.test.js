@@ -6,13 +6,16 @@ const statsModule = require('../../src/modules/stats');
 jest.mock('fs/promises', () => ({
   access: jest.fn().mockResolvedValue(true),
   appendFile: jest.fn().mockResolvedValue(),
-  writeFile: jest.fn((targetPath) => new Promise((resolve, reject) => {
-    if (targetPath.indexOf('errorId') > -1) {
-      reject('Error creating new report file');
-    } else {
-      resolve(true);
-    }
-  })),
+  writeFile: jest.fn(
+    (targetPath) =>
+      new Promise((resolve, reject) => {
+        if (targetPath.indexOf('errorId') > -1) {
+          reject('Error creating new report file');
+        } else {
+          resolve(true);
+        }
+      })
+  ),
 }));
 
 // Mocking: fs module
@@ -30,9 +33,7 @@ jest.mock('stream', () => jest.fn().mockImplementation(() => ({})));
 jest.mock('readline', () => ({
   createInterface: jest.fn(() => ({
     on: jest.fn((_, callback) => {
-      callback(
-        `1|1|1|1|1|1|1|1`,
-      );
+      callback(`1|1|1|1|1|1|1|1`);
     }),
   })),
 }));
@@ -82,18 +83,10 @@ describe('Stats Module Tests', () => {
         const formattedAverage = statsModule.formatAverageResults(results, rangeType);
 
         expect(formattedAverage.cpu).toBe(results.cpu / itemCount);
-        expect(formattedAverage.memoryArrayBuffers).toBe(
-          results.memory.arrayBuffers / itemCount
-        );
-        expect(formattedAverage.memoryHeapTotal).toBe(
-          results.memory.heapTotal / itemCount
-        );
-        expect(formattedAverage.memoryHeapUsed).toBe(
-          results.memory.heapUsed / itemCount
-        );
-        expect(formattedAverage.memoryExternal).toBe(
-          results.memory.external / itemCount
-        );
+        expect(formattedAverage.memoryArrayBuffers).toBe(results.memory.arrayBuffers / itemCount);
+        expect(formattedAverage.memoryHeapTotal).toBe(results.memory.heapTotal / itemCount);
+        expect(formattedAverage.memoryHeapUsed).toBe(results.memory.heapUsed / itemCount);
+        expect(formattedAverage.memoryExternal).toBe(results.memory.external / itemCount);
         expect(formattedAverage.memoryRss).toBe(results.memory.rss / itemCount);
         expect(formattedAverage.handles).toBe(results.handles / itemCount);
         expect(formattedAverage.itemCount).toBe(itemCount);
@@ -153,7 +146,10 @@ describe('Stats Module Tests', () => {
 
         expect(pathData).toHaveProperty('fileFolder', `${process.cwd()}/_amiokstats`);
         expect(pathData).toHaveProperty('fileName', `${global.amiokCurrentTestId}.stat`);
-        expect(pathData).toHaveProperty('path', `${process.cwd()}/_amiokstats/${global.amiokCurrentTestId}.stat`);
+        expect(pathData).toHaveProperty(
+          'path',
+          `${process.cwd()}/_amiokstats/${global.amiokCurrentTestId}.stat`
+        );
       });
     });
   });

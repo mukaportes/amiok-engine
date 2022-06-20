@@ -8,7 +8,7 @@ describe('App Shutdown Process', () => {
   describe('happy path', () => {
     it('should return new context data', async () => {
       try {
-        const stubProcess = jest.spyOn(global.process, 'kill').mockImplementation(() => { });
+        const stubProcess = jest.spyOn(global.process, 'kill').mockImplementation(() => {});
         const apiPid = randomData.integer({ min: 1, max: 2000 });
         const context = {
           [PROCESS_ENUM.INFO_API_PID]: {
@@ -38,7 +38,7 @@ describe('App Shutdown Process', () => {
         const context = {
           [PROCESS_ENUM.INFO_API_PID]: {
             apiPid: randomData.string(),
-          }
+          },
         };
 
         await appShutdownProcess(undefined, context);

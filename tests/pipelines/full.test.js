@@ -10,9 +10,7 @@ const prepareStorage = require('../../src/process/storage/prepare');
 const setupTest = require('../../src/process/setup/test');
 const storeTest = require('../../src/process/storage/store-test');
 
-jest.mock('../../src/process/app/start', () =>
-  jest.fn().mockResolvedValue({ key: 'APP_START' })
-);
+jest.mock('../../src/process/app/start', () => jest.fn().mockResolvedValue({ key: 'APP_START' }));
 jest.mock('../../src/process/app/shutdown', () =>
   jest.fn().mockResolvedValue({ key: 'APP_SHUTDOWN' })
 );
@@ -46,9 +44,7 @@ jest.mock('../../src/process/storage/prepare', () =>
 jest.mock('../../src/process/storage/prepare', () =>
   jest.fn().mockResolvedValue({ key: 'SETUP_TEST' })
 );
-jest.mock('../../src/process/setup/test', () =>
-  jest.fn().mockResolvedValue({ key: 'SETUP_TEST' })
-);
+jest.mock('../../src/process/setup/test', () => jest.fn().mockResolvedValue({ key: 'SETUP_TEST' }));
 jest.mock('../../src/process/storage/store-test', () =>
   jest.fn().mockResolvedValue({ key: 'STORAGE_TEST_RESULT' })
 );
@@ -78,7 +74,7 @@ describe('Full Pipeline Tests', () => {
   });
   describe('unhappy path', () => {
     it('prints error and kills process when an error occurs executing a step', async () => {
-      const stubProcess = jest.spyOn(global.process, 'kill').mockImplementation(() => { });
+      const stubProcess = jest.spyOn(global.process, 'kill').mockImplementation(() => {});
       try {
         await fullPipeline({ errorSteps: true });
       } catch (error) {

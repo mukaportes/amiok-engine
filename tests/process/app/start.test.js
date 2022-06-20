@@ -60,7 +60,7 @@ describe('App Start Process', () => {
           [PROCESS_ENUM.SETTINGS_PREPARE]: {
             config: {
               initApp: randomData.integer(),
-            }
+            },
           },
         };
         await appStartProcess(undefined, context);

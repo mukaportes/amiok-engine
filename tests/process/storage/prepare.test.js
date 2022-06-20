@@ -36,7 +36,7 @@ describe('Storage Prepare Process Tests', () => {
           key: PROCESS_ENUM.STORAGE_PREPARE,
           storage: customStorageModule,
         });
-      } catch (error) { }
+      } catch (error) {}
     });
     it('should return new context data with custom storage config when no storageModule path is defined', async () => {
       try {
