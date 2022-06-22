@@ -38,14 +38,13 @@ const getCpuPercentage = () => {
 
 /**
  *
- * @param {object} targetProcess NodeJS process
  * @returns {string}
  */
-const getAnalysis = (targetProcess) => {
+const getAnalysis = () => {
   const cpuUsage = getCpuPercentage();
-  const memory = targetProcess.memoryUsage();
+  const memory = process.memoryUsage();
   // eslint-disable-next-line no-underscore-dangle
-  const numActiveHandles = targetProcess._getActiveHandles().length;
+  const numActiveHandles = process._getActiveHandles().length;
 
   let outputStr = '';
 
@@ -59,11 +58,7 @@ const getAnalysis = (targetProcess) => {
 
 let interval;
 
-/**
- *
- * @param {object} targetProcess NodeJS process
- */
-const startAmiok = async (targetProcess) => {
+const startAmiok = async () => {
   const { fileFolder, fileName } = getReportFilePath();
 
   const testId = crypto.randomUUID();
@@ -72,7 +67,7 @@ const startAmiok = async (targetProcess) => {
   await createFile(fileFolder, fileName.replace('undefined', testId));
 
   interval = setInterval(() => {
-    addStatsToFile(getAnalysis(targetProcess));
+    addStatsToFile(getAnalysis());
   }, 10);
 };
 

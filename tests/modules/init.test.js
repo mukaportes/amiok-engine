@@ -54,18 +54,7 @@ describe('Init Module Tests', () => {
     describe('happy path', () => {
       it.only('executes amiok start process', async () => {
         try {
-          const targetProcess = {
-            memoryUsage: jest.fn(() => ({
-              rss: 1,
-              heapTotal: 1,
-              heapUsed: 1,
-              external: 1,
-              arrayBuffers: 1,
-            })),
-            _getActiveHandles: jest.fn(() => [{}]),
-          };
-
-          await initModule.startAmiok(targetProcess);
+          await initModule.startAmiok();
 
           await waitFor(3000);
           initModule.stopAmiok();

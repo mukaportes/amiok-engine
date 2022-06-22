@@ -13,7 +13,6 @@ interface GlobalConfig {
   title?: string;
   basePath: string;
   port: number;
-  runInSequence?: boolean;
   rounds?: number;
   threads?: number;
   testScripts: Array<TestScript>;
